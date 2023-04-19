@@ -22,7 +22,7 @@ const UploadImage = () => {
   }
 
   return (
-    <div className='w-1/2'>
+    <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>Defect Sample</p>
       <div className="relative w-full h-[188px] bg-dark-200 border border-dashed border-light-400 rounded-md flex justify-center items-center flex-col py-6">
         <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer' />

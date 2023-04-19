@@ -19,9 +19,9 @@ const DefectType = () => {
   const handleOpen = () => setOpen(true);
 
   return (
-    <div className='w-1/2 flex flex-col'>
+    <div className='w-full md:w-1/2 flex flex-col'>
       <FormControl fullWidth>
-        <Label className='mb-1'>Defect Type</Label>
+        <Label className='!mb-1'>Defect Type</Label>
         <SelectList
           open={open}
           onClose={handleClose}

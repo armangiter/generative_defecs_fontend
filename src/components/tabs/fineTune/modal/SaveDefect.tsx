@@ -19,7 +19,7 @@ const SaveDefect = () => {
       <Box className='!px-8 !w-[560px]' sx={style}>
         <p className='text-2xl font-extrabold text-light-100'>Save Defect Model</p>
         <div className='flex flex-col justify-start mt-12'>
-          <Label className='mb-1'>Defect Type</Label>
+          <Label className='!mb-1'>Defect Type</Label>
           <TextField
             placeholder='Scratch'
             size='small'
@@ -28,7 +28,7 @@ const SaveDefect = () => {
               '.MuiInputBase-input': { color: '#D1D5DB' }
             }}
           />
-          <Label className='mt-6 mb-1'>Defect Type</Label>
+          <Label className='mt-6 !mb-1'>Defect Type</Label>
           <TextField
             placeholder='Scratch-1'
             size='small'

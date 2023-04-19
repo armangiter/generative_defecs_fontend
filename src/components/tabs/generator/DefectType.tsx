@@ -28,9 +28,9 @@ const DefectType = () => {
   ]
 
   return (
-    <div className='w-1/2'>
+    <div className='w-full md:w-1/2'>
       <div className='flex items-start flex-col'>
-        <Label className='mb-1'>Defect Type</Label>
+        <Label className='!mb-1'>Defect Type</Label>
         <Input
           size='small'
           placeholder='Scratch'
@@ -38,7 +38,7 @@ const DefectType = () => {
       </div>
       {listSelect.map((item: Selects) =>
         <div key={item.id} className='flex items-start flex-col mt-6'>
-          <Label className='mb-1'>{item.label}</Label>
+          <Label className='!mb-1'>{item.label}</Label>
           <SelectList
             size='small'
             value={item.value}
@@ -72,7 +72,7 @@ const DefectType = () => {
         />
       </div>
       <div className='flex flex-col mt-6'>
-        <Label className='mb-1'>Number of Images</Label>
+        <Label className='!mb-1'>Number of Images</Label>
         <Input
           value={20}
           size='small'

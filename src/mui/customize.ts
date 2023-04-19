@@ -14,7 +14,7 @@ const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }));
 
 const Input = styled(TextField)({
-  background: '#374151', borderRadius: '4px', color: 'red', width: '100%',
+  background: '#374151', borderRadius: '4px', color: '#D1D5DB', width: '100%',
   '.MuiInputBase-input': { color: '#D1D5DB' }
 })
 

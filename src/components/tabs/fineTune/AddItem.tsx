@@ -37,7 +37,7 @@ const AddItem = ({ setListMenu, listMenu }: IProps) => {
         <CloseIcon className='text-red-100' onClick={() => setDefectName('')} />
       </Button>
       <Button className='!w-4 !h-4' variant='text'>
-        <DoneIcon className='text-green-100' onClick={addItem} />
+        <DoneIcon className='text-green-100' onClick={() => defectName && addItem()} />
       </Button>
     </div>
   )

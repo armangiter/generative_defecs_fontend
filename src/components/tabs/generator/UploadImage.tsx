@@ -15,18 +15,18 @@ const UploadImage = () => {
   }
 
   return (
-    <div className='w-1/2'>
+    <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>Your Image</p>
       {urlUploaded ?
         <div className='w-full h-96 relative rounded-md overflow-hidden'>
           <img
-            className='w-full h-full'
+            className='w-full h-full object-cover'
             src={urlUploaded}
           />
           <EditImage />
         </div> :
         <div
-          className="relative w-full h-96 bg-dark-200 border border-dashed
+          className="relative w-full bg-dark-200 border border-dashed h-64 lg:h-96
         border-light-400 rounded-md flex justify-center items-center flex-col py-6"
         >
           <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer' />

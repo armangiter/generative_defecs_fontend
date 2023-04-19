@@ -1,6 +1,7 @@
 import { useState, SyntheticEvent, ReactNode } from 'react'
 import { Box, AppBar, Tab, Tabs } from '@mui/material'
 import SwipeableViews from 'react-swipeable-views';
+import { tabTitle } from '../helper';
 
 // Components
 import FineTune from './tabs/fineTune';
@@ -44,13 +45,14 @@ const TabPage = () => {
   const listTab: string[] = ['Fine Tune', 'Generator', 'Results'];
   const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
   const [value, setValue] = useState<number>(2);
+  tabTitle(`${listTab[value]} - Rutilea`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
   const changeIndex = (index: number) => setValue(index);
 
   return (
     <Box className='!w-full'>
-      <AppBar position="static" className='!w-[320px] !bg-transparent !border-transparent'>
+      <AppBar position="static" className='!w-[301px] sm:!w-[320px] !bg-transparent !border-transparent'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -70,7 +72,7 @@ const TabPage = () => {
           {listTab.map((item: string, idx: number) =>
             <Tab
               key={item}
-              className={`${idx !== 0 && '!ml-1'}`}
+              className={`${idx !== 0 && '!ml-1'} !text-sm sm:!text-base sm:!py-1.5 sm:!px-4`}
               label={item}
               {...a11yProps(idx)}
             />
