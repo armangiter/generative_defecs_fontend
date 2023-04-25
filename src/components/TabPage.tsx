@@ -44,7 +44,7 @@ const TabPage = () => {
 
   const listTab: string[] = ['Fine Tune', 'Generator', 'Results'];
   const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
-  const [value, setValue] = useState<number>(1);
+  const [value, setValue] = useState<number>(0);
   tabTitle(`${listTab[value]} - Rutilea`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);

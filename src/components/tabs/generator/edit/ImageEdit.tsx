@@ -153,7 +153,7 @@ const ImageEdit = ({ urlUploaded, setUrlUploaded, type, typeRect }: IProp) => {
           <Cropper
             ref={cropperRef}
             style={{ height: 400, width: "100%" }}
-            zoomTo={2.5}
+            zoomTo={0}
             initialAspectRatio={1}
             preview=".img-preview"
             src={urlUploaded}

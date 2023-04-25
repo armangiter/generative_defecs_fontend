@@ -20,6 +20,9 @@ const UploadImage = () => {
     }
     reader.readAsDataURL(event.currentTarget.files[0]);
   }
+  const removeImage = (item: Url) => {
+    setUrlUploaded(urlUploaded.filter(url => url.id !== item.id))
+  }
 
   return (
     <div className='w-full md:w-1/2'>
@@ -39,6 +42,7 @@ const UploadImage = () => {
               className='!min-w-0 !rounded-lg !w-9 !h-9 !absolute right-3 top-3 !bg-[rgba(0,0,0,0.4)]
               shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
               variant='text'
+              onClick={() => removeImage(item)}
             >
               <img src={remove} alt='delete' />
             </Button>
