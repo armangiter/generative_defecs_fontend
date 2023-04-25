@@ -25,7 +25,7 @@ const UploadImage = () => {
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>Defect Sample</p>
       <div className="relative w-full h-[188px] bg-dark-200 border border-dashed border-light-400 rounded-md flex justify-center items-center flex-col py-6">
-        <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer' />
+        <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer z-10' />
         <img src={gallery} alt='gallery' />
         <p className='text-primary font-normal text-xs mt-4 mb-6'>Drag & drop your files here or</p>
         <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>Browse</Button>

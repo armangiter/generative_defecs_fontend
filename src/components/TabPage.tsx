@@ -44,7 +44,7 @@ const TabPage = () => {
 
   const listTab: string[] = ['Fine Tune', 'Generator', 'Results'];
   const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
-  const [value, setValue] = useState<number>(2);
+  const [value, setValue] = useState<number>(1);
   tabTitle(`${listTab[value]} - Rutilea`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
@@ -52,7 +52,7 @@ const TabPage = () => {
 
   return (
     <Box className='!w-full'>
-      <AppBar position="static" className='!w-[301px] sm:!w-[320px] !bg-transparent !border-transparent'>
+      <AppBar position="static" className='!w-[281px] sm:!w-[321px] !bg-transparent !border-transparent'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -72,7 +72,7 @@ const TabPage = () => {
           {listTab.map((item: string, idx: number) =>
             <Tab
               key={item}
-              className={`${idx !== 0 && '!ml-1'} !text-sm sm:!text-base sm:!py-1.5 sm:!px-4`}
+              className={`${idx !== 0 && '!ml-1'} !text-sm !px-1.5 sm:!text-base sm:!px-4`}
               label={item}
               {...a11yProps(idx)}
             />

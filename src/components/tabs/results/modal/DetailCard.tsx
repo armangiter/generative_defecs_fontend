@@ -55,11 +55,11 @@ const DetailCard = ({ data }: IProps) => {
               />
               <ul
                 className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
-                grid-rows-[repeat(4,80px)] mb-auto h-[55%] gap-2.5 rounded-md p-6 mt-8 border 
+                grid-rows-[min-content] mb-auto h-[55%] gap-2.5 rounded-md p-6 mt-8 border 
                 border-light-400 overflow-auto'
               >
                 {data.images.map((item, idx) =>
-                  <li key={idx} className='w-full cursor-pointer' onClick={() => setSelectedImg(item)}>
+                  <li key={idx} className='w-full cursor-pointer max-h-20' onClick={() => setSelectedImg(item)}>
                     <img
                       src={item}
                       alt='result'
