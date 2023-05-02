@@ -2,11 +2,12 @@ import { ReactElement, useState, Dispatch, SetStateAction } from 'react'
 import { Divider } from '@mui/material';
 
 // Icons
-import { ReactComponent as Crop } from '../../../../assets/icons/crop.svg';
-import { ReactComponent as Edit } from '../../../../assets/icons/edit.svg';
-import { ReactComponent as MouseCircle } from '../../../../assets/icons/mouseCircle.svg';
-import { ReactComponent as MouseSquare } from '../../../../assets/icons/mouseSquare.svg';
-import { ReactComponent as Eraser } from '../../../../assets/icons/eraser.svg';
+import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
+import { ReactComponent as Edit } from '../../../../../assets/icons/edit.svg';
+import { ReactComponent as MouseCircle } from '../../../../../assets/icons/mouseCircle.svg';
+import { ReactComponent as MouseSquare } from '../../../../../assets/icons/mouseSquare.svg';
+import { ReactComponent as Eraser } from '../../../../../assets/icons/eraser.svg';
+import GestureIcon from '@mui/icons-material/Gesture';
 
 interface ListIcon {
   name: string,
@@ -20,7 +21,7 @@ interface IProps {
   setTypeRect: Dispatch<SetStateAction<string>>
 }
 
-const EditImage = ({ type, setType, typeRect, setTypeRect }: IProps) => {
+const ListIcon = ({ type, setType, typeRect, setTypeRect }: IProps) => {
 
   const handleClass = (type: boolean, name?: string) => type ? name ? 'activeSIcon' : 'activeIcon' : ''
 
@@ -33,28 +34,30 @@ const EditImage = ({ type, setType, typeRect, setTypeRect }: IProps) => {
   }, {
     name: 'MouseSquare', component: <MouseSquare className={handleClass(type === 'MouseSquare')} />,
   }, {
+    name: 'MouseDraw', component: <GestureIcon className={handleClass(type === 'MouseDraw', 'Draw')} />,
+  }, {
     name: 'Eraser', component: <Eraser className={handleClass(type === 'Eraser', 'Eraser')} />,
   }]
   const changeIcon = (item: ListIcon) => {
     setType(item.name)
-    item.name === 'MouseSquare' || item.name === 'MouseCircle' || item.name === 'Crop' ?
+    item.name === 'MouseSquare' || item.name === 'MouseCircle' || item.name === 'Crop' || item.name === 'MouseDraw' ?
       setTypeRect(item.name) : undefined
   }
 
   return (
     <ul
-      className='absolute left-6 top-6 bg-light-100 py-[9px] px-[13px] flex items-center justify-center rounded-lg
-      shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
+      className='absolute left-6 top-6 bg-light-100 py-[9px] px-[13px] flex items-center justify-center 
+      rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
     >
       {listIcons.map((item, idx) =>
         <li
-          className={`cursor-pointer flex items-center ${idx === 2 || idx === 3 ? 'ml-4' : ''}`}
+          className={`cursor-pointer flex items-center ${idx === 2 || idx === 3 || idx === 4 ? 'ml-4' : ''}`}
           key={idx}
         >
           <div onClick={() => changeIcon(item)}>
             {item.component}
           </div>
-          {idx === 0 || idx === 3 ?
+          {idx === 0 || idx === 4 ?
             <Divider
               className='!bg-dark-100 opacity-[0.24] !h-px !w-6 rotate-90'
             /> : undefined
@@ -65,4 +68,4 @@ const EditImage = ({ type, setType, typeRect, setTypeRect }: IProps) => {
   )
 }
 
-export default EditImage
+export default ListIcon

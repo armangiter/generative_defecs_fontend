@@ -1,49 +1,27 @@
-import { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react'
-import { Stage, Layer, Image } from 'react-konva'
-import { KonvaEventObject } from 'konva/lib/Node';
-import Cropper, { ReactCropperElement } from "react-cropper";
+import { useState } from 'react'
+import { Image, Layer } from 'react-konva'
+import { KonvaEventObject } from 'konva/lib/Node'
+import { Annotations } from '../../../../../models'
 import { v4 } from 'uuid';
-import { Button } from '@mui/material'
-import DrawLabel from './DrawLabel';
-import "cropperjs/dist/cropper.css";
-import { Annotations } from '../../../../models';
+import RectAngle from '../RectAngle';
 
-interface IProp {
-  urlUploaded: string,
+interface IProps {
+  urlUploaded: string
+  width?: number,
+  height?: number,
   type: string,
   typeRect: string,
-  setUrlUploaded: Dispatch<SetStateAction<string>>
+  image: HTMLImageElement | undefined
 }
 
-const ImageEdit = ({ urlUploaded, setUrlUploaded, type, typeRect }: IProp) => {
+const DrawLabel = ({ width, height, urlUploaded, type, typeRect, image }: IProps) => {
 
-  const cropperRef = useRef<ReactCropperElement>();
-  const contentImg = useRef<HTMLDivElement>(null);
-  const [cropData, setCropData] = useState<string>("#");
-  const [image, setImage] = useState<HTMLImageElement>()
   const [rects, setRects] = useState<Annotations>();
   const [uniqueID, setUniqueID] = useState<string>(v4())
   const [newAnnotation, setNewAnnotation] = useState<Annotations>({})
-  const [test, setTest] = useState('')
   const [selectShape, setSelectShape] = useState<string>('');
   const [isTransforming, setIsTransforming] = useState<boolean>(false)
 
-  useEffect(() => {
-    const img: HTMLImageElement = new window.Image()
-    img.crossOrigin = ''
-    img.src = urlUploaded
-    setImage(img)
-    let canvas: HTMLCanvasElement = document.createElement('canvas')
-    let ctx: CanvasRenderingContext2D | null = canvas.getContext('2d')
-
-    if (ctx && contentImg.current) {
-
-      ctx?.drawImage(img, 0, 0, 500, 380, 0, 0, 500, 300)
-
-      const url = canvas.toDataURL()
-      setTest(url)
-    }
-  }, [urlUploaded])
   const handleMouseDown = (event: KonvaEventObject<MouseEvent>) => {
     if (!isTransforming) {
       if (type === 'Eraser' && rects && event.target.attrs.name) {
@@ -132,68 +110,25 @@ const ImageEdit = ({ urlUploaded, setUrlUploaded, type, typeRect }: IProp) => {
       }
     }
   };
-  const cropImage = () => {
-    if (typeof cropperRef.current?.cropper !== "undefined") {
-      setUrlUploaded(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
-    }
-  }
 
   return (
-    <div className='w-full h-full relative' ref={contentImg}>
-      {/* <img src={test} className='absolute w-full z-10 left-0 top-0 h-fit' /> */}
-      {
-        typeRect === 'Crop' &&
-        <>
-          <Button
-            className='!absolute !bottom-4 !right-4 !z-20'
-            onClick={cropImage}
-            color='success'
-            variant='contained'
-          >Crop</Button>
-          <Cropper
-            ref={cropperRef}
-            style={{ height: 400, width: "100%" }}
-            zoomTo={0}
-            initialAspectRatio={1}
-            preview=".img-preview"
-            src={urlUploaded}
-            viewMode={1}
-            minCropBoxHeight={10}
-            minCropBoxWidth={10}
-            background={false}
-            responsive={true}
-            autoCropArea={1}
-            checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
-            guides={true}
-          />
-        </>
-      }
-      <Stage
-        width={contentImg.current?.clientWidth}
-        height={contentImg.current?.clientHeight}
-        onMouseDown={handleMouseDown}
-        onMouseMove={(event) => type === 'MouseCircle' || type === 'MouseSquare' || type === 'Crop' ? handleMouseMove(event) : undefined}
-        onMouseUp={(event) => type === 'MouseCircle' || type === 'MouseSquare' || type === 'Crop' ? handleMouseUp(event) : undefined}
-      >
-        <Layer>
-          <Image width={contentImg.current?.clientWidth} height={contentImg.current?.clientHeight} image={image} alt='img' />
-          <DrawLabel
-            rects={rects}
-            typeRect={typeRect}
-            type={type}
-            setRects={setRects}
-            setIsTransforming={setIsTransforming}
-            selectShape={selectShape}
-            setSelectShape={setSelectShape}
-          />
-        </Layer>
-      </Stage>
-      {/* <img
-        className='w-full h-full object-cover'
-        src={urlUploaded}
-      /> */}
-    </div>
+    <Layer
+      onMouseDown={handleMouseDown}
+      onMouseMove={(event) => type === 'MouseCircle' || type === 'MouseSquare' || type === 'Crop' ? handleMouseMove(event) : undefined}
+      onMouseUp={(event) => type === 'MouseCircle' || type === 'MouseSquare' || type === 'Crop' ? handleMouseUp(event) : undefined}
+    >
+      <Image width={width} height={height} alt='img' image={image} />
+      <RectAngle
+        rects={rects}
+        typeRect={typeRect}
+        type={type}
+        setRects={setRects}
+        setIsTransforming={setIsTransforming}
+        selectShape={selectShape}
+        setSelectShape={setSelectShape}
+      />
+    </Layer>
   )
 }
 
-export default ImageEdit
+export default DrawLabel

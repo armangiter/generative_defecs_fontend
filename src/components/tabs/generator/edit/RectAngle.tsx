@@ -1,4 +1,4 @@
-import { useState, Dispatch, SetStateAction } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { Annotations } from '../../../../models';
 import RectAngles from './shape/RectAngles';
 
@@ -7,12 +7,12 @@ interface IProps {
   typeRect: string,
   type: string,
   selectShape: string,
-  setRects: Dispatch<SetStateAction<Annotations>>,
+  setRects: Dispatch<SetStateAction<Annotations | undefined>>,
   setSelectShape: Dispatch<SetStateAction<string>>,
   setIsTransforming: Dispatch<SetStateAction<boolean>>
 }
 
-const DrawLabel = ({ rects, type, typeRect, setIsTransforming, selectShape, setSelectShape, setRects }: IProps) => {
+const RectAngle = ({ rects, type, typeRect, setIsTransforming, selectShape, setSelectShape, setRects }: IProps) => {
   return (
     <>
       {
@@ -31,17 +31,18 @@ const DrawLabel = ({ rects, type, typeRect, setIsTransforming, selectShape, setS
               height: typeRect === 'MouseCircle' ? Math.abs(rect.height) : rect.height
             }}
             onChange={(newAttrs) => {
-              const newObj = Object.entries(rects).reduce((acc, [key, value]) => {
+              const newObj = Object.entries(rects).reduce((acc: any, [key, value]) => {
                 if (value.name === newAttrs.name) {
-                  acc[key] = newAttrs
+                  acc[key] = newAttrs;
                 } else {
                   acc[key] = value;
                 }
                 return acc;
               }, {});
 
-              setRects(newObj)
+              setRects(newObj);
             }}
+          // type={''}
           />
         )
       }
@@ -49,4 +50,4 @@ const DrawLabel = ({ rects, type, typeRect, setIsTransforming, selectShape, setS
   )
 }
 
-export default DrawLabel
+export default RectAngle

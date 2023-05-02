@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
-import IconEditor from './edit/IconEditor';
-import ImageEdit from './edit/ImageEdit';
+import ListIcon from './edit/view/ListIcon';
+import Konva from './edit/Konva';
+import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
+import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 
 const UploadImage = () => {
 
   const [type, setType] = useState<string>('MouseSquare')
   const [typeRect, setTypeRect] = useState<string>('MouseSquare')
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
   const [urlUploaded, setUrlUploaded] = useState<string>('');
+
 
   const readDataURL = (event: any) => {
     let reader = new FileReader();
@@ -18,13 +22,33 @@ const UploadImage = () => {
     reader.readAsDataURL(event.currentTarget.files[0]);
   }
 
+
   return (
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>Your Image</p>
       {urlUploaded ?
-        <div className='w-full h-96 relative rounded-md overflow-hidden'>
-          <ImageEdit type={type} typeRect={typeRect} urlUploaded={urlUploaded} setUrlUploaded={setUrlUploaded} />
-          <IconEditor type={type} setType={setType} typeRect={typeRect} setTypeRect={setTypeRect} />
+        <div
+          className={`w-full rounded-md overflow-hidden 
+          ${isFullScreen ? 'h-full absolute left-0 top-0 z-20 rounded-r-2xl rounded-bl-2xl' :
+              'relative h-96'}`}
+        >
+          <Konva
+            type={type}
+            typeRect={typeRect}
+            urlUploaded={urlUploaded}
+            isFullScreen={isFullScreen}
+            setUrlUploaded={setUrlUploaded}
+          />
+          <ListIcon type={type} setType={setType} typeRect={typeRect} setTypeRect={setTypeRect} />
+          <div
+            className='absolute right-6 top-6 bg-light-100 py-[12px] px-[13px] flex items-center 
+          justify-center rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
+            onClick={() => setIsFullScreen(!isFullScreen)}
+          >
+            {isFullScreen ?
+              <SmallScreen className='cursor-pointer flex items-center' /> :
+              <FullScreen className='cursor-pointer flex items-center' />}
+          </div>
         </div> :
         <div
           className="relative w-full bg-dark-200 border border-dashed h-64 lg:h-96

@@ -27,7 +27,7 @@ function TabPanel(props: TabPanelProps) {
       {...other}
     >
       {value === index && (
-        <Box className='!pt-10 !px-8 !pb-6'>{children}</Box>
+        <Box className='!pt-10 !px-8 !pb-6 !relative'>{children}</Box>
       )}
     </div>
   );
@@ -44,7 +44,7 @@ const TabPage = () => {
 
   const listTab: string[] = ['Fine Tune', 'Generator', 'Results'];
   const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(1);
   tabTitle(`${listTab[value]} - Rutilea`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
@@ -79,7 +79,7 @@ const TabPage = () => {
           )}
         </Tabs>
       </AppBar>
-      <SwipeableViews index={value} onChangeIndex={changeIndex} >
+      <SwipeableViews className='relative' index={value} onChangeIndex={changeIndex} >
         {listComponent.map((item: ReactNode, idx: number) =>
           <div key={idx} className='bg-dark-100 rounded-r-2xl rounded-bl-2xl'>
             <TabPanel value={value} index={idx}>{item}</TabPanel>
