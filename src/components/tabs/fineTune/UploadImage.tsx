@@ -14,6 +14,10 @@ const UploadImage = () => {
 
   const { t } = i18next;
   const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
+  const getListImage = () => {
+    request.listImage()
+      .then(response => setUrlUploaded(response.data))
+  }
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     const defectId = 2
     const formData: FormData | null = new FormData()
@@ -21,28 +25,18 @@ const UploadImage = () => {
     if (event.target.files && formData.get('file')) {
       request.uploadImage(formData.get('file'), defectId)
         .then(response => {
-          console.log(response);
+          getListImage();
         })
     }
-
-
-    let reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === 'string') {
-        setUrlUploaded([...urlUploaded, { id: urlUploaded.length + 1, url: reader.result }])
-      }
-    }
-    reader.readAsDataURL(event.currentTarget.files[0]);
   }
   const removeImage = (item: Url) => {
     setUrlUploaded(urlUploaded.filter(url => url.id !== item.id))
   }
 
-  const updateUrl = (url: string) => url.replace("http://minio", "http://128.65.167.198")
+  const updateUrl = (url: string) => url && url.replace("http://minio", "http://128.65.167.198")
 
   useEffect(() => {
-    request.listImage()
-      .then(response => setUrlUploaded(response.data))
+    getListImage()
   }, [])
 
 
@@ -57,7 +51,7 @@ const UploadImage = () => {
       </div>
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-        {urlUploaded.reverse().map((item: Url) =>
+        {urlUploaded.length && urlUploaded.reverse().map((item: Url) =>
           <li key={item.id} className='relative'>
             <img src={updateUrl(item.file)} className='h-[120px] object-cover rounded-md' />
             <Button

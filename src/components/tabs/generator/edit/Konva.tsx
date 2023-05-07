@@ -31,7 +31,12 @@ const Konva = ({ urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IP
       {/* <img src={test} className='absolute w-full z-10 left-0 top-0 h-fit' /> */}
       {
         typeRect === 'Crop' ? (
-          <Crop setUrlUploaded={setUrlUploaded} urlUploaded={urlUploaded} />
+          <Crop
+            setUrlUploaded={setUrlUploaded}
+            urlUploaded={urlUploaded}
+            width={contentImg.current?.clientWidth}
+            height={contentImg.current?.clientHeight}
+          />
         ) : (
           <Stage
             width={contentImg.current?.clientWidth}

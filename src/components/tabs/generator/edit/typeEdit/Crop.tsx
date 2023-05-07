@@ -4,11 +4,13 @@ import { Button } from '@mui/material'
 import i18next from 'i18next';
 
 interface IProps {
+  width: string,
+  height: string,
   urlUploaded: string,
   setUrlUploaded: Dispatch<SetStateAction<string>>
 }
 
-const Crop = ({ urlUploaded, setUrlUploaded }: IProps) => {
+const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {
 
   const { t } = i18next;
   const cropperRef = useRef<ReactCropperElement>();
@@ -26,7 +28,7 @@ const Crop = ({ urlUploaded, setUrlUploaded }: IProps) => {
       >{t('crop')}</Button>
       <Cropper
         ref={cropperRef}
-        style={{ height: 400, width: "100%" }}
+        style={{ height: height, width: "100%" }}
         zoomTo={0}
         initialAspectRatio={1}
         preview=".img-preview"
