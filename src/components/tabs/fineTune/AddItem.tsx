@@ -1,21 +1,27 @@
 import { Dispatch, SetStateAction, ChangeEvent, useState } from 'react'
+import { request } from '../../../services/api';
+import { DefectType } from '../../../models';
 
 // MUI
-import { TextField, Button } from '@mui/material'
+import { TextField, Button, CircularProgress } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close';
 import DoneIcon from '@mui/icons-material/Done';
 
 interface IProps {
-  listMenu: string[],
-  setListMenu: Dispatch<SetStateAction<string[]>>
+  isLoading: boolean,
+  setIsInput: Dispatch<SetStateAction<boolean>>,
+  getListDefect: () => void,
 }
 
-const AddItem = ({ setListMenu, listMenu }: IProps) => {
+const AddItem = ({ isLoading, setIsInput, getListDefect }: IProps) => {
 
   const [defectName, setDefectName] = useState('')
   const addItem = () => {
-    setDefectName('')
-    setListMenu([defectName, ...listMenu])
+    request.createDefect(defectName)
+      .then(response => {
+        setDefectName('')
+        getListDefect()
+      })
   }
 
   return (
@@ -34,11 +40,17 @@ const AddItem = ({ setListMenu, listMenu }: IProps) => {
         size='small'
       />
       <Button className='!w-4 !h-4 !ml-3 !mr-2' variant='text'>
-        <CloseIcon className='text-red-100' onClick={() => setDefectName('')} />
+        <CloseIcon className='text-red-100' onClick={() => { setDefectName(''); setIsInput(false) }} />
       </Button>
-      <Button className='!w-4 !h-4' variant='text'>
-        <DoneIcon className='text-green-100' onClick={() => defectName && addItem()} />
-      </Button>
+      {
+        isLoading ? (
+          <CircularProgress className='!h-7 !w-7' />
+        ) : (
+          <Button className='!w-4 !h-4' variant='text'>
+            <DoneIcon className='text-green-100' onClick={() => defectName && addItem()} />
+          </Button>
+        )
+      }
     </div>
   )
 }

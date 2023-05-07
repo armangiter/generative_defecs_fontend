@@ -1,6 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Input, Label, MenuList, SelectList } from '../../../mui/customize'
 import { SelectChangeEvent, Slider, Button } from '@mui/material'
+import { DefectType as Defect } from '../../../models';
+import { request } from '../../../services/api'
+import i18next from 'i18next';
 
 interface Selects {
   id: number,
@@ -12,29 +15,49 @@ interface Selects {
 
 const DefectType = () => {
 
+  const { t } = i18next;
   const [progress, setProgress] = useState<number>(17)
   const [listModel, setListModel] = useState<string[]>(['Scratch-1', 'Scratch-2', 'Scratch-3'])
   const [listMask, setListMask] = useState<string[]>(['Random', 'In Paint'])
+  const [defect, setDefect] = useState<number>()
+  const [listDefect, setListDefect] = useState<Defect[]>([])
   const [model, setModel] = useState<string>(listModel[0])
   const [mask, setMask] = useState<string>(listMask[0])
   const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
-    name === 'model' ? setModel(event.target.value as string) : setMask(event.target.value as string)
+    name === 'model' ? setModel(event.target.value as string) :
+      name === 'mask' ? setMask(event.target.value as string) :
+        setDefect(event.target.value as number)
 
   const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
 
   const listSelect: Selects[] = [
-    { id: 1, name: 'model', value: model, label: 'Model', list: listModel },
-    { id: 2, name: 'mask', value: mask, label: 'Mask Mode', list: listMask }
+    { id: 1, name: 'model', value: model, label: t('model'), list: listModel },
+    { id: 2, name: 'mask', value: mask, label: t('mask_mode'), list: listMask }
   ]
+
+  useEffect(() => {
+    request.listDefect()
+      .then(response => {
+        setListDefect(response.data)
+        setDefect(response.data[0].id)
+      })
+  }, [])
 
   return (
     <div className='w-full md:w-1/2'>
       <div className='flex items-start flex-col'>
-        <Label className='!mb-1'>Defect Type</Label>
-        <Input
+        <Label className='!mb-1'>{t('defect_type')}</Label>
+        <SelectList
           size='small'
-          placeholder='Scratch'
-        />
+          value={defect || ''}
+          onChange={(event) => changeModal(event, 'defect')}
+        >
+          {listDefect.map((item: Defect) =>
+            <MenuList key={item.id} value={item.id}>
+              {item.name}
+            </MenuList>
+          )}
+        </SelectList>
       </div>
       {listSelect.map((item: Selects) =>
         <div key={item.id} className='flex items-start flex-col mt-6'>
@@ -54,7 +77,7 @@ const DefectType = () => {
       )}
       <div className='flex flex-col mt-6'>
         <div className='flex items-center justify-between'>
-          <Label>Number of Masks</Label>
+          <Label>{t('number_of_masks')}</Label>
           <p
             className='w-16 h-10 bg-dark-200 rounded border border-light-400 font-normal text-[15px]
             flex justify-center items-center'
@@ -68,17 +91,17 @@ const DefectType = () => {
           onChange={changeProgress}
           aria-label="Default"
           color='secondary'
-          max={80}
+          max={100}
         />
       </div>
       <div className='flex flex-col mt-6'>
-        <Label className='!mb-1'>Number of Images</Label>
+        <Label className='!mb-1'>{t('number_of_images')}</Label>
         <Input
           value={20}
           size='small'
         />
       </div>
-      <Button fullWidth className='!mt-6' variant='contained' color='success'>Generate</Button>
+      <Button fullWidth className='!mt-6' variant='contained' color='success'>{t('generate')}</Button>
     </div>
   )
 }

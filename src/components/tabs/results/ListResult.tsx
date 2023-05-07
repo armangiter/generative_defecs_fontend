@@ -1,6 +1,6 @@
-import { useState } from 'react'
 import { Label } from "../../../mui/customize"
 import DetailCard from './modal/DetailCard'
+import i18next from 'i18next';
 
 interface Result {
   id: number,
@@ -15,6 +15,9 @@ interface IProps {
 }
 
 const ListResult = ({ data }: IProps) => {
+
+  const { t } = i18next;
+
   return (
     <li className='bg-dark-300 p-2 rounded-md	'>
       <Label>{data.date}</Label>
@@ -27,10 +30,10 @@ const ListResult = ({ data }: IProps) => {
         {data.images.length > 4 && <DetailCard data={data} />}
       </ul>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
-        Type: {data.type}
+        {t('type')}: {data.type}
       </p>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
-        Model: {data.model}
+        {t('model')}: {data.model}
       </p>
     </li>
   )

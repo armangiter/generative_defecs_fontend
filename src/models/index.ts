@@ -20,3 +20,8 @@ export interface Annotation {
 export interface Annotations {
   [key: string]: Annotation
 }
+
+export interface DefectType {
+  id: number,
+  name: string
+}

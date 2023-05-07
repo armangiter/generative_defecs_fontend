@@ -2,6 +2,7 @@ import { useState, SyntheticEvent, ReactNode } from 'react'
 import { Box, AppBar, Tab, Tabs } from '@mui/material'
 import SwipeableViews from 'react-swipeable-views';
 import { tabTitle } from '../helper';
+import i18next from 'i18next';
 
 // Components
 import FineTune from './tabs/fineTune';
@@ -42,10 +43,11 @@ function a11yProps(index: number) {
 
 const TabPage = () => {
 
-  const listTab: string[] = ['Fine Tune', 'Generator', 'Results'];
+  const { t } = i18next;
+  const listTab: string[] = [t('fine_tune'), t('generator'), t('results')];
   const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
-  const [value, setValue] = useState<number>(1);
-  tabTitle(`${listTab[value]} - Rutilea`)
+  const [value, setValue] = useState<number>(0);
+  tabTitle(`${listTab[value]} - ${t('rutilea')}`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
   const changeIndex = (index: number) => setValue(index);

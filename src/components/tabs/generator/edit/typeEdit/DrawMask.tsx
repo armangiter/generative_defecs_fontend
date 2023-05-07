@@ -1,5 +1,5 @@
-import { useRef, useEffect, useState } from 'react'
-import Konva, { Layer, Image, Line } from 'react-konva'
+import { useRef, useState } from 'react'
+import { Layer, Image, Line } from 'react-konva'
 
 interface IProps {
   image: HTMLImageElement | undefined,

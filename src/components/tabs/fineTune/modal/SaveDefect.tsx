@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { Modal, Box, TextField, Button } from '@mui/material';
 import style from '../../../../mui/style';
 import { Label } from '../../../../mui/customize';
+import i18next from 'i18next';
 
 const SaveDefect = () => {
 
+  const { t } = i18next;
   const [open, setOpen] = useState(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -17,9 +19,9 @@ const SaveDefect = () => {
       aria-describedby="modal-modal-description"
     >
       <Box className='!px-8 !w-[560px]' sx={style}>
-        <p className='text-2xl font-extrabold text-light-100'>Save Defect Model</p>
+        <p className='text-2xl font-extrabold text-light-100'>{t('save_defect_model')}</p>
         <div className='flex flex-col justify-start mt-12'>
-          <Label className='!mb-1'>Defect Type</Label>
+          <Label className='!mb-1'>{t('defect_type')}</Label>
           <TextField
             placeholder='Scratch'
             size='small'
@@ -28,7 +30,7 @@ const SaveDefect = () => {
               '.MuiInputBase-input': { color: '#D1D5DB' }
             }}
           />
-          <Label className='mt-6 !mb-1'>Defect Type</Label>
+          <Label className='mt-6 !mb-1'>{t('defect_type')}</Label>
           <TextField
             placeholder='Scratch-1'
             size='small'
@@ -44,12 +46,12 @@ const SaveDefect = () => {
             color='secondary'
             variant='outlined'
             onClick={closeModal}
-          >Discard</Button>
+          >{t('discard')}</Button>
           <Button
             color='secondary'
             variant='contained'
             onClick={closeModal}
-          >Save</Button>
+          >{t('save')}</Button>
         </div>
       </Box>
     </Modal>

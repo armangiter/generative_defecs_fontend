@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction, useRef } from 'react'
 import Cropper, { ReactCropperElement } from "react-cropper";
 import { Button } from '@mui/material'
+import i18next from 'i18next';
 
 interface IProps {
   urlUploaded: string,
@@ -9,6 +10,7 @@ interface IProps {
 
 const Crop = ({ urlUploaded, setUrlUploaded }: IProps) => {
 
+  const { t } = i18next;
   const cropperRef = useRef<ReactCropperElement>();
 
   const cropImage = () =>
@@ -21,7 +23,7 @@ const Crop = ({ urlUploaded, setUrlUploaded }: IProps) => {
         onClick={cropImage}
         color='success'
         variant='contained'
-      >Crop</Button>
+      >{t('crop')}</Button>
       <Cropper
         ref={cropperRef}
         style={{ height: 400, width: "100%" }}

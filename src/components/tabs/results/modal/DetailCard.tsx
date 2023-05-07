@@ -5,6 +5,7 @@ import { Result } from "../../../../models"
 import style from '../../../../mui/style';
 import CloseIcon from '@mui/icons-material/Close';
 import download from '../../../../assets/icons/download.svg';
+import i18next from 'i18next';
 
 interface IProps {
   data: Result,
@@ -12,6 +13,7 @@ interface IProps {
 
 const DetailCard = ({ data }: IProps) => {
 
+  const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
@@ -41,7 +43,7 @@ const DetailCard = ({ data }: IProps) => {
           </div>
           <div className='flex flex-col sm:flex-row items-start justify-center mt-8 gap-8 h-fit sm:h-[89%]'>
             <div className='flex flex-col justify-center w-full sm:w-1/2 h-full'>
-              <Label className='!mb-1'>Defect Type</Label>
+              <Label className='!mb-1'>{t('defect_type')}</Label>
               <Input
                 size='small'
                 value={data.type}
@@ -68,10 +70,10 @@ const DetailCard = ({ data }: IProps) => {
                   </li>
                 )}
               </ul>
-              <Button fullWidth className='!mt-6' color='success' variant='contained'>Download All</Button>
+              <Button fullWidth className='!mt-6' color='success' variant='contained'>{t('download_all')}</Button>
             </div>
             <div className='flex flex-col h-full justify-start w-full sm:w-1/2'>
-              <Label className='!mb-1'>Model</Label>
+              <Label className='!mb-1'>{t('model')}</Label>
               <Input
                 size='small'
                 value={data.model}

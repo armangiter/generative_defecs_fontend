@@ -5,9 +5,11 @@ import ListIcon from './edit/view/ListIcon';
 import Konva from './edit/Konva';
 import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
 import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
+import i18next from 'i18next';
 
 const UploadImage = () => {
 
+  const { t } = i18next;
   const [type, setType] = useState<string>('MouseSquare')
   const [typeRect, setTypeRect] = useState<string>('MouseSquare')
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
@@ -25,7 +27,7 @@ const UploadImage = () => {
 
   return (
     <div className='w-full md:w-1/2'>
-      <p className='text-sm	font-medium mb-1'>Your Image</p>
+      <p className='text-sm	font-medium mb-1'>{t('your_image')}</p>
       {urlUploaded ?
         <div
           className={`w-full rounded-md overflow-hidden 
@@ -56,8 +58,8 @@ const UploadImage = () => {
         >
           <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer z-10' />
           <img src={gallery} alt='gallery' />
-          <p className='text-primary font-normal text-xs mt-4 mb-6'>Drag & drop your files here or</p>
-          <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>Browse</Button>
+          <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
+          <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
         </div>
       }
     </div>
