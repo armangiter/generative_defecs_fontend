@@ -1,5 +1,5 @@
 import { useEffect, useState, ChangeEvent } from 'react';
-import { Button, Divider } from '@mui/material';
+import { Button, Divider, CircularProgress } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import remove from '../../../assets/icons/delete.svg';
 import { request } from '../../../services/api';
@@ -14,9 +14,11 @@ const UploadImage = () => {
 
   const { t } = i18next;
   const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
+  const [idLoading, setIdLoading] = useState<number>();
+
   const getListImage = () => {
     request.listImage()
-      .then(response => setUrlUploaded(response.data))
+      .then(response => setUrlUploaded(response.data.reverse()))
   }
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     const defectId = 2
@@ -29,8 +31,13 @@ const UploadImage = () => {
         })
     }
   }
-  const removeImage = (item: Url) => {
-    setUrlUploaded(urlUploaded.filter(url => url.id !== item.id))
+  const removeImage = (id: number) => {
+    setIdLoading(id)
+    request.deleteImage(id)
+      .then(response => {
+        setIdLoading(id)
+        getListImage()
+      })
   }
 
   const updateUrl = (url: string) => url && url.replace("http://minio", "http://128.65.167.198")
@@ -51,16 +58,21 @@ const UploadImage = () => {
       </div>
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-        {urlUploaded.length && urlUploaded.reverse().map((item: Url) =>
+        {urlUploaded.length && urlUploaded.map((item: Url) =>
           <li key={item.id} className='relative'>
             <img src={updateUrl(item.file)} className='h-[120px] object-cover rounded-md' />
             <Button
               className='!min-w-0 !rounded-lg !w-9 !h-9 !absolute right-3 top-3 !bg-[rgba(0,0,0,0.4)]
               shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
               variant='text'
-              onClick={() => removeImage(item)}
+              color='error'
+              onClick={() => removeImage(item.id)}
             >
-              <img src={remove} alt='delete' />
+              {
+                idLoading === item.id ?
+                  <CircularProgress className='!w-full !h-full' /> :
+                  <img src={remove} alt='delete' />
+              }
             </Button>
           </li>
         )}
