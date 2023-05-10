@@ -29,12 +29,10 @@ const DatePicker = ({ dateRange, setDateRange }: IProps) => {
     t("Jan"), t("Feb"), t("Mar"), t("Apr"), t("May"), t("Jun"),
     t("Jul"), t("Aug"), t("Sep"), t("Oct"), t("Nov"), t("Dec")
   ];
-  console.log(dateRef);
-
 
   return (
     <div className='flex items-center justify-center'>
-      <ListFilter />
+      {/* <ListFilter /> */}
       <DateRange
         editableDateInputs={true}
         onChange={(item: any) => changeDatePicker([item.selection])}

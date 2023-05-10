@@ -1,15 +1,16 @@
 export interface ResultImg {
   id: number,
-  created: string,
   file: string
 }
 
 export interface Result {
   id: number,
   image: number,
+  created: string,
   mask_image: number,
   defect_type_id: number,
   defect_model_id: number,
+  defect_type_name?: string,
   result_images: ResultImg[],
 }
 

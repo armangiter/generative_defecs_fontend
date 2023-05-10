@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react'
+import { useState, Dispatch, SetStateAction } from 'react'
 import { useTranslation } from 'react-i18next';
 import filter from '../../../../assets/icons/filter.svg';
 import PreviewDate from './PreviewDate';
@@ -7,27 +7,25 @@ import DatePicker from './DatePicker';
 import { Menu } from '@mui/material';
 import { addDays } from 'date-fns';
 
-const FilterDate = () => {
+interface IProps {
+  dateRange: TimeDate[],
+  setDateRange: Dispatch<SetStateAction<TimeDate[]>>
+}
+
+const FilterDate = ({ dateRange, setDateRange }: IProps) => {
 
   const { t } = useTranslation();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement | boolean>(true);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
   const open = Boolean(anchorEl);
-  const [dateRange, setDateRange] = useState<TimeDate[]>([
-    {
-      startDate: addDays(new Date(), -30),
-      endDate: new Date(),
-      key: 'selection'
-    }
-  ]);
   const closeModal = () => setAnchorEl(null);
 
   return (
-    <div className='flex items-center justify-between'>
+    <div className='flex items-center justify-between my-8'>
       <div className='flex items-center'>
         <img src={filter} alt='filter' />
         <p className='text-sm font-medium text-light-300 ml-2'>{t('filters')}</p>
       </div>
-      <div className='my-8'>
+      <div>
         <PreviewDate
           dateRange={dateRange}
           setDateRange={setDateRange}

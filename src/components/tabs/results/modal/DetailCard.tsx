@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Modal, Box, Button } from '@mui/material';
 import { Label, Input } from '../../../../mui/customize';
 import { Result } from "../../../../models"
@@ -8,25 +8,38 @@ import download from '../../../../assets/icons/download.svg';
 import i18next from 'i18next';
 
 interface IProps {
+  open: boolean,
   data: Result,
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const DetailCard = ({ data }: IProps) => {
+const DetailCard = ({ open, setOpen, data }: IProps) => {
 
   const { t } = i18next;
-  const [open, setOpen] = useState<boolean>(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-  const [selectedImg, setSelectedImg] = useState(data.images[0])
+  const [selectedImg, setSelectedImg] = useState(data.result_images[0].file)
+
+  const downloadImg = (url: string) => {
+    // const link = document.createElement('a');
+    // link.href = 'https://img.freepik.com/free-photo/close-up-young-successful-man-smiling-camera-standing-casual-outfit-against-blue-background_1258-65746.jpg';
+    // link.download = 'my-image.png';
+    // link.style.display = 'none';
+    // document.body.appendChild(link);
+    // link.click();
+    // document.body.removeChild(link);
+  }
 
   return (
     <div className='w-1/4'>
-      <li
-        className="w-full h-10 p-1.5 bg-dark-100 rounded flex justify-center items-center cursor-pointer"
-        onClick={openModal}
-      >
-        <Label className="text-light-100">+{data.images.length - 3}</Label>
-      </li>
+      {data.result_images.length > 4 && 
+        <li
+          className="w-full h-10 p-1.5 bg-dark-100 rounded flex justify-center items-center cursor-pointer"
+          onClick={openModal}
+        >
+          <Label className="text-light-100">+{data.result_images.length - 3}</Label>
+        </li>
+      }
       <Modal
         open={open}
         onClose={closeModal}
@@ -35,7 +48,7 @@ const DetailCard = ({ data }: IProps) => {
       >
         <Box className='!w-[90%] h-[80vh] !max-h-[640px] !px-8' sx={style}>
           <div className='flex items-center justify-between'>
-            <p className='font-extrabold text-2xl text-light-100'>{data.date}</p>
+            <p className='font-extrabold text-2xl text-light-100'>{data.created.split('T')[0]}</p>
             <CloseIcon
               className='!text-light-100 border border-light-100 rounded-full p-1 cursor-pointer'
               onClick={closeModal}
@@ -46,7 +59,7 @@ const DetailCard = ({ data }: IProps) => {
               <Label className='!mb-1'>{t('defect_type')}</Label>
               <Input
                 size='small'
-                value={data.type}
+                value={data.defect_type_name}
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
@@ -60,12 +73,14 @@ const DetailCard = ({ data }: IProps) => {
                 grid-rows-[min-content] mb-auto h-[55%] gap-2.5 rounded-md p-6 mt-8 border 
                 border-light-400 overflow-auto'
               >
-                {data.images.map((item, idx) =>
-                  <li key={idx} className='w-full cursor-pointer max-h-20' onClick={() => setSelectedImg(item)}>
+                {data.result_images.map((item, idx) =>
+                  <li key={idx} className='w-full cursor-pointer max-h-20' onClick={() => setSelectedImg(item.file)}>
                     <img
-                      src={item}
+                      src={item.file}
                       alt='result'
-                      className={`rounded-md transition object-cover h-full w-full border-[3px] border-transparent ${selectedImg === item && '!border-light-100'}`}
+                      className={`rounded-md transition object-cover h-full w-full border-[3px] border-transparent 
+                        ${selectedImg === item.file && '!border-light-100'}`
+                      }
                     />
                   </li>
                 )}
@@ -76,7 +91,7 @@ const DetailCard = ({ data }: IProps) => {
               <Label className='!mb-1'>{t('model')}</Label>
               <Input
                 size='small'
-                value={data.model}
+                value='Scratch-1'
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
@@ -89,6 +104,7 @@ const DetailCard = ({ data }: IProps) => {
                 <img className='w-full h-full object-cover' src={selectedImg} alt='result' />
                 <img
                   className='absolute top-6 right-6 bg-light-100 p-2 shadow-[0px_4px_4px_rgba(0,0,0,0.08)] rounded-lg cursor-pointer'
+                  onClick={() => downloadImg(selectedImg)}
                   src={download}
                   alt='download'
                 />
