@@ -12,35 +12,28 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 // Services
 import { request } from '../../../services/api';
 
-const DefectType = () => {
+interface IProps {
+  listDefect: Defect[] | undefined,
+  isLoading: boolean,
+  getListDefect: () => void
+}
+
+const DefectType = ({ listDefect, isLoading, getListDefect }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
   const [isInput, setIsInput] = useState<boolean>(false);
-  const [listDefect, setListDefect] = useState<Defect[]>();
   const [defect, setDefect] = useState<number>();
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const changeDefect = (event: SelectChangeEvent<unknown>) => setDefect(event.target.value as number)
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
 
-  const getListDefect = () => {
-    setIsLoading(true)
-    request.listDefect()
-      .then(response => {
-        setIsLoading(false)
-        if (response.data.length) {
-          setListDefect(response.data)
-          setDefect(response.data[0].id)
-        }
-      })
-      .catch(() => setIsLoading(false))
-  }
-
   useEffect(() => {
-    getListDefect()
-  }, [])
+    if (listDefect) {
+      setDefect(listDefect[0].id)
+    }
+  }, [listDefect])
 
   return (
     <div className='w-full md:w-1/2 flex flex-col'>

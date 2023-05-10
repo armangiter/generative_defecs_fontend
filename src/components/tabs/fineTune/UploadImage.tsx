@@ -4,6 +4,7 @@ import gallery from '../../../assets/images/gallery.png';
 import remove from '../../../assets/icons/delete.svg';
 import { request } from '../../../services/api';
 import i18next from 'i18next';
+import { updateUrl } from '../../../helper';
 
 interface Url {
   id: number,
@@ -26,7 +27,7 @@ const UploadImage = () => {
     formData.append('file', event.target.files[0])
     if (event.target.files && formData.get('file')) {
       request.uploadImage(formData.get('file'), defectId)
-        .then(response => {
+        .then(() => {
           getListImage();
         })
     }
@@ -34,13 +35,12 @@ const UploadImage = () => {
   const removeImage = (id: number) => {
     setIdLoading(id)
     request.deleteImage(id)
-      .then(response => {
+      .then(() => {
         setIdLoading(id)
         getListImage()
       })
   }
 
-  const updateUrl = (url: string) => url && url.replace("http://minio", "http://128.65.167.198")
 
   useEffect(() => {
     getListImage()

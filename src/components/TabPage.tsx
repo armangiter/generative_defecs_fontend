@@ -1,6 +1,8 @@
-import { useState, SyntheticEvent, ReactNode } from 'react'
-import { Box, AppBar, Tab, Tabs } from '@mui/material'
+import { useState, SyntheticEvent, ReactNode, useEffect } from 'react'
+import { Box, AppBar, Tab, Tabs } from '@mui/material';
 import SwipeableViews from 'react-swipeable-views';
+import { request } from '../services/api';
+import { DefectType } from '../models';
 import { tabTitle } from '../helper';
 import i18next from 'i18next';
 
@@ -44,13 +46,42 @@ function a11yProps(index: number) {
 const TabPage = () => {
 
   const { t } = i18next;
+  const [listDefect, setListDefect] = useState<DefectType[]>();
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const listTab: string[] = [t('fine_tune'), t('generator'), t('results')];
-  const listComponent: ReactNode[] = [<FineTune />, <Generator />, <Results />]
-  const [value, setValue] = useState<number>(0);
+  const getListDefect = () => {
+    setIsLoading(true)
+    request.listDefect()
+      .then(response => {
+        setIsLoading(false)
+        if (response.data.length) {
+          setListDefect(response.data)
+        }
+      })
+      .catch(() => setIsLoading(false))
+  }
+  const listComponent: ReactNode[] = [
+    <FineTune
+      getListDefect={getListDefect}
+      listDefect={listDefect}
+      isLoading={isLoading}
+    />,
+    <Generator
+      listDefect={listDefect}
+    />,
+    <Results
+      listDefect={listDefect}
+    />
+  ]
+  const [value, setValue] = useState<number>(2);
   tabTitle(`${listTab[value]} - ${t('rutilea')}`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
   const changeIndex = (index: number) => setValue(index);
+
+  useEffect(() => {
+    getListDefect()
+  }, [])
 
   return (
     <Box className='!w-full'>

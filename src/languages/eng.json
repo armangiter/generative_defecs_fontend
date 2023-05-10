@@ -27,6 +27,18 @@
   "Crop": "crop",
   "your_Results": "Your Results",
   "type": "Type",
-  
-  "download_all": "Download All"
+  "download_all": "Download All",
+  "filters": "Filters",
+  "Jan": "Jan",
+  "Feb": "Feb",
+  "Mar": "Mar",
+  "Apr": "Apr",
+  "May": "May",
+  "Jun": "Jun",
+  "Jul": "Jul",
+  "Aug": "Aug",
+  "Sep": "Sep",
+  "Oct": "Oct",
+  "Nov": "Nov",
+  "Dec": "Dec"
 }

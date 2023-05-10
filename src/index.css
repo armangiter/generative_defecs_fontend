@@ -42,7 +42,84 @@ p {
   fill: #F97316;
 }
 
-.testt {
-  width: 100% !important;
-  height: 100% !important;
+.rdrDateDisplayWrapper {
+  display: none;
+}
+
+.rdrDay .rdrDayNumber span {
+  color: #FFFFFF !important;
+}
+
+.rdrDayPassive .rdrDayNumber span {
+  color: rgb(129, 135, 144) !important;
+}
+
+.rdrInRange {
+  background: #3F4959;
+  top: 4px !important;
+}
+
+.rdrInRange+.rdrDayNumber span {
+  color: #F97316 !important;
+}
+
+.rdrStartEdge,
+.rdrEndEdge {
+  color: #F97316 !important;
+  height: 80% !important;
+  top: 4px !important;
+}
+
+.rdrStartEdge {
+  border-top-left-radius: 4px !important;
+  border-bottom-left-radius: 4px !important;
+}
+
+.rdrEndEdge {
+  border-top-right-radius: 4px !important;
+  border-bottom-right-radius: 4px !important;
+}
+
+.rdrDayInPreview {
+  color: transparent !important;
+}
+
+.rdrDayInPreview+span {
+  background: #3F4959 !important;
+}
+
+.rdrDayStartPreview,
+.rdrDayEndPreview {
+  background: rgba(249, 115, 22, 0.2) !important;
+  height: 80%;
+  top: 4px !important;
+  border-radius: 4px;
+  border: 0;
+}
+
+.rdrNextButton:hover,
+.rdrPprevButton:hover {
+  background: #1F2937;
+}
+
+.rdrNextButton i {
+  border-color: transparent transparent transparent #FFFFFF;
+}
+
+.rdrPprevButton i {
+  border-color: transparent #FFFFFF transparent transparent;
+}
+
+.rdrYearPicker {
+  display: none;
+}
+
+.rdrMonthPicker select {
+  pointer-events: none;
+  background: transparent !important;
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  color: #FFFFFF !important;
+  padding: 10px !important;
 }

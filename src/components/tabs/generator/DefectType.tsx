@@ -13,14 +13,17 @@ interface Selects {
   list: string[]
 }
 
-const DefectType = () => {
+interface IProps {
+  listDefect: Defect[] | undefined
+}
+
+const DefectType = ({ listDefect }: IProps) => {
 
   const { t } = i18next;
   const [progress, setProgress] = useState<number>(17)
   const [listModel, setListModel] = useState<string[]>(['Scratch-1', 'Scratch-2', 'Scratch-3'])
   const [listMask, setListMask] = useState<string[]>(['Random', 'In Paint'])
   const [defect, setDefect] = useState<number>()
-  const [listDefect, setListDefect] = useState<Defect[]>([])
   const [model, setModel] = useState<string>(listModel[0])
   const [mask, setMask] = useState<string>(listMask[0])
   const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
@@ -36,12 +39,10 @@ const DefectType = () => {
   ]
 
   useEffect(() => {
-    request.listDefect()
-      .then(response => {
-        setListDefect(response.data)
-        setDefect(response.data[0].id)
-      })
-  }, [])
+    if (listDefect) {
+      setDefect(listDefect[0].id)
+    }
+  }, [listDefect])
 
   return (
     <div className='w-full md:w-1/2'>
@@ -52,7 +53,7 @@ const DefectType = () => {
           value={defect || ''}
           onChange={(event) => changeModal(event, 'defect')}
         >
-          {listDefect.map((item: Defect) =>
+          {listDefect && listDefect.length && listDefect.map((item: Defect) =>
             <MenuList key={item.id} value={item.id}>
               {item.name}
             </MenuList>

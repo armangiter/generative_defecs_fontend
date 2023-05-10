@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
-import { Typography, TextField, Select, MenuItem } from '@mui/material'
+import { Typography, TextField, Select, MenuItem, Button } from '@mui/material'
 
 const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
   height: 16,
@@ -34,4 +34,6 @@ const MenuList = styled(MenuItem)({
 
 const Label = styled(Typography)({ color: '#D1D5DB', fontSize: 14, fontWeight: 500, fontFamily: "Inter" });
 
-export { BorderLinearProgress, Label, Input, SelectList, MenuList }
+const ButtonDate = styled(Button)({ background: '#353F4F', height: 40, borderRadius: 6, ":hover": { background: '#1F2937' } })
+
+export { BorderLinearProgress, Label, Input, SelectList, MenuList, ButtonDate }

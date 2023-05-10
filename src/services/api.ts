@@ -16,4 +16,5 @@ export const request = {
   listImage: () => api.get('images/'),
   deleteImage: (id: number) => api.delete(`images/${id}`),
   createFineTune: () => api.post('fine_tune/'),
+  getResult: () => api.get('results')
 }

@@ -1,9 +1,16 @@
+export interface ResultImg {
+  id: number,
+  created: string,
+  file: string
+}
+
 export interface Result {
   id: number,
-  date: string,
-  type: string,
-  model: string,
-  images: string[]
+  image: number,
+  mask_image: number,
+  defect_type_id: number,
+  defect_model_id: number,
+  result_images: ResultImg[],
 }
 
 export interface Annotation {
@@ -24,4 +31,10 @@ export interface Annotations {
 export interface DefectType {
   id: number,
   name: string
+}
+
+export interface TimeDate {
+  startDate: Date;
+  endDate: Date;
+  key: string;
 }
