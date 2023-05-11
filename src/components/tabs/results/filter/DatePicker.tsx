@@ -1,47 +1,69 @@
-import { Dispatch, SetStateAction, useRef } from 'react';
+import { useState, Dispatch, SetStateAction } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TimeDate } from '../../../../models';
 import ListFilter from './changeDate/ListFilter';
+import { Button } from '@mui/material'
 
 // DatePicker
-import { DateRange, DateRangeProps } from 'react-date-range';
+import { DateRange } from 'react-date-range';
 import { enAU, ja } from 'date-fns/locale';
-import { addMonths } from 'date-fns';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
 interface IProps {
-  dateRange: TimeDate[],
-  setDateRange: Dispatch<SetStateAction<TimeDate[]>>
+  editDateRange: TimeDate[],
+  setEditDateRange: Dispatch<SetStateAction<TimeDate[]>>,
+  updateDateRange: (name: string) => void,
+  closeModal: () => void
 }
 
-const DatePicker = ({ dateRange, setDateRange }: IProps) => {
+const DatePicker = ({ closeModal, updateDateRange, editDateRange, setEditDateRange }: IProps) => {
 
-  const { t, i18n } = useTranslation();
-  const dateRef = useRef();
-
-  const changeDatePicker = (newDate: any) => setDateRange(newDate);
-  const changeDate = () => setDateRange([{
-    ...dateRange[0],
-    endDate: addMonths(dateRange[0].endDate, 1),
-  }])
-  const shortNameOfMonth = [
-    t("Jan"), t("Feb"), t("Mar"), t("Apr"), t("May"), t("Jun"),
-    t("Jul"), t("Aug"), t("Sep"), t("Oct"), t("Nov"), t("Dec")
-  ];
+  const { i18n } = useTranslation();
+  const [filter, setFilter] = useState<number>(1)
+  const changeDatePicker = (newDate: any) => {
+    setFilter(8)
+    setEditDateRange(newDate)
+  }
 
   return (
-    <div className='flex items-center justify-center'>
-      {/* <ListFilter /> */}
-      <DateRange
-        editableDateInputs={true}
-        onChange={(item: any) => changeDatePicker([item.selection])}
-        moveRangeOnFirstSelection={false}
-        locale={i18n.language === 'jp' ? ja : enAU}
-        className='bg-dark-400'
-        ranges={dateRange}
-        ref={dateRef}
+    <div className='flex justify-center items-start py-2 pr-1 pl-2'>
+      <ListFilter
+        filter={filter}
+        setFilter={setFilter}
+        editDateRange={editDateRange}
+        setEditDateRange={setEditDateRange}
       />
+      <div className='border-0 border-l-[1px] border-l-[#3F4959]'>
+        <DateRange
+          editableDateInputs={true}
+          onChange={(item: any) => changeDatePicker([item.selection])}
+          moveRangeOnFirstSelection={false}
+          locale={i18n.language === 'jp' ? ja : enAU}
+          className='bg-dark-400'
+          ranges={editDateRange}
+        />
+        <div className='flex justify-end items-center gap-2 p-3 pb-1 border-0 border-t-[1px] border-t-[#3F4959]'>
+          <Button
+            className='!bg-dark-500'
+            variant='contained'
+            color='primary'
+            onClick={() => {
+              updateDateRange('cancel');
+              closeModal();
+              setFilter(8);
+            }}
+          >Cancel</Button>
+          <Button
+            variant='contained'
+            color='success'
+            onClick={() => {
+              updateDateRange('update');
+              closeModal();
+            }}
+          >Set Date</Button>
+        </div>
+      </div>
     </div>
   )
 }

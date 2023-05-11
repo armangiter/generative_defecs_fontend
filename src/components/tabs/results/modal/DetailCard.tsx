@@ -6,6 +6,7 @@ import style from '../../../../mui/style';
 import CloseIcon from '@mui/icons-material/Close';
 import download from '../../../../assets/icons/download.svg';
 import i18next from 'i18next';
+import axios from 'axios';
 
 interface IProps {
   open: boolean,
@@ -21,18 +22,27 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
   const [selectedImg, setSelectedImg] = useState(data.result_images[0].file)
 
   const downloadImg = (url: string) => {
-    // const link = document.createElement('a');
-    // link.href = 'https://img.freepik.com/free-photo/close-up-young-successful-man-smiling-camera-standing-casual-outfit-against-blue-background_1258-65746.jpg';
-    // link.download = 'my-image.png';
-    // link.style.display = 'none';
-    // document.body.appendChild(link);
-    // link.click();
-    // document.body.removeChild(link);
+    axios.get(url, {
+      responseType: 'blob'
+    })
+      .then(response => {
+        const href = URL.createObjectURL(response.data);
+
+        const anchorElement = document.createElement('a');
+        anchorElement.href = href;
+        anchorElement.download = 'result.png';
+
+        document.body.appendChild(anchorElement);
+        anchorElement.click();
+
+        document.body.removeChild(anchorElement);
+        window.URL.revokeObjectURL(href);
+      })
   }
 
   return (
     <div className='w-1/4'>
-      {data.result_images.length > 4 && 
+      {data.result_images.length > 4 &&
         <li
           className="w-full h-10 p-1.5 bg-dark-100 rounded flex justify-center items-center cursor-pointer"
           onClick={openModal}

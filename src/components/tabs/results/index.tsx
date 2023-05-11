@@ -8,7 +8,7 @@ import { addDays } from 'date-fns';
 import { Pagination } from "@mui/material";
 
 interface IProps {
-  listDefect: DefectType[]
+  listDefect: DefectType[] | undefined
 }
 
 const Results = ({ listDefect }: IProps) => {
@@ -16,15 +16,21 @@ const Results = ({ listDefect }: IProps) => {
   const { t } = i18next;
   const pageRef = useRef()
   const [page, setPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [listResult, setListResult] = useState<Result[]>()
   const [dateRange, setDateRange] = useState<TimeDate[]>([
     {
-      startDate: addDays(new Date(), -30),
+      startDate: addDays(new Date(), -7),
       endDate: new Date(),
       key: 'selection'
     }
   ]);
+  const [editDateRange, setEditDateRange] = useState<TimeDate[]>([
+    {
+      startDate: addDays(new Date(), -7),
+      endDate: new Date(),
+      key: 'selection'
+    }
+  ])
 
   useEffect(() => {
     request.getResult()
@@ -51,16 +57,18 @@ const Results = ({ listDefect }: IProps) => {
     return idx + 1 <= maxPage && idx + 1 > minPage
   })
 
-  const filteredDate = filteredPagination?.filter((item: Result) => 
+  const filteredDate = filteredPagination?.filter((item: Result) =>
     new Date(dateRange[0].startDate) <= new Date(item.created) && new Date(item.created) <= new Date(dateRange[0].endDate)
   )
+  const updateDateRange = (name: string) => name === 'cancel' ? setEditDateRange(dateRange) : setDateRange(editDateRange);
 
   return (
     <div>
       <p className='text-light-100 font-extrabold	text-2xl'>{t('your_Results')}</p>
-      <FilterDate 
-      dateRange={dateRange}
-      setDateRange={setDateRange}
+      <FilterDate
+        editDateRange={editDateRange}
+        updateDateRange={updateDateRange}
+        setEditDateRange={setEditDateRange}
       />
       <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
         {!!filteredDate && !!filteredDate.length && filteredDate.map((item: Result, idx: number) =>
@@ -69,32 +77,32 @@ const Results = ({ listDefect }: IProps) => {
       </ul>
       {
         !!listResult && !!listResult.length && listResult.length > 12 &&
-          <Pagination
-            count={Math.floor(listResult.length / 12)}
-            page={page}
-            onChange={handleChangePage}
-            ref={pageRef}
-            sx={{
-                marginTop: '32px',
-              '.MuiButtonBase-root': {
-                fontWeight: 500,
-                fontSize: '14px',
-                lineHeight: '20px',
-                color: '#A5ACBA',
-              },
-              '.MuiPagination-ul': {
-                background: '#2F3949',
-                boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.04)',
-                borderRadius: '25px',
-                width: 'fit-content',
-                margin: '0 auto',
-              },
-              '.Mui-selected': {
-                background: 'transparent !important',
-                color: '#F97316'
-              }
-            }}
-          />
+        <Pagination
+          count={Math.floor(listResult.length / 12)}
+          page={page}
+          onChange={handleChangePage}
+          ref={pageRef}
+          sx={{
+            marginTop: '32px',
+            '.MuiButtonBase-root': {
+              fontWeight: 500,
+              fontSize: '14px',
+              lineHeight: '20px',
+              color: '#A5ACBA',
+            },
+            '.MuiPagination-ul': {
+              background: '#2F3949',
+              boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.04)',
+              borderRadius: '25px',
+              width: 'fit-content',
+              margin: '0 auto',
+            },
+            '.Mui-selected': {
+              background: 'transparent !important',
+              color: '#F97316'
+            }
+          }}
+        />
       }
     </div>
   )

@@ -12,6 +12,7 @@ export default {
         'dark-200': '#374151',
         'dark-300': '#2F3949',
         'dark-400': '#353F4F',
+        'dark-500': '#3F4959',
         'light-100': '#FFFFFF',
       },
       colors: {
@@ -22,6 +23,7 @@ export default {
         'light-400': '#6B7280',
         'light-500': '#434B57',
         'light-600': '#F9F9F9',
+        'light-700': '#F97316',
         'dark-100': '#1F2937',
         'dark-200': '#374151',
         'green-100': '#22C55E',

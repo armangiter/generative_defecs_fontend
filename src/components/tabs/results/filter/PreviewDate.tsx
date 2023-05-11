@@ -7,12 +7,12 @@ import arrow from '../../../../assets/icons/arrow.svg';
 import calendar from '../../../../assets/icons/calendar.svg';
 
 interface IProps {
-  dateRange: TimeDate[],
-  setDateRange: Dispatch<SetStateAction<TimeDate[]>>,
-  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement>>,
+  editDateRange: TimeDate[],
+  setEditDateRange: Dispatch<SetStateAction<TimeDate[]>>,
+  setAnchorEl: Dispatch<SetStateAction<null | HTMLElement | undefined>>,
 }
 
-const PreviewDate = ({ dateRange, setDateRange, setAnchorEl }: IProps) => {
+const PreviewDate = ({ editDateRange, setEditDateRange, setAnchorEl }: IProps) => {
 
   const { t } = i18next;
   const shortNameOfMonth = [
@@ -20,12 +20,12 @@ const PreviewDate = ({ dateRange, setDateRange, setAnchorEl }: IProps) => {
     t("Jul"), t("Aug"), t("Sep"), t("Oct"), t("Nov"), t("Dec")
   ];
   const openModal = (event: MouseEvent<HTMLButtonElement>) => setAnchorEl(event?.currentTarget)
-  const changeDate = (type: string) => type === 'prev' ? setDateRange([{
-    ...dateRange[0],
-    startDate: addMonths(dateRange[0].startDate, -1),
-  }]) : setDateRange([{
-    ...dateRange[0],
-    endDate: addMonths(dateRange[0].endDate, 1),
+  const changeDate = (type: string) => type === 'prev' ? setEditDateRange([{
+    ...editDateRange[0],
+    startDate: addMonths(editDateRange[0].startDate, -1),
+  }]) : setEditDateRange([{
+    ...editDateRange[0],
+    endDate: addMonths(editDateRange[0].endDate, 1),
   }])
 
   return (
@@ -43,8 +43,8 @@ const PreviewDate = ({ dateRange, setDateRange, setAnchorEl }: IProps) => {
         <img src={calendar} alt='calendar' />
         <p className='text-light-100 text-sm font-normal'>
           {`
-            ${dateRange[0] && shortNameOfMonth[dateRange[0].startDate.getMonth()]} ${dateRange[0] && dateRange[0].startDate.getDate()} - 
-            ${dateRange[0] && shortNameOfMonth[dateRange[0].endDate.getMonth()]} ${dateRange[0] && dateRange[0].endDate.getDate()}
+            ${editDateRange[0] && shortNameOfMonth[editDateRange[0].startDate.getMonth()]} ${editDateRange[0] && editDateRange[0].startDate.getDate()} - 
+            ${editDateRange[0] && shortNameOfMonth[editDateRange[0].endDate.getMonth()]} ${editDateRange[0] && editDateRange[0].endDate.getDate()}
             `}
         </p>
       </ButtonDate>

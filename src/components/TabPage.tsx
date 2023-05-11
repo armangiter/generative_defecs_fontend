@@ -73,7 +73,7 @@ const TabPage = () => {
       listDefect={listDefect}
     />
   ]
-  const [value, setValue] = useState<number>(2);
+  const [value, setValue] = useState<number>(0);
   tabTitle(`${listTab[value]} - ${t('rutilea')}`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
