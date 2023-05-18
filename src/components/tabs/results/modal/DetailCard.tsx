@@ -19,7 +19,7 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
   const { t } = i18next;
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-  const [selectedImg, setSelectedImg] = useState(data.result_images[0].file)
+  const [selectedImg, setSelectedImg] = useState(data && data.result_images && data.result_images.length && data.result_images[0].file)
 
   const downloadImg = (url: string) => {
     axios.get(url, {
