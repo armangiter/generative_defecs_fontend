@@ -17,7 +17,6 @@ const DrawMask = ({ width, height, type, image, stageRef }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
   const isDrawing = useRef(false);
-  const lineRef = useRef<Line>(null);
 
   const handleMouseDown = (e: any) => {
     if (type === 'MouseDraw') {

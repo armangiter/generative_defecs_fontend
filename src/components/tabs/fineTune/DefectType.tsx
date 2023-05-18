@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import AddItem from './AddItem';
 import { DefectType as Defect } from '../../../models';
 import StartTuning from './modal/StartTuning';
@@ -13,27 +13,22 @@ import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 import { request } from '../../../services/api';
 
 interface IProps {
-  listDefect: Defect[] | undefined,
+  defect: number | undefined,
   isLoading: boolean,
+  listDefect: Defect[] | undefined,
+  setDefect: Dispatch<SetStateAction<number | undefined>>,
   getListDefect: () => void
 }
 
-const DefectType = ({ listDefect, isLoading, getListDefect }: IProps) => {
+const DefectType = ({ defect, setDefect, listDefect, isLoading, getListDefect }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
   const [isInput, setIsInput] = useState<boolean>(false);
-  const [defect, setDefect] = useState<number>();
   const changeDefect = (event: SelectChangeEvent<unknown>) => setDefect(event.target.value as number)
 
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
-
-  useEffect(() => {
-    if (listDefect) {
-      setDefect(listDefect[0].id)
-    }
-  }, [listDefect])
 
   return (
     <div className='w-full md:w-1/2 flex flex-col'>

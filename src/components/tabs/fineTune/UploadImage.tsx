@@ -8,10 +8,14 @@ import { updateUrl } from '../../../helper';
 
 interface Url {
   id: number,
-  file: string
+  file: string,
 }
 
-const UploadImage = () => {
+interface IProps {
+  defect: number
+}
+
+const UploadImage = ({ defect }: IProps) => {
 
   const { t } = i18next;
   const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
@@ -22,14 +26,11 @@ const UploadImage = () => {
       .then(response => setUrlUploaded(response.data.reverse()))
   }
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
-    const defectId = 2
     const formData: FormData | null = new FormData()
     formData.append('file', event.target.files[0])
     if (event.target.files && formData.get('file')) {
-      request.uploadImage(formData.get('file'), defectId)
-        .then(() => {
-          getListImage();
-        })
+      request.uploadImage(formData.get('file'), defect)
+        .then(() => getListImage())
     }
   }
   const removeImage = (id: number) => {
