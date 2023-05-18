@@ -60,6 +60,7 @@ const TabPage = () => {
       })
       .catch(() => setIsLoading(false))
   }
+  const [value, setValue] = useState<number>(0);
   const listComponent: ReactNode[] = [
     <FineTune
       getListDefect={getListDefect}
@@ -71,9 +72,9 @@ const TabPage = () => {
     />,
     <Results
       listDefect={listDefect}
+      value={value}
     />
   ]
-  const [value, setValue] = useState<number>(0);
   tabTitle(`${listTab[value]} - ${t('rutilea')}`)
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);

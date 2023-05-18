@@ -8,10 +8,11 @@ import { addDays } from 'date-fns';
 import { Pagination } from "@mui/material";
 
 interface IProps {
+  value: number,
   listDefect: DefectType[] | undefined
 }
 
-const Results = ({ listDefect }: IProps) => {
+const Results = ({ listDefect, value }: IProps) => {
 
   const { t } = i18next;
   const pageRef = useRef()
@@ -32,7 +33,7 @@ const Results = ({ listDefect }: IProps) => {
     }
   ])
 
-  useEffect(() => {
+  const getListResult = () => {
     request.getResult()
       .then(response => {
         const filteredData = response.data.map((item: Result) => {
@@ -45,7 +46,11 @@ const Results = ({ listDefect }: IProps) => {
         )
         setListResult(filteredData)
       })
-  }, [listDefect])
+  }
+
+  useEffect(() => {
+    getListResult()
+  }, [listDefect, value])
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
