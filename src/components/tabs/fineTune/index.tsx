@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import DefectType from "./DefectType"
 import UploadImage from "./UploadImage"
 import i18next from 'i18next';
-import { DefectType as Defect } from "../../../models";
+import { DefectType as Defect, Url } from "../../../models";
+import { request } from "../../../services/api";
 
 interface IProps {
   listDefect: Defect[] | undefined,
@@ -12,8 +13,14 @@ interface IProps {
 
 const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
 
+  const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
   const [defect, setDefect] = useState<number>();
   const { t } = i18next;
+
+  const getListImage = () => {
+    request.listImage()
+      .then(response => setUrlUploaded(response.data.reverse()))
+  }
 
   useEffect(() => {
     if (listDefect) {
@@ -25,8 +32,8 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
     <div>
       <p className='text-light-100 font-extrabold	text-2xl'>{t('fine_tune_defect_types')}</p>
       <div className='flex flex-col md:flex-row items-start justify-center md:gap-8 mt-12'>
-        <UploadImage defect={defect} />
-        <DefectType defect={defect} setDefect={setDefect} listDefect={listDefect} isLoading={isLoading} getListDefect={getListDefect} />
+        <UploadImage defect={defect} getListImage={getListImage} urlUploaded={urlUploaded} />
+        <DefectType getListImage={getListImage} defect={defect} setDefect={setDefect} listDefect={listDefect} isLoading={isLoading} getListDefect={getListDefect} />
       </div>
     </div>
   )

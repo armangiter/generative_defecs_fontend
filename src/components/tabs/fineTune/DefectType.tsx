@@ -9,18 +9,16 @@ import i18next from 'i18next';
 import { MenuItem, SelectChangeEvent, Button, FormControl, CircularProgress } from '@mui/material'
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
-// Services
-import { request } from '../../../services/api';
-
 interface IProps {
   defect: number | undefined,
   isLoading: boolean,
   listDefect: Defect[] | undefined,
   setDefect: Dispatch<SetStateAction<number | undefined>>,
+  getListImage: () => void,
   getListDefect: () => void
 }
 
-const DefectType = ({ defect, setDefect, listDefect, isLoading, getListDefect }: IProps) => {
+const DefectType = ({ getListImage, defect, setDefect, listDefect, isLoading, getListDefect }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
@@ -80,7 +78,7 @@ const DefectType = ({ defect, setDefect, listDefect, isLoading, getListDefect }:
           )}
         </SelectList>
       </FormControl>
-      <StartTuning />
+      <StartTuning getListImage={getListImage} />
     </div>
   )
 }

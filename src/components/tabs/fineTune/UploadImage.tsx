@@ -5,26 +5,19 @@ import remove from '../../../assets/icons/delete.svg';
 import { request } from '../../../services/api';
 import i18next from 'i18next';
 import { updateUrl } from '../../../helper';
-
-interface Url {
-  id: number,
-  file: string,
-}
+import { Url } from '../../../models';
 
 interface IProps {
-  defect: number
+  defect: number | undefined,
+  urlUploaded: Url[],
+  getListImage: () => void
 }
 
-const UploadImage = ({ defect }: IProps) => {
+const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
 
   const { t } = i18next;
-  const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
   const [idLoading, setIdLoading] = useState<number>();
 
-  const getListImage = () => {
-    request.listImage()
-      .then(response => setUrlUploaded(response.data.reverse()))
-  }
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     const formData: FormData | null = new FormData()
     formData.append('file', event.target.files[0])

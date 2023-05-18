@@ -6,7 +6,11 @@ import style from '../../../../mui/style';
 import { request } from '../../../../services/api';
 import i18next from 'i18next';
 
-const StartTuning = () => {
+interface IProps {
+  getListImage: () => void
+}
+
+const StartTuning = ({ getListImage }: IProps) => {
 
   const { t } = i18next;
   const [progress, setProgress] = useState<number>(52)
@@ -18,8 +22,9 @@ const StartTuning = () => {
   const createTune = () => {
     setIsLoading(true)
     request.createFineTune()
-      .then(res => {
+      .then(() => {
         setIsLoading(false)
+        getListImage()
       })
       .catch(() => setIsLoading(false))
   }

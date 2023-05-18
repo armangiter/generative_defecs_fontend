@@ -39,3 +39,8 @@ export interface TimeDate {
   endDate: Date;
   key: string;
 }
+
+export interface Url {
+  id: number,
+  file: string,
+}
