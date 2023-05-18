@@ -45,14 +45,18 @@ const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>{t('defect_sample')}</p>
       <div className="relative w-full h-[188px] bg-dark-200 border border-dashed border-light-400 rounded-md flex justify-center items-center flex-col py-6">
-        <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer z-10' />
+        <input
+          onChange={readDataURL}
+          type="file"
+          className='absolute w-full h-full opacity-0 cursor-pointer z-10'
+        />
         <img src={gallery} alt='gallery' />
         <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
         <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
       </div>
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-        {urlUploaded.length && urlUploaded.map((item: Url) =>
+        {!!urlUploaded.length && urlUploaded.map((item: Url) =>
           <li key={item.id} className='relative'>
             <img src={updateUrl(item.file)} className='h-[120px] object-cover rounded-md' />
             <Button
