@@ -1,4 +1,4 @@
-import { useState, useEffect, Dispatch, SetStateAction } from 'react'
+import { useState, Dispatch, SetStateAction } from 'react'
 import AddItem from './AddItem';
 import { DefectType as Defect } from '../../../models';
 import StartTuning from './modal/StartTuning';

@@ -1,19 +1,21 @@
-import { useEffect, useState, ChangeEvent } from 'react';
-import { Button, Divider, CircularProgress } from '@mui/material';
+import { Fragment, Dispatch, useEffect, SetStateAction, useState, ChangeEvent } from 'react';
+import { Button, Divider, Skeleton, CircularProgress } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import remove from '../../../assets/icons/delete.svg';
 import { request } from '../../../services/api';
 import i18next from 'i18next';
-import { updateUrl } from '../../../helper';
+import { updateUrl, urlToBlob } from '../../../helper';
 import { Url } from '../../../models';
+import { v4 } from 'uuid';
 
 interface IProps {
   defect: number | undefined,
   urlUploaded: Url[],
+  setUrlUploaded: Dispatch<SetStateAction<Url[]>>,
   getListImage: () => void
 }
 
-const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
+const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IProps) => {
 
   const { t } = i18next;
   const [idLoading, setIdLoading] = useState<number>();
@@ -21,11 +23,33 @@ const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     const formData: FormData | null = new FormData()
     formData.append('file', event.target.files[0])
-    if (event.target.files && formData.get('file')) {
+    const emptyUrl: Url = {
+      id: v4(),
+      file: '',
+    }
+    if (event.target.files && formData.get('file') && defect) {
       request.uploadImage(formData.get('file'), defect)
-        .then(() => getListImage())
+        .then(() => {
+          setUrlUploaded([emptyUrl, ...urlUploaded])
+          request.listImage()
+            .then(response => {
+              let notInclude: Url | null = null
+              response.data.map(async (item: Url) => {
+                if (!urlUploaded.find((url: Url) => url.id === item.id)) {
+                  notInclude = item
+                  if (notInclude) {
+                    const blob = await urlToBlob(item.file)
+                    notInclude.file = blob
+                    notInclude.isLoaded = true
+                    setUrlUploaded([notInclude, ...urlUploaded]);
+                  }
+                }
+              })
+            })
+        })
     }
   }
+
   const removeImage = (id: number) => {
     setIdLoading(id)
     request.deleteImage(id)
@@ -34,12 +58,6 @@ const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
         getListImage()
       })
   }
-
-
-  useEffect(() => {
-    getListImage()
-  }, [])
-
 
   return (
     <div className='w-full md:w-1/2'>
@@ -56,9 +74,19 @@ const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
       </div>
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-        {!!urlUploaded.length && urlUploaded.map((item: Url) =>
-          <li key={item.id} className='relative'>
-            <img src={updateUrl(item.file)} className='h-[120px] object-cover rounded-md' />
+
+        {!!urlUploaded.length && urlUploaded.map((item: Url) => (
+          <li key={item.id} className='relative rounded-md overflow-hidden h-[120px]'>
+            {
+              item.isLoaded ? (
+                <img
+                  src={updateUrl(item.file)}
+                  className='h-full object-cover'
+                />
+              ) : (
+                <Skeleton variant="rectangular" style={{ width: '100%', height: '100%' }} />
+              )
+            }
             <Button
               className='!min-w-0 !rounded-lg !w-9 !h-9 !absolute right-3 top-3 !bg-[rgba(0,0,0,0.4)]
               shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
@@ -73,7 +101,7 @@ const UploadImage = ({ urlUploaded, getListImage, defect }: IProps) => {
               }
             </Button>
           </li>
-        )}
+        ))}
       </ul>
     </div>
   )
