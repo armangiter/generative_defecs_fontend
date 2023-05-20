@@ -41,6 +41,8 @@ export interface TimeDate {
 }
 
 export interface Url {
-  id: number,
+  id: number | string,
   file: string,
+  isLoaded?: boolean,
+  newUploaded?: true
 }
