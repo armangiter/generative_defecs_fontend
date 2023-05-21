@@ -7,13 +7,14 @@ import DrawMask from './typeEdit/DrawMask';
 
 interface IProps {
   type: string,
+  slider: number,
   typeRect: string,
   urlUploaded: string,
   isFullScreen: boolean,
-  setUrlUploaded: Dispatch<SetStateAction<string>>
+  setUrlUploaded: Dispatch<SetStateAction<string>>,
 }
 
-const Konva = ({ urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const Konva = ({ slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef(null);
   const [image, setImage] = useState<HTMLImageElement>()
@@ -28,7 +29,6 @@ const Konva = ({ urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IP
 
   return (
     <div className='w-full h-full relative' ref={contentImg}>
-      {/* <img src={test} className='absolute w-full z-10 left-0 top-0 h-fit' /> */}
       {
         typeRect === 'Crop' ? (
           <Crop
@@ -49,6 +49,7 @@ const Konva = ({ urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IP
                   image={image}
                   stageRef={stageRef}
                   type={type}
+                  slider={slider}
                   width={contentImg.current?.clientWidth}
                   height={contentImg.current?.clientHeight}
                 />

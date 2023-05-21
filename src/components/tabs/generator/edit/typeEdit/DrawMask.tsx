@@ -3,9 +3,10 @@ import { Layer, Image, Line } from 'react-konva'
 
 interface IProps {
   image: HTMLImageElement | undefined,
-  type: string
+  slider: number,
   height?: number,
   width?: number,
+  type: string,
   stageRef: any,
 }
 
@@ -13,7 +14,7 @@ interface Lines {
   points: number[]
 }
 
-const DrawMask = ({ width, height, type, image, stageRef }: IProps) => {
+const DrawMask = ({ slider, width, height, type, image, stageRef }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
   const isDrawing = useRef(false);
@@ -35,7 +36,9 @@ const DrawMask = ({ width, height, type, image, stageRef }: IProps) => {
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
       let lastLine = lines[lines.length - 1];
-      lastLine.points = lastLine.points.concat([point.x, point.y]);
+      if (lastLine.points && lastLine) {
+        lastLine.points = lastLine.points.concat([point.x, point.y]);
+      }
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
     }
@@ -117,7 +120,7 @@ const DrawMask = ({ width, height, type, image, stageRef }: IProps) => {
           key={i}
           points={line.points}
           stroke="white"
-          strokeWidth={12}
+          strokeWidth={slider}
           onClick={event => type === 'Eraser' && removeLine(event)}
           tension={0.5}
           lineCap="round"

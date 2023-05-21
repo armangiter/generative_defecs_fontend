@@ -1,5 +1,5 @@
-import { ReactElement, useState, Dispatch, SetStateAction } from 'react'
-import { Divider } from '@mui/material';
+import { ReactElement, useState, Dispatch, MouseEvent, SetStateAction } from 'react'
+import { Divider, Menu, Slider } from '@mui/material';
 
 // Icons
 import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
@@ -16,14 +16,24 @@ interface ListIcon {
 
 interface IProps {
   type: string,
+  slider: number,
   typeRect: string,
   setType: Dispatch<SetStateAction<string>>,
-  setTypeRect: Dispatch<SetStateAction<string>>
+  setTypeRect: Dispatch<SetStateAction<string>>,
+  changeSlider: (event: Event, newValue: number | number[]) => void,
 }
 
-const ListIcon = ({ type, setType, typeRect, setTypeRect }: IProps) => {
+const ListIcon = ({ type, setType, slider, typeRect, setTypeRect, changeSlider }: IProps) => {
 
   const handleClass = (type: boolean, name?: string) => type ? name ? 'activeSIcon' : 'activeIcon' : ''
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
+  const open = Boolean(anchorEl);
+
+  const openMenu = (event: MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
+
+  const closeMenu = () =>
+    setAnchorEl(null);
 
   const listIcons: ListIcon[] = [{
     name: 'Crop', component: <Crop className={handleClass(type === 'Crop')} />,
@@ -34,7 +44,53 @@ const ListIcon = ({ type, setType, typeRect, setTypeRect }: IProps) => {
   }, {
     name: 'MouseSquare', component: <MouseSquare className={handleClass(type === 'MouseSquare')} />,
   }, {
-    name: 'MouseDraw', component: <GestureIcon className={handleClass(type === 'MouseDraw', 'Draw')} />,
+    name: 'MouseDraw', component:
+      <>
+        <div onClick={openMenu} className={handleClass(type === 'MouseDraw', 'Draw')}>
+          <GestureIcon />
+        </div>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={closeMenu}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          sx={{
+            '.MuiPaper-root': {
+              boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.08) !important',
+              borderRadius: '8px !important',
+              overflow: 'hidden',
+              border: 'none'
+            },
+            ".MuiList-root": {
+              backgroundColor: "#FFFFFF",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 220,
+              padding: 0
+            },
+            '.MuiSlider-rail': {
+              background: '#DFE2E6'
+            }
+          }}
+        >
+          <Slider
+            aria-label="Temperature"
+            className='!w-56'
+            defaultValue={30}
+            value={slider}
+            min={1}
+            max={70}
+            size='small'
+            sx={{ margin: '6px 3px 12px', width: '160px !important' }}
+            onChange={changeSlider}
+          />
+          <p className='font-normal text-sm text-light-200 ml-2.5'>{slider}</p>
+        </Menu>
+      </>
+    ,
   }, {
     name: 'Eraser', component: <Eraser className={handleClass(type === 'Eraser', 'Eraser')} />,
   }]
