@@ -1,7 +1,7 @@
 import api from "./http.service";
 
 export const request = {
-  listDefect: () => api.get('types'),
+  listDefect: () => api.get('types/'),
   createDefect: (name: string) => api.post('types/', {
     name
   }),

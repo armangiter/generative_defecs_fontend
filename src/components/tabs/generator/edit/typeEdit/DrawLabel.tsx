@@ -6,7 +6,8 @@ import { v4 } from 'uuid';
 import RectAngle from '../RectAngle';
 
 interface IProps {
-  urlUploaded: string
+  urlUploaded: string,
+  color: string,
   width?: number,
   height?: number,
   type: string,
@@ -14,7 +15,7 @@ interface IProps {
   image: HTMLImageElement | undefined
 }
 
-const DrawLabel = ({ width, height, urlUploaded, type, typeRect, image }: IProps) => {
+const DrawLabel = ({ color, width, height, urlUploaded, type, typeRect, image }: IProps) => {
 
   const [rects, setRects] = useState<Annotations>();
   const [uniqueID, setUniqueID] = useState<string>(v4())
@@ -119,12 +120,13 @@ const DrawLabel = ({ width, height, urlUploaded, type, typeRect, image }: IProps
     >
       <Image width={width} height={height} alt='img' image={image} />
       <RectAngle
-        rects={rects}
-        typeRect={typeRect}
         type={type}
+        rects={rects}
+        color={color}
+        typeRect={typeRect}
         setRects={setRects}
-        setIsTransforming={setIsTransforming}
         selectShape={selectShape}
+        setIsTransforming={setIsTransforming}
         setSelectShape={setSelectShape}
       />
     </Layer>

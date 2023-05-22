@@ -1,5 +1,7 @@
 import { ReactElement, useState, Dispatch, MouseEvent, SetStateAction } from 'react'
-import { Divider, Menu, Slider } from '@mui/material';
+import { Divider, Menu } from '@mui/material';
+import WidthStroke from './WidthStroke';
+import ColorStroke from './ColorStroke';
 
 // Icons
 import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
@@ -11,19 +13,21 @@ import GestureIcon from '@mui/icons-material/Gesture';
 
 interface ListIcon {
   name: string,
-  component: ReactElement
+  component: ReactElement,
 }
 
 interface IProps {
   type: string,
+  color: string,
   slider: number,
   typeRect: string,
   setType: Dispatch<SetStateAction<string>>,
+  setColor: Dispatch<SetStateAction<string>>,
   setTypeRect: Dispatch<SetStateAction<string>>,
   changeSlider: (event: Event, newValue: number | number[]) => void,
 }
 
-const ListIcon = ({ type, setType, slider, typeRect, setTypeRect, changeSlider }: IProps) => {
+const ListIcon = ({ color, setColor, type, setType, slider, typeRect, setTypeRect, changeSlider }: IProps) => {
 
   const handleClass = (type: boolean, name?: string) => type ? name ? 'activeSIcon' : 'activeIcon' : ''
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
@@ -66,9 +70,10 @@ const ListIcon = ({ type, setType, slider, typeRect, setTypeRect, changeSlider }
             ".MuiList-root": {
               backgroundColor: "#FFFFFF",
               display: 'flex',
+              flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              width: 220,
+              width: 250,
               padding: 0
             },
             '.MuiSlider-rail': {
@@ -76,18 +81,14 @@ const ListIcon = ({ type, setType, slider, typeRect, setTypeRect, changeSlider }
             }
           }}
         >
-          <Slider
-            aria-label="Temperature"
-            className='!w-56'
-            defaultValue={30}
-            value={slider}
-            min={1}
-            max={70}
-            size='small'
-            sx={{ margin: '6px 3px 12px', width: '160px !important' }}
-            onChange={changeSlider}
+          <WidthStroke
+            slider={slider}
+            changeSlider={changeSlider}
           />
-          <p className='font-normal text-sm text-light-200 ml-2.5'>{slider}</p>
+          <ColorStroke
+            color={color}
+            setColor={setColor}
+          />
         </Menu>
       </>
     ,

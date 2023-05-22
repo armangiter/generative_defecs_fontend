@@ -3,16 +3,17 @@ import { Circle, Rect, Transformer } from 'react-konva';
 import { Annotation } from '../../../../../models';
 
 interface IProps {
-  shapeProps: Annotation,
-  typeRect: string,
   type: string,
+  color: string,
+  typeRect: string,
   isSelected: boolean,
+  shapeProps: Annotation,
   setIsTransforming: Dispatch<SetStateAction<boolean>>,
   onSelect: () => void,
   onChange: (prop: any) => void,
 }
 
-const RectAngles = ({ shapeProps, type, isSelected, setIsTransforming, typeRect, onSelect, onChange }: IProps) => {
+const RectAngles = ({ color, shapeProps, type, isSelected, setIsTransforming, typeRect, onSelect, onChange }: IProps) => {
 
   const shapeRef = useRef<any>();
   const trRef = useRef<any>();
@@ -48,13 +49,15 @@ const RectAngles = ({ shapeProps, type, isSelected, setIsTransforming, typeRect,
         typeRect === 'MouseCircle' && type !== 'Edit' ?
           <Circle
             {...shapeProps}
+            strokeWidth={2}
             // onClick={onSelect}
-            stroke='red'
+            stroke={`#${color}`}
             draggable
             onTransformEnd={e => transformEnd(e)}
           /> :
           <Rect
             {...shapeProps}
+            strokeWidth={2}
             onClick={onSelect}
             ref={shapeRef}
             onDragEnd={(e) => {
@@ -66,7 +69,7 @@ const RectAngles = ({ shapeProps, type, isSelected, setIsTransforming, typeRect,
                 yDestination: e.target.attrs.height < 0 ? e.target.attrs.y + e.target.attrs.height : e.target.attrs.y,
               });
             }}
-            stroke='red'
+            stroke={`#${color}`}
             draggable
             onTransformStart={() => setIsTransforming(true)}
             onTransformEnd={e => transformEnd(e)}

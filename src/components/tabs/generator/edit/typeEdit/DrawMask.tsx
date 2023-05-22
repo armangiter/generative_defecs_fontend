@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Layer, Image, Line } from 'react-konva'
 
 interface IProps {
@@ -8,20 +8,21 @@ interface IProps {
   width?: number,
   type: string,
   stageRef: any,
+  color: string,
+  isFullScreen: boolean
 }
 
 interface Lines {
   points: number[]
 }
 
-const DrawMask = ({ slider, width, height, type, image, stageRef }: IProps) => {
+const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullScreen }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e: any) => {
     if (type === 'MouseDraw') {
-      document.body.style.overflowY = "hidden";
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
       setLines([...lines, { points: [pos.x, pos.y] }]);
@@ -36,7 +37,7 @@ const DrawMask = ({ slider, width, height, type, image, stageRef }: IProps) => {
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
       let lastLine = lines[lines.length - 1];
-      if (lastLine.points && lastLine) {
+      if (lastLine && lastLine.points) {
         lastLine.points = lastLine.points.concat([point.x, point.y]);
       }
       lines.splice(lines.length - 1, 1, lastLine);
@@ -119,7 +120,7 @@ const DrawMask = ({ slider, width, height, type, image, stageRef }: IProps) => {
         <Line
           key={i}
           points={line.points}
-          stroke="white"
+          stroke={`#${color}`}
           strokeWidth={slider}
           onClick={event => type === 'Eraser' && removeLine(event)}
           tension={0.5}

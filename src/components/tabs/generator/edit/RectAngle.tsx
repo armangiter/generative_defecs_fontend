@@ -3,16 +3,17 @@ import { Annotations } from '../../../../models';
 import RectAngles from './shape/RectAngles';
 
 interface IProps {
-  rects?: Annotations,
-  typeRect: string,
   type: string,
+  color: string,
+  typeRect: string,
+  rects?: Annotations,
   selectShape: string,
   setRects: Dispatch<SetStateAction<Annotations | undefined>>,
   setSelectShape: Dispatch<SetStateAction<string>>,
   setIsTransforming: Dispatch<SetStateAction<boolean>>
 }
 
-const RectAngle = ({ rects, type, typeRect, setIsTransforming, selectShape, setSelectShape, setRects }: IProps) => {
+const RectAngle = ({ color, rects, type, typeRect, setIsTransforming, selectShape, setSelectShape, setRects }: IProps) => {
   return (
     <>
       {
@@ -21,6 +22,7 @@ const RectAngle = ({ rects, type, typeRect, setIsTransforming, selectShape, setS
         ).map(rect =>
           <RectAngles
             key={rect.name}
+            color={color}
             typeRect={typeRect}
             setIsTransforming={setIsTransforming}
             onSelect={() => setSelectShape(rect.name)}

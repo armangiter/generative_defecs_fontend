@@ -7,6 +7,7 @@ import DrawMask from './typeEdit/DrawMask';
 
 interface IProps {
   type: string,
+  color: string,
   slider: number,
   typeRect: string,
   urlUploaded: string,
@@ -14,7 +15,7 @@ interface IProps {
   setUrlUploaded: Dispatch<SetStateAction<string>>,
 }
 
-const Konva = ({ slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const Konva = ({ color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef(null);
   const [image, setImage] = useState<HTMLImageElement>()
@@ -46,18 +47,21 @@ const Konva = ({ slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRe
             {
               typeRect === 'MouseDraw' ? (
                 <DrawMask
-                  image={image}
-                  stageRef={stageRef}
                   type={type}
+                  image={image}
+                  color={color}
                   slider={slider}
+                  stageRef={stageRef}
+                  isFullScreen={isFullScreen}
                   width={contentImg.current?.clientWidth}
                   height={contentImg.current?.clientHeight}
                 />
               ) : (
                 <DrawLabel
                   type={type}
-                  typeRect={typeRect}
                   image={image}
+                  color={color}
+                  typeRect={typeRect}
                   urlUploaded={urlUploaded}
                   width={contentImg.current?.clientWidth}
                   height={contentImg.current?.clientHeight}
