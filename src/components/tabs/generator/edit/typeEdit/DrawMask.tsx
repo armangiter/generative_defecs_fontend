@@ -19,13 +19,16 @@ interface Lines {
 const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullScreen }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
+  const [percentLines, setPercentLines] = useState<Lines[]>([])
+
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e: any) => {
-    if (type === 'MouseDraw') {
+    if (type === 'MouseDraw' && width && height) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
       setLines([...lines, { points: [pos.x, pos.y] }]);
+      // setPercentLines([...lines, { points: [pos.x / width, pos.y / height] }]);
     }
   };
 
@@ -42,6 +45,7 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
       }
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
+      // setPercentLines(lines.concat());
     }
   };
 
@@ -104,7 +108,33 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     setLines((prevLines) =>
       prevLines.filter((line, index) => index !== clickedLineIndex - 1)
     );
+    setPercentLines((prevLines) =>
+      prevLines.filter((line, index) => index !== clickedLineIndex - 1)
+    );
   }
+
+  useEffect(() => {
+    if (width && height) {
+      const responsiveLine = lines.map((line: Lines) => {
+        return {
+          points: line.points.map((point: number, idx: number) =>
+            idx % 2 === 0 ? point / width : point / height
+          )
+        }
+      })
+      setPercentLines(responsiveLine);
+    }
+  }, [lines])
+
+  const responsiveLine = percentLines.map((line: Lines) => {
+    if (width && height) {
+      return {
+        points: line.points.map((point: number, idx: number) =>
+          idx % 2 === 0 ? width * point : height * point
+        )
+      }
+    }
+  })
 
   return (
     <Layer
@@ -116,7 +146,7 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
       onMouseup={handleMouseUp}
     >
       <Image width={width} height={height} alt='img' image={image} />
-      {lines.map((line, i) => (
+      {responsiveLine.map((line, i) => !!line && (
         <Line
           key={i}
           points={line.points}

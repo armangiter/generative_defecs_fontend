@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, Dispatch, SetStateAction } from 'react'
 import { Stage } from 'react-konva'
 import "cropperjs/dist/cropper.css";
-import DrawLabel from './typeEdit/DrawLabel';
 import Crop from './typeEdit/Crop';
 import DrawMask from './typeEdit/DrawMask';
 
@@ -45,7 +44,7 @@ const Konva = ({ color, slider, urlUploaded, isFullScreen, setUrlUploaded, type,
             ref={stageRef}
           >
             {
-              typeRect === 'MouseDraw' ? (
+              typeRect === 'MouseDraw' && (
                 <DrawMask
                   type={type}
                   image={image}
@@ -53,16 +52,6 @@ const Konva = ({ color, slider, urlUploaded, isFullScreen, setUrlUploaded, type,
                   slider={slider}
                   stageRef={stageRef}
                   isFullScreen={isFullScreen}
-                  width={contentImg.current?.clientWidth}
-                  height={contentImg.current?.clientHeight}
-                />
-              ) : (
-                <DrawLabel
-                  type={type}
-                  image={image}
-                  color={color}
-                  typeRect={typeRect}
-                  urlUploaded={urlUploaded}
                   width={contentImg.current?.clientWidth}
                   height={contentImg.current?.clientHeight}
                 />

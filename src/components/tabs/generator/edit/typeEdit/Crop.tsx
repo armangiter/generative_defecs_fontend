@@ -39,7 +39,7 @@ const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {
         background={false}
         responsive={true}
         autoCropArea={1}
-        checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+        checkOrientation={false}
         guides={true}
       />
     </>

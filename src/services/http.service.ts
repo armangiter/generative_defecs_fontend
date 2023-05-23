@@ -11,7 +11,9 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   error => {
-    if (error.response.status === 403) {
+    console.log(error);
+
+    if (error.response && error.response.status === 403) {
       window.location.reload()
     } else {
       try {
@@ -26,18 +28,16 @@ api.interceptors.response.use(
           theme: "light",
         });
       } catch (err) {
-        Object.values(JSON.parse(error.request.response)).map((item, idx) => {
-          toast.error(`${Object.keys(JSON.parse(error.request.response))[idx]}: ${item}`, {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-        })
+        toast.error(error.name, {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }
   }

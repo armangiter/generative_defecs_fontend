@@ -5,9 +5,6 @@ import ColorStroke from './ColorStroke';
 
 // Icons
 import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
-import { ReactComponent as Edit } from '../../../../../assets/icons/edit.svg';
-import { ReactComponent as MouseCircle } from '../../../../../assets/icons/mouseCircle.svg';
-import { ReactComponent as MouseSquare } from '../../../../../assets/icons/mouseSquare.svg';
 import { ReactComponent as Eraser } from '../../../../../assets/icons/eraser.svg';
 import GestureIcon from '@mui/icons-material/Gesture';
 
@@ -41,12 +38,6 @@ const ListIcon = ({ color, setColor, type, setType, slider, typeRect, setTypeRec
 
   const listIcons: ListIcon[] = [{
     name: 'Crop', component: <Crop className={handleClass(type === 'Crop')} />,
-  }, {
-    name: 'Edit', component: <Edit className={handleClass(type === 'Edit')} />,
-  }, {
-    name: 'MouseCircle', component: <MouseCircle className={handleClass(type === 'MouseCircle')} />,
-  }, {
-    name: 'MouseSquare', component: <MouseSquare className={handleClass(type === 'MouseSquare')} />,
   }, {
     name: 'MouseDraw', component:
       <>
@@ -97,7 +88,7 @@ const ListIcon = ({ color, setColor, type, setType, slider, typeRect, setTypeRec
   }]
   const changeIcon = (item: ListIcon) => {
     setType(item.name)
-    item.name === 'MouseSquare' || item.name === 'MouseCircle' || item.name === 'Crop' || item.name === 'MouseDraw' ?
+    item.name === 'Crop' || item.name === 'MouseDraw' ?
       setTypeRect(item.name) : undefined
   }
 
