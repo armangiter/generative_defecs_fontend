@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import ListIcon from './edit/view/ListIcon';
-import Konva from './edit/Konva';
+import DrawKonva from './edit/DrawKonva';
 import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
 import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 import i18next from 'i18next';
@@ -10,11 +10,15 @@ import i18next from 'i18next';
 const UploadImage = () => {
 
   const { t } = i18next;
-  const [type, setType] = useState<string>('MouseSquare')
-  const [typeRect, setTypeRect] = useState<string>('MouseSquare')
+  const [color, setColor] = useState('FF0000')
+  const [type, setType] = useState<string>('MouseDraw')
+  const [typeRect, setTypeRect] = useState<string>('MouseDraw')
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
-  const [urlUploaded, setUrlUploaded] = useState<string>('');
+  const [slider, setSlider] = useState<number>(12)
+  const [urlUploaded, setUrlUploaded] = useState<string>();
 
+  const changeSlider = (event: Event, newValue: number | number[]) =>
+    typeof newValue === 'number' && setSlider(newValue);
 
   const readDataURL = (event: any) => {
     let reader = new FileReader();
@@ -23,7 +27,6 @@ const UploadImage = () => {
 
     reader.readAsDataURL(event.currentTarget.files[0]);
   }
-
 
   return (
     <div className='w-full md:w-1/2'>
@@ -34,14 +37,25 @@ const UploadImage = () => {
           ${isFullScreen ? 'h-full absolute left-0 top-0 z-20 rounded-r-2xl rounded-bl-2xl' :
               'relative h-96'}`}
         >
-          <Konva
+          <DrawKonva
             type={type}
+            color={color}
+            slider={slider}
             typeRect={typeRect}
             urlUploaded={urlUploaded}
             isFullScreen={isFullScreen}
             setUrlUploaded={setUrlUploaded}
           />
-          <ListIcon type={type} setType={setType} typeRect={typeRect} setTypeRect={setTypeRect} />
+          <ListIcon
+            type={type}
+            color={color}
+            slider={slider}
+            setType={setType}
+            typeRect={typeRect}
+            setColor={setColor}
+            setTypeRect={setTypeRect}
+            changeSlider={changeSlider}
+          />
           <div
             className='absolute right-6 top-6 bg-light-100 py-[12px] px-[13px] flex items-center 
           justify-center rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'

@@ -1,46 +1,94 @@
-import { ReactElement, useState, Dispatch, SetStateAction } from 'react'
-import { Divider } from '@mui/material';
+import { ReactElement, useState, Dispatch, MouseEvent, SetStateAction } from 'react'
+import { Divider, Menu } from '@mui/material';
+import WidthStroke from './WidthStroke';
+import ColorStroke from './ColorStroke';
 
 // Icons
 import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
-import { ReactComponent as Edit } from '../../../../../assets/icons/edit.svg';
-import { ReactComponent as MouseCircle } from '../../../../../assets/icons/mouseCircle.svg';
-import { ReactComponent as MouseSquare } from '../../../../../assets/icons/mouseSquare.svg';
 import { ReactComponent as Eraser } from '../../../../../assets/icons/eraser.svg';
 import GestureIcon from '@mui/icons-material/Gesture';
 
 interface ListIcon {
   name: string,
-  component: ReactElement
+  component: ReactElement,
 }
 
 interface IProps {
   type: string,
+  color: string,
+  slider: number,
   typeRect: string,
   setType: Dispatch<SetStateAction<string>>,
-  setTypeRect: Dispatch<SetStateAction<string>>
+  setColor: Dispatch<SetStateAction<string>>,
+  setTypeRect: Dispatch<SetStateAction<string>>,
+  changeSlider: (event: Event, newValue: number | number[]) => void,
 }
 
-const ListIcon = ({ type, setType, typeRect, setTypeRect }: IProps) => {
+const ListIcon = ({ color, setColor, type, setType, slider, typeRect, setTypeRect, changeSlider }: IProps) => {
 
   const handleClass = (type: boolean, name?: string) => type ? name ? 'activeSIcon' : 'activeIcon' : ''
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>();
+  const open = Boolean(anchorEl);
+
+  const openMenu = (event: MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
+
+  const closeMenu = () =>
+    setAnchorEl(null);
 
   const listIcons: ListIcon[] = [{
     name: 'Crop', component: <Crop className={handleClass(type === 'Crop')} />,
   }, {
-    name: 'Edit', component: <Edit className={handleClass(type === 'Edit')} />,
-  }, {
-    name: 'MouseCircle', component: <MouseCircle className={handleClass(type === 'MouseCircle')} />,
-  }, {
-    name: 'MouseSquare', component: <MouseSquare className={handleClass(type === 'MouseSquare')} />,
-  }, {
-    name: 'MouseDraw', component: <GestureIcon className={handleClass(type === 'MouseDraw', 'Draw')} />,
+    name: 'MouseDraw', component:
+      <>
+        <div onClick={openMenu} className={handleClass(type === 'MouseDraw', 'Draw')}>
+          <GestureIcon />
+        </div>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={closeMenu}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+          sx={{
+            '.MuiPaper-root': {
+              boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.08) !important',
+              borderRadius: '8px !important',
+              overflow: 'hidden',
+              border: 'none'
+            },
+            ".MuiList-root": {
+              backgroundColor: "#FFFFFF",
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 250,
+              padding: 0
+            },
+            '.MuiSlider-rail': {
+              background: '#DFE2E6'
+            }
+          }}
+        >
+          <WidthStroke
+            slider={slider}
+            changeSlider={changeSlider}
+          />
+          <ColorStroke
+            color={color}
+            setColor={setColor}
+          />
+        </Menu>
+      </>
+    ,
   }, {
     name: 'Eraser', component: <Eraser className={handleClass(type === 'Eraser', 'Eraser')} />,
   }]
   const changeIcon = (item: ListIcon) => {
     setType(item.name)
-    item.name === 'MouseSquare' || item.name === 'MouseCircle' || item.name === 'Crop' || item.name === 'MouseDraw' ?
+    item.name === 'Crop' || item.name === 'MouseDraw' ?
       setTypeRect(item.name) : undefined
   }
 

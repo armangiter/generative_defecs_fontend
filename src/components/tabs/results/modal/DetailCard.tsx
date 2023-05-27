@@ -40,6 +40,9 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
       })
   }
 
+  const downloadAllImg = () =>
+    data.result_images.map(item => downloadImg(item.file));
+
   return (
     <div className='w-1/4'>
       {data.result_images.length > 4 &&
@@ -95,7 +98,13 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
                   </li>
                 )}
               </ul>
-              <Button fullWidth className='!mt-6' color='success' variant='contained'>{t('download_all')}</Button>
+              <Button
+                fullWidth
+                className='!mt-6'
+                color='success'
+                variant='contained'
+                onClick={downloadAllImg}
+              >{t('download_all')}</Button>
             </div>
             <div className='flex flex-col h-full justify-start w-full sm:w-1/2'>
               <Label className='!mb-1'>{t('model')}</Label>

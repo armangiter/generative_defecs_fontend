@@ -4,8 +4,8 @@ import { Button } from '@mui/material'
 import i18next from 'i18next';
 
 interface IProps {
-  width: string,
-  height: string,
+  width: number | undefined,
+  height: number | undefined,
   urlUploaded: string,
   setUrlUploaded: Dispatch<SetStateAction<string>>
 }
@@ -13,7 +13,7 @@ interface IProps {
 const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {
 
   const { t } = i18next;
-  const cropperRef = useRef<ReactCropperElement>();
+  const cropperRef = useRef<ReactCropperElement | undefined | string>();
 
   const cropImage = () =>
     setUrlUploaded(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
@@ -39,7 +39,7 @@ const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {
         background={false}
         responsive={true}
         autoCropArea={1}
-        checkOrientation={false} // https://github.com/fengyuanchen/cropperjs/issues/671
+        checkOrientation={false}
         guides={true}
       />
     </>

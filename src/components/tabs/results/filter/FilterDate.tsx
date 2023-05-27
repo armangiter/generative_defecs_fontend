@@ -40,7 +40,7 @@ const FilterDate = ({ editDateRange, setEditDateRange, updateDateRange }: IProps
             ".css-6hp17o-MuiList-root-MuiMenu-list": { maxHeight: '100%', minWidth: '480px' },
             '.MuiPaper-root': {
               border: 'none',
-              overflow: 'scroll',
+              overflow: 'auto',
               borderRadius: '8px',
               boxShadow: '0px 3px 14px rgba(19, 10, 46, 0.03), 0px 1px 3px rgba(19, 10, 46, 0.13)',
             },

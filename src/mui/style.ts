@@ -2,7 +2,7 @@ const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
-  padding: '32px 0',
+  padding: '31px 0',
   transform: 'translate(-50%, -50%)',
   overflow: 'auto',
   width: 'fit-content',
