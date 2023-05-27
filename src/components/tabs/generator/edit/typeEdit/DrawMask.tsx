@@ -13,7 +13,9 @@ interface IProps {
 }
 
 interface Lines {
-  points: number[]
+  points: number[],
+  strokeWidth: number,
+  color: string
 }
 
 const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullScreen }: IProps) => {
@@ -27,10 +29,12 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     if (type === 'MouseDraw' && width && height) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
-      setLines([...lines, { points: [pos.x, pos.y] }]);
+      setLines([...lines, { points: [pos.x, pos.y], strokeWidth: slider, color: color }]);
       // setPercentLines([...lines, { points: [pos.x / width, pos.y / height] }]);
     }
   };
+  console.log(lines);
+
 
   const handleMouseMove = (e: any) => {
     if (type === 'MouseDraw') {
@@ -117,6 +121,8 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     if (width && height) {
       const responsiveLine = lines.map((line: Lines) => {
         return {
+          color: line.color,
+          strokeWidth: line.strokeWidth,
           points: line.points.map((point: number, idx: number) =>
             idx % 2 === 0 ? point / width : point / height
           )
@@ -129,6 +135,8 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
   const responsiveLine = percentLines.map((line: Lines) => {
     if (width && height) {
       return {
+        color: line.color,
+        strokeWidth: line.strokeWidth,
         points: line.points.map((point: number, idx: number) =>
           idx % 2 === 0 ? width * point : height * point
         )
@@ -150,8 +158,8 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
         <Line
           key={i}
           points={line.points}
-          stroke={`#${color}`}
-          strokeWidth={slider}
+          stroke={`#${line.color}`}
+          strokeWidth={line.strokeWidth}
           onClick={event => type === 'Eraser' && removeLine(event)}
           tension={0.5}
           lineCap="round"
