@@ -7,9 +7,7 @@ interface IProps {
   height?: number,
   width?: number,
   type: string,
-  stageRef: any,
   color: string,
-  isFullScreen: boolean
 }
 
 interface Lines {
@@ -18,7 +16,7 @@ interface Lines {
   color: string
 }
 
-const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullScreen }: IProps) => {
+const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
   const [percentLines, setPercentLines] = useState<Lines[]>([])
@@ -29,15 +27,13 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     if (type === 'MouseDraw' && width && height) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
-      setLines([...lines, { points: [pos.x, pos.y], strokeWidth: slider, color: color }]);
+      setLines([...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]);
       // setPercentLines([...lines, { points: [pos.x / width, pos.y / height] }]);
     }
   };
-  console.log(lines);
-
 
   const handleMouseMove = (e: any) => {
-    if (type === 'MouseDraw') {
+    if (type === 'MouseDraw' && width && height) {
       if (!isDrawing.current) {
         return;
       }
@@ -45,7 +41,7 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
       const point = stage.getPointerPosition();
       let lastLine = lines[lines.length - 1];
       if (lastLine && lastLine.points) {
-        lastLine.points = lastLine.points.concat([point.x, point.y]);
+        lastLine.points = lastLine.points.concat([point.x / width, point.y / height]);
       }
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
@@ -60,53 +56,6 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     }
   };
 
-  const handleDownload = () => {
-    let newStage = stageRef.current
-    const stage = newStage.getStage();
-    const layer = newStage.getLayers()[0];
-
-    // Add a rectangle shape as the background
-    const background = new window.Konva.Rect({
-      x: 0,
-      y: 0,
-      width: stage.width(),
-      height: stage.height(),
-      fillLinearGradientStartPoint: { x: 0, y: 0 },
-      fillLinearGradientEndPoint: { x: stage.width(), y: stage.height() },
-      fillLinearGradientColorStops: [
-        0,
-        'black',
-        1,
-        'black',
-      ],
-      listening: false,
-    });
-    const listLine: any = []
-
-    lines.map(item => listLine.push(new window.Konva.Line({
-      points: item.points,
-      stroke: '#fff',
-      strokeWidth: 12,
-      tension: 0.5,
-      lineCap: "round"
-    })))
-    layer.add(background);
-
-    listLine.map((item: any) => layer.add(item))
-
-    layer.draw();
-
-    // Generate data URL for background
-
-    const dataURL = newStage.toDataURL();
-    const link = document.createElement('a');
-    link.href = dataURL;
-    link.download = 'image.png';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   const removeLine = (e) => {
     const clickedLineIndex = e.target.index;
     setLines((prevLines) =>
@@ -117,22 +66,7 @@ const DrawMask = ({ color, slider, width, height, type, image, stageRef, isFullS
     );
   }
 
-  useEffect(() => {
-    if (width && height) {
-      const responsiveLine = lines.map((line: Lines) => {
-        return {
-          color: line.color,
-          strokeWidth: line.strokeWidth,
-          points: line.points.map((point: number, idx: number) =>
-            idx % 2 === 0 ? point / width : point / height
-          )
-        }
-      })
-      setPercentLines(responsiveLine);
-    }
-  }, [lines])
-
-  const responsiveLine = percentLines.map((line: Lines) => {
+  const responsiveLine = lines.map((line: Lines) => {
     if (width && height) {
       return {
         color: line.color,

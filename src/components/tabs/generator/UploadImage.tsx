@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import ListIcon from './edit/view/ListIcon';
-import Konva from './edit/Konva';
+import DrawKonva from './edit/DrawKonva';
 import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
 import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 import i18next from 'i18next';
@@ -28,7 +28,6 @@ const UploadImage = () => {
     reader.readAsDataURL(event.currentTarget.files[0]);
   }
 
-
   return (
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>{t('your_image')}</p>
@@ -38,7 +37,7 @@ const UploadImage = () => {
           ${isFullScreen ? 'h-full absolute left-0 top-0 z-20 rounded-r-2xl rounded-bl-2xl' :
               'relative h-96'}`}
         >
-          <Konva
+          <DrawKonva
             type={type}
             color={color}
             slider={slider}
