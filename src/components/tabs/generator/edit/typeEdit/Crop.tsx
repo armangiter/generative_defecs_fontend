@@ -7,7 +7,7 @@ interface IProps {
   width: number | undefined,
   height: number | undefined,
   urlUploaded: string,
-  setUrlUploaded: Dispatch<SetStateAction<string>>
+  setUrlUploaded: Dispatch<SetStateAction<string | undefined>>
 }
 
 const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {

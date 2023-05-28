@@ -6,6 +6,7 @@ import DrawKonva from './edit/DrawKonva';
 import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
 import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 import i18next from 'i18next';
+import DeleteImg from './edit/typeEdit/DeleteImg';
 
 const UploadImage = () => {
 
@@ -58,12 +59,19 @@ const UploadImage = () => {
           />
           <div
             className='absolute right-6 top-6 bg-light-100 py-[12px] px-[13px] flex items-center 
-          justify-center rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
-            onClick={() => setIsFullScreen(!isFullScreen)}
+          justify-center gap-3 rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
+
           >
+            <DeleteImg setUrlUploaded={setUrlUploaded} />
             {isFullScreen ?
-              <SmallScreen className='cursor-pointer flex items-center' /> :
-              <FullScreen className='cursor-pointer flex items-center' />}
+              <SmallScreen
+                onClick={() => setIsFullScreen(!isFullScreen)}
+                className='cursor-pointer flex items-center'
+              /> :
+              <FullScreen
+                onClick={() => setIsFullScreen(!isFullScreen)}
+                className='cursor-pointer flex items-center'
+              />}
           </div>
         </div> :
         <div

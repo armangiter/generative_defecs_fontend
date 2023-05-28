@@ -13,12 +13,7 @@ interface IProps {
   typeRect: string,
   urlUploaded: string,
   isFullScreen: boolean,
-  setUrlUploaded: Dispatch<SetStateAction<string>>,
-}
-
-interface Point {
-  points: number[],
-  strokeWidth: number
+  setUrlUploaded: Dispatch<SetStateAction<string | undefined>>,
 }
 
 const DrawKonva = ({ color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
@@ -72,7 +67,6 @@ const DrawKonva = ({ color, slider, urlUploaded, isFullScreen, setUrlUploaded, t
   //   layer.draw();
 
   //   const url = stage.toDataURL()
-  //   console.log(url);
 
 
   // }
