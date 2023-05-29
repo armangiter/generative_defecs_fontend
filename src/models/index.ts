@@ -43,6 +43,12 @@ export interface TimeDate {
 export interface Url {
   id: number | string,
   file: string,
+  blob?: string,
   isLoaded?: boolean,
   newUploaded?: true
+}
+
+export interface Size {
+  width: number,
+  height: number
 }

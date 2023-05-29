@@ -1,4 +1,4 @@
-import { Fragment, Dispatch, useEffect, SetStateAction, useState, ChangeEvent } from 'react';
+import { Dispatch, SetStateAction, useState, ChangeEvent } from 'react';
 import { Button, Divider, Skeleton, CircularProgress } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import remove from '../../../assets/icons/delete.svg';
@@ -7,6 +7,7 @@ import i18next from 'i18next';
 import { updateUrl, urlToBlob } from '../../../helper';
 import { Url } from '../../../models';
 import { v4 } from 'uuid';
+import OpenEdit from './modal/OpenEdit';
 
 interface IProps {
   defect: number | undefined,
@@ -26,6 +27,7 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
     const emptyUrl: Url = {
       id: v4(),
       file: '',
+      blob: ''
     }
     if (event.target.files && formData.get('file') && defect) {
       request.uploadImage(formData.get('file'), defect)
@@ -39,7 +41,7 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
                   notInclude = item
                   if (notInclude) {
                     const blob = await urlToBlob(item.file)
-                    notInclude.file = blob
+                    notInclude.blob = blob
                     notInclude.isLoaded = true
                     setUrlUploaded([notInclude, ...urlUploaded]);
                   }
@@ -51,12 +53,14 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
   }
 
   const removeImage = (id: number) => {
-    setIdLoading(id)
-    request.deleteImage(id)
-      .then(() => {
-        setIdLoading(id)
-        getListImage()
-      })
+    if (typeof id === 'number') {
+      setIdLoading(id)
+      request.deleteImage(id)
+        .then(() => {
+          setIdLoading(id)
+          getListImage()
+        })
+    }
   }
 
   return (
@@ -87,19 +91,22 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
                 <Skeleton variant="rectangular" style={{ width: '100%', height: '100%' }} />
               )
             }
-            <Button
-              className='!min-w-0 !rounded-lg !w-9 !h-9 !absolute right-3 top-3 !bg-[rgba(0,0,0,0.4)]
+            <div className="flex flex-wrap items-center justify-end gap-2 !absolute right-3 top-3">
+              <OpenEdit data={item} />
+              <Button
+                className='!min-w-0 !rounded-lg !w-9 !h-9 !bg-[rgba(0,0,0,0.4)]
               shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
-              variant='text'
-              color='error'
-              onClick={() => removeImage(item.id)}
-            >
-              {
-                idLoading === item.id ?
-                  <CircularProgress className='!w-full !h-full' /> :
-                  <img src={remove} alt='delete' />
-              }
-            </Button>
+                variant='text'
+                color='error'
+                onClick={() => typeof item.id === 'number' && removeImage(item.id)}
+              >
+                {
+                  idLoading === item.id ?
+                    <CircularProgress className='!w-full !h-full' /> :
+                    <img src={remove} alt='delete' />
+                }
+              </Button>
+            </div>
           </li>
         ))}
       </ul>

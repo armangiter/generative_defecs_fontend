@@ -1,7 +1,10 @@
 import { useRef, useState, useEffect } from 'react'
 import { Layer, Image, Line } from 'react-konva'
+import { Size, Url } from '../../../../models'
 
 interface IProps {
+  data: Url,
+  sizeImage: Size | undefined,
   image: HTMLImageElement | undefined,
   slider: number,
   height?: number,
@@ -16,7 +19,7 @@ interface Lines {
   color: string
 }
 
-const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
+const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }: IProps) => {
 
   const [lines, setLines] = useState<Lines[]>([]);
 
@@ -72,6 +75,7 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
     }
   })
 
+
   return (
     <Layer
       onTouchStart={handleMouseDown}
@@ -81,7 +85,9 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
       onMousemove={handleMouseMove}
       onMouseup={handleMouseUp}
     >
-      <Image width={width} height={height} alt='img' image={image} />
+      {sizeImage && width ? (
+        <Image width={width} height={(width / sizeImage.width) * sizeImage.height} alt='img' image={image} />
+      ) : <></>}
       {responsiveLine.map((line, i) => !!line && (
         <Line
           key={i}

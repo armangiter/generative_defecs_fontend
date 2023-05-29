@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, ChangeEvent, useState } from 'react'
 import { request } from '../../../services/api';
-import { DefectType } from '../../../models';
 
 // MUI
 import { TextField, Button, CircularProgress } from '@mui/material'
@@ -18,7 +17,7 @@ const AddItem = ({ isLoading, setIsInput, getListDefect }: IProps) => {
   const [defectName, setDefectName] = useState('')
   const addItem = () => {
     request.createDefect(defectName)
-      .then(response => {
+      .then(() => {
         setDefectName('')
         getListDefect()
       })

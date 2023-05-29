@@ -4,7 +4,6 @@ import UploadImage from "./UploadImage"
 import i18next from 'i18next';
 import { DefectType as Defect, Url } from "../../../models";
 import { request } from "../../../services/api";
-import axios from "axios";
 import { urlToBlob } from "../../../helper";
 
 interface IProps {
@@ -30,7 +29,7 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
           const urlToUpdate = listUrl.find((i: Url) => i.id === item.id);
           if (urlToUpdate) {
             urlToUpdate.isLoaded = true;
-            urlToUpdate.file = blob;
+            urlToUpdate.blob = blob;
             setUrlUploaded([...listUrl]);
           }
         })
@@ -42,6 +41,7 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
       setDefect(listDefect[0].id)
     }
   }, [listDefect])
+
   useEffect(() => {
     getListImage()
   }, [])
