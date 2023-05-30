@@ -6,7 +6,7 @@ import i18next from 'i18next';
 interface IProps {
   width: number | undefined,
   height: number | undefined,
-  urlUploaded: string,
+  urlUploaded: string | undefined,
   setUrlUploaded: Dispatch<SetStateAction<string>>
 }
 

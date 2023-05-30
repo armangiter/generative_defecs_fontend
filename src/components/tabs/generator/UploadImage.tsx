@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
-import ListIcon from './edit/view/ListIcon';
-import DrawKonva from './edit/DrawKonva';
-import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
-import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 import i18next from 'i18next';
-import DeleteImg from './edit/typeEdit/DeleteImg';
+import ListIcon from '../../editImage/tools/view/ListIcon';
+import DeleteImg from '../../editImage/tools/typeEdit/DeleteImg';
+import DrawKonva from '../../editImage/tools/DrawKonva';
+import { Lines, Size } from '../../../models';
+import FullScreen from './modal/FullScreen';
 
 const UploadImage = () => {
 
@@ -16,6 +16,8 @@ const UploadImage = () => {
   const [typeRect, setTypeRect] = useState<string>('MouseDraw')
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
   const [slider, setSlider] = useState<number>(12)
+  const [sizeImage, setSizeImage] = useState<Size>()
+  const [prevLines, setPrevLines] = useState<Lines[]>([]);
   const [urlUploaded, setUrlUploaded] = useState<string>();
 
   const changeSlider = (event: Event, newValue: number | number[]) =>
@@ -29,20 +31,33 @@ const UploadImage = () => {
     reader.readAsDataURL(event.currentTarget.files[0]);
   }
 
+  useEffect(() => {
+    const img: HTMLImageElement = new window.Image()
+    img.onload = () => {
+      let size: Size = {
+        width: 300,
+        height: 168
+      };
+      size.width = img.width
+      size.height = img.height
+      setSizeImage(size)
+    }
+    img.src = urlUploaded
+  }, [urlUploaded])
+
   return (
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>{t('your_image')}</p>
       {urlUploaded ?
-        <div
-          className={`w-full rounded-md overflow-hidden 
-          ${isFullScreen ? 'h-full absolute left-0 top-0 z-20 rounded-r-2xl rounded-bl-2xl' :
-              'relative h-96'}`}
-        >
+        <div className='w-full rounded-md overflow-hidden relative'>
           <DrawKonva
             type={type}
             color={color}
             slider={slider}
             typeRect={typeRect}
+            prevLines={prevLines}
+            setPrevLines={setPrevLines}
+            sizeImage={sizeImage}
             urlUploaded={urlUploaded}
             isFullScreen={isFullScreen}
             setUrlUploaded={setUrlUploaded}
@@ -60,18 +75,15 @@ const UploadImage = () => {
           <div
             className='absolute right-6 top-6 bg-light-100 py-[12px] px-[13px] flex items-center 
           justify-center gap-3 rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
-
           >
             <DeleteImg setUrlUploaded={setUrlUploaded} />
-            {isFullScreen ?
-              <SmallScreen
-                onClick={() => setIsFullScreen(!isFullScreen)}
-                className='cursor-pointer flex items-center'
-              /> :
-              <FullScreen
-                onClick={() => setIsFullScreen(!isFullScreen)}
-                className='cursor-pointer flex items-center'
-              />}
+            <FullScreen
+              urlUploaded={urlUploaded}
+              prevLines={prevLines}
+              setPrevLines={setPrevLines}
+              isFullScreen={isFullScreen}
+              setIsFullScreen={setIsFullScreen}
+            />
           </div>
         </div> :
         <div

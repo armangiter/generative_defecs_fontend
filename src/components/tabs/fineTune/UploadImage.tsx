@@ -78,7 +78,6 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
       </div>
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-
         {!!urlUploaded.length && urlUploaded.map((item: Url) => (
           <li key={item.id} className='relative rounded-md overflow-hidden h-[120px]'>
             {

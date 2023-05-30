@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react'
 import deleteImg from '../../../../assets/icons/delete.svg'
 
 interface IProps {
-    setUrlUploaded: Dispatch<SetStateAction<string | undefined>>
+    setUrlUploaded: Dispatch<SetStateAction<string>>
 }
 
 const DeleteImg = ({ setUrlUploaded }: IProps) => {

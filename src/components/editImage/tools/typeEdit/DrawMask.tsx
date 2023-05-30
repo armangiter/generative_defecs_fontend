@@ -1,9 +1,10 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, Dispatch, SetStateAction } from 'react'
 import { Layer, Image, Line } from 'react-konva'
-import { Size, Url } from '../../../../models'
+import { Lines, Size, Url } from '../../../../models'
 
 interface IProps {
-  data: Url,
+  prevLines?: Lines[] | undefined,
+  data: Url | undefined,
   sizeImage: Size | undefined,
   image: HTMLImageElement | undefined,
   slider: number,
@@ -11,17 +12,12 @@ interface IProps {
   width?: number,
   type: string,
   color: string,
+  setPrevLines?: Dispatch<SetStateAction<Lines[] | undefined>>,
 }
 
-interface Lines {
-  points: number[],
-  strokeWidth: number,
-  color: string
-}
+const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, height, type, image }: IProps) => {
 
-const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }: IProps) => {
-
-  const [lines, setLines] = useState<Lines[]>([]);
+  const [lines, setLines] = useState<Lines[]>(prevLines || []);
 
   const isDrawing = useRef(false);
 
@@ -29,7 +25,9 @@ const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }
     if (type === 'MouseDraw' && width && height) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
-      setLines([...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]);
+      const result = [...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]
+      setLines(result);
+      prevLines && setPrevLines && setPrevLines(result)
     }
   };
 
@@ -46,6 +44,7 @@ const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }
       }
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
+      prevLines && setPrevLines && setPrevLines(lines.concat())
     }
   };
 
@@ -63,7 +62,9 @@ const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }
     );
   }
 
-  const responsiveLine = lines.map((line: Lines) => {
+  const newLines = prevLines ? prevLines : lines
+
+  const responsiveLine = newLines.map((line: Lines) => {
     if (width && height) {
       return {
         color: line.color,
@@ -74,7 +75,6 @@ const DrawMask = ({ sizeImage, data, color, slider, width, height, type, image }
       }
     }
   })
-
 
   return (
     <Layer

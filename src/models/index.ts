@@ -50,5 +50,11 @@ export interface Url {
 
 export interface Size {
   width: number,
-  height: number
+  height: number,
+}
+
+export interface Lines {
+  points: number[],
+  strokeWidth: number,
+  color: string
 }

@@ -3,42 +3,38 @@ import { Stage } from 'react-konva'
 import "cropperjs/dist/cropper.css";
 import Crop from './typeEdit/Crop';
 import DrawMask from './typeEdit/DrawMask';
-import { Size, Url } from '../../../models';
+import { Lines, Size, Url } from '../../../models';
 
 interface IProps {
-  data: Url,
+  data?: Url,
   type: string,
-  open: boolean,
+  open?: boolean,
   color: string,
   slider: number,
   typeRect: string,
-  urlUploaded: string,
+  prevLines?: Lines[],
+  urlUploaded?: string,
   isFullScreen: boolean,
-  setUrlUploaded: Dispatch<SetStateAction<string>>,
+  sizeImage: Size | undefined,
+  setPrevLines: Dispatch<SetStateAction<Lines[]>>,
+  setUrlUploaded?: Dispatch<SetStateAction<string>>,
 }
 
-const DrawKonva = ({ open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const DrawKonva = ({ prevLines, setPrevLines, sizeImage, open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef(null);
   const [image, setImage] = useState<HTMLImageElement>()
   const contentImg = useRef<HTMLDivElement>(null);
-  const [sizeImage, setSizeImage] = useState<Size>()
 
   useEffect(() => {
     const img: HTMLImageElement = new window.Image()
     img.crossOrigin = 'anonymous'
-    img.onload = () => {
-      let size: Size = {
-        width: 0,
-        height: 0
-      };
-      size.width = img.width
-      size.height = img.height
-      setSizeImage(size)
-    }
-    img.src = data.file
+    if (data && data.file)
+      img.src = data.file
+    else if (urlUploaded)
+      img.src = urlUploaded;
     setImage(img)
-  }, [urlUploaded, isFullScreen, data, open])
+  }, [urlUploaded, isFullScreen, sizeImage])
 
   // const download = () => {
   //   // get list points
@@ -90,12 +86,18 @@ const DrawKonva = ({ open, data, color, slider, urlUploaded, isFullScreen, setUr
             setUrlUploaded={setUrlUploaded}
             urlUploaded={urlUploaded}
             width={contentImg.current?.clientWidth}
-            height={contentImg.current?.clientHeight}
+            height={contentImg.current && sizeImage ?
+              (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
+              : 0
+            }
           />
         ) : (
           <Stage
             width={contentImg.current?.clientWidth}
-            height={contentImg.current?.clientHeight}
+            height={contentImg.current && sizeImage ?
+              (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
+              : 0
+            }
             ref={stageRef}
           >
             {
@@ -106,16 +108,20 @@ const DrawKonva = ({ open, data, color, slider, urlUploaded, isFullScreen, setUr
                   image={image}
                   color={color}
                   slider={slider}
+                  prevLines={prevLines}
+                  setPrevLines={setPrevLines}
                   sizeImage={sizeImage}
                   width={contentImg.current?.clientWidth}
-                  height={contentImg.current?.clientHeight}
+                  height={contentImg.current && sizeImage ?
+                    (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
+                    : 0
+                  }
                 />
               )
             }
           </Stage>
         )
       }
-
     </div>
   )
 }
