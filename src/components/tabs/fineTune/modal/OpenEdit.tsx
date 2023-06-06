@@ -3,19 +3,21 @@ import { Button, Modal, Box } from '@mui/material';
 import edit from '../../../../assets/icons/edit.svg';
 import closeCircle from '../../../../assets/icons/close.svg';
 import style from '../../../../mui/style';
-import { Url } from '../../../../models';
+import { Lines, Url } from '../../../../models';
 import EditImage from '../../../editImage';
-import { t } from 'i18next';
 
 interface IProps {
-    data: Url
+    data: Url,
+    isLoading: boolean,
+    sendMask: (maskFile: FormDataEntryValue | null) => void
 }
 
-const OpenEdit = ({ data }: IProps) => {
+const OpenEdit = ({ isLoading, sendMask, data }: IProps) => {
 
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState<boolean>(false)
     const openModal = () => setOpen(true);
     const closeModal = () => setOpen(false);
+    const [prevLines, setPrevLines] = useState<Lines[]>([]);
 
     return (
         <div>
@@ -39,11 +41,17 @@ const OpenEdit = ({ data }: IProps) => {
                         <img className='cursor-pointer' onClick={closeModal} src={closeCircle} alt="close" />
                     </div>
                     <div className='mt-8'>
-                        <EditImage imgUploaded={data.file} data={data} open={open} />
-                    </div>
-                    <div className='flex items-center justify-end gap-4 mt-8'>
-                        <Button color='secondary' variant='outlined' onClick={closeModal}>{t('discard')}</Button>
-                        <Button color='inherit' variant='contained' onClick={closeModal}>{t('save_change')}</Button>
+                        <EditImage
+                            isLoading={isLoading}
+                            sendMask={sendMask}
+                            imgUploaded={data.file}
+                            prevLines={prevLines}
+                            setPrevLines={setPrevLines}
+                            closeModal={closeModal}
+                            data={data}
+                            open={open}
+                            typeEdit='modal'
+                        />
                     </div>
                 </Box>
             </Modal>

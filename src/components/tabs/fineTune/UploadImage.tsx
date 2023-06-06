@@ -1,13 +1,15 @@
-import { Dispatch, SetStateAction, useState, ChangeEvent } from 'react';
-import { Button, Divider, Skeleton, CircularProgress } from '@mui/material';
+import { Dispatch, SetStateAction, useState } from 'react';
+import { Button, Divider } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
-import remove from '../../../assets/icons/delete.svg';
 import { request } from '../../../services/api';
-import i18next from 'i18next';
-import { updateUrl, urlToBlob } from '../../../helper';
-import { Url } from '../../../models';
+import { t } from 'i18next';
+import { readDataURL, urlToFile, urlToLocal } from '../../../helper';
+import { Lines, ResponseImg, Url } from '../../../models';
 import { v4 } from 'uuid';
-import OpenEdit from './modal/OpenEdit';
+import { toast } from 'react-toastify';
+import EditImage from '../../editImage';
+import MoreIcon from '../../editImage/tools/view/MoreIcon';
+import ListResult from './ListResult';
 
 interface IProps {
   defect: number | undefined,
@@ -18,21 +20,32 @@ interface IProps {
 
 const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IProps) => {
 
-  const { t } = i18next;
   const [idLoading, setIdLoading] = useState<number>();
+  const [localUrl, setLocalUrl] = useState<string | null>()
+  const [localBlob, setLocalBlob] = useState<File | null>()
+  const [prevLines, setPrevLines] = useState<Lines[]>([]);
+  const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
-  const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
+  const sendMask = async (maskFile: FormDataEntryValue | null, typeEdit?: string, data?: ResponseImg) => {
+    setIsLoading(true)
+
     const formData: FormData | null = new FormData()
-    formData.append('file', event.target.files[0])
+    if (localBlob) {
+      formData.append('file', localBlob)
+    }
     const emptyUrl: Url = {
       id: v4(),
       file: '',
       blob: ''
     }
-    if (event.target.files && formData.get('file') && defect) {
-      request.uploadImage(formData.get('file'), defect)
+
+    if (formData.get('file') && maskFile && defect)
+      request.uploadImage(formData.get('file'), maskFile, defect)
         .then(() => {
           setUrlUploaded([emptyUrl, ...urlUploaded])
+          setLocalBlob(null)
+          setLocalUrl(null)
           request.listImage()
             .then(response => {
               let notInclude: Url | null = null
@@ -40,16 +53,29 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
                 if (!urlUploaded.find((url: Url) => url.id === item.id)) {
                   notInclude = item
                   if (notInclude) {
-                    const blob = await urlToBlob(item.file)
+                    const blob = await urlToLocal(item.file)
                     notInclude.blob = blob
                     notInclude.isLoaded = true
+                    setIsLoading(false)
                     setUrlUploaded([notInclude, ...urlUploaded]);
                   }
                 }
               })
             })
+            .catch(() => setIsLoading(false))
         })
-    }
+        .catch(() => setIsLoading(false));
+    else if (typeEdit === 'fromModal' && data) {
+      const blob = await urlToFile(data.file)
+      await request.uploadImage(blob, maskFile, data?.defect_type)
+        .then(() => {
+          setLocalBlob(null)
+          setLocalUrl(null)
+          setIsLoading(false)
+        })
+        .catch(() => setIsLoading(false))
+    } else
+      setIsLoading(false);
   }
 
   const removeImage = (id: number) => {
@@ -66,48 +92,64 @@ const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IPro
   return (
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>{t('defect_sample')}</p>
-      <div className="relative w-full h-[188px] bg-dark-200 border border-dashed border-light-400 rounded-md flex justify-center items-center flex-col py-6">
-        <input
-          onChange={readDataURL}
-          type="file"
-          className='absolute w-full h-full opacity-0 cursor-pointer z-10'
-        />
-        <img src={gallery} alt='gallery' />
-        <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
-        <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
-      </div>
+      {localUrl ?
+        <div className='w-full rounded-md overflow-hidden relative'>
+          <EditImage
+            isLoading={isLoading}
+            sendMask={sendMask}
+            prevLines={prevLines}
+            imgUploaded={localUrl}
+            setPrevLines={setPrevLines}
+          />
+          <MoreIcon
+            prevLines={prevLines}
+            urlUploaded={localUrl}
+            isFullScreen={isFullScreen}
+            setPrevLines={setPrevLines}
+            setUrlUploaded={setLocalUrl}
+            setIsFullScreen={setIsFullScreen}
+          />
+        </div>
+        :
+        <div className="relative w-full h-[188px] bg-dark-200 border border-dashed border-light-400 rounded-md flex justify-center items-center flex-col py-6">
+          <input
+            onChange={(event) =>
+              readDataURL(event)
+                .then(blobUrl => {
+                  setPrevLines([])
+                  setLocalUrl(blobUrl)
+                  event.target.files && setLocalBlob(event.target.files[0])
+                })
+                .catch(() => {
+                  toast.error(t('failed_to_load_img'), {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  })
+                })
+            }
+            type="file"
+            className='absolute w-full h-full opacity-0 cursor-pointer z-10'
+          />
+          <img src={gallery} alt='gallery' />
+          <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
+          <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
+        </div>
+      }
       <Divider className='!my-8' color='#6B7280' />
       <ul className='grid grid-cols-4 gap-3'>
-        {!!urlUploaded.length && urlUploaded.map((item: Url) => (
-          <li key={item.id} className='relative rounded-md overflow-hidden h-[120px]'>
-            {
-              item.isLoaded ? (
-                <img
-                  src={updateUrl(item.file)}
-                  className='h-full object-cover'
-                />
-              ) : (
-                <Skeleton variant="rectangular" style={{ width: '100%', height: '100%' }} />
-              )
-            }
-            <div className="flex flex-wrap items-center justify-end gap-2 !absolute right-3 top-3">
-              <OpenEdit data={item} />
-              <Button
-                className='!min-w-0 !rounded-lg !w-9 !h-9 !bg-[rgba(0,0,0,0.4)]
-              shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
-                variant='text'
-                color='error'
-                onClick={() => typeof item.id === 'number' && removeImage(item.id)}
-              >
-                {
-                  idLoading === item.id ?
-                    <CircularProgress className='!w-full !h-full' /> :
-                    <img src={remove} alt='delete' />
-                }
-              </Button>
-            </div>
-          </li>
-        ))}
+        <ListResult
+          urlUploaded={urlUploaded}
+          sendMask={sendMask}
+          idLoading={idLoading}
+          removeImage={removeImage}
+          isLoading={isLoading}
+        />
       </ul>
     </div>
   )

@@ -3,26 +3,33 @@ import { Stage } from 'react-konva'
 import "cropperjs/dist/cropper.css";
 import Crop from './typeEdit/Crop';
 import DrawMask from './typeEdit/DrawMask';
-import { Lines, Size, Url } from '../../../models';
+import { Lines, ResponseImg, Size, Url } from '../../../models';
+import SendResult from '../SendResult';
+import Konva from 'konva';
+import BtnModal from './BtnModal';
 
 interface IProps {
   data?: Url,
   type: string,
+  typeEdit?: string,
   open?: boolean,
   color: string,
   slider: number,
   typeRect: string,
+  isLoading: boolean,
   prevLines?: Lines[],
   urlUploaded?: string,
   isFullScreen: boolean,
   sizeImage: Size | undefined,
+  closeModal: () => void,
+  sendMask: ((maskFile: FormDataEntryValue | null) => void) | ((maskFile: FormDataEntryValue | null, typeEdit: string, data: ResponseImg) => void),
   setPrevLines: Dispatch<SetStateAction<Lines[]>>,
-  setUrlUploaded?: Dispatch<SetStateAction<string>>,
+  setUrlUploaded?: Dispatch<SetStateAction<string | undefined>> | Dispatch<SetStateAction<string>>,
 }
 
-const DrawKonva = ({ prevLines, setPrevLines, sizeImage, open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const DrawKonva = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPrevLines, sizeImage, open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
-  const stageRef = useRef(null);
+  const stageRef = useRef<Konva.Stage>(null);
   const [image, setImage] = useState<HTMLImageElement>()
   const contentImg = useRef<HTMLDivElement>(null);
 
@@ -36,68 +43,23 @@ const DrawKonva = ({ prevLines, setPrevLines, sizeImage, open, data, color, slid
     setImage(img)
   }, [urlUploaded, isFullScreen, sizeImage])
 
-  // const download = () => {
-  //   // get list points
-  //   const children = stageRef.current?.getChildren()[0].children
-  //   const points: Point[] = []
-  //   children.map((item: Line) =>
-  //     item.attrs.points && points.push({
-  //       strokeWidth: item.attrs.strokeWidth,
-  //       points: item.attrs.points,
-  //     })
-  //   );
-
-  //   // Stage
-  //   const stage = new Konva.Stage({
-  //     container: 'drawMask',
-  //     width: 500,
-  //     height: 500
-  //   });
-
-  //   // Layer
-  //   const layer = new Konva.Layer();
-  //   stage.add(layer);
-
-  //   // Line
-  //   const listLine: any = []
-  //   points.map((item: Point) => listLine.push(new window.Konva.Line({
-  //     points: item.points,
-  //     stroke: '#fff',
-  //     strokeWidth: item.strokeWidth,
-  //     tension: 0.5,
-  //     lineCap: "round"
-  //   })))
-
-  //   // Add Line
-  //   listLine.map((item: any) => layer.add(item))
-
-  //   layer.draw();
-
-  //   const url = stage.toDataURL()
-
-
-  // }
+  const width = contentImg.current?.clientWidth
+  const height = contentImg.current && width && sizeImage ? (width / sizeImage?.width) * sizeImage?.height : 0
 
   return (
-    <div className='w-full h-full relative' ref={contentImg}>
+    <div className='w-full h-full relative flex flex-col justify-end' ref={contentImg}>
       {
         typeRect === 'Crop' ? (
           <Crop
             setUrlUploaded={setUrlUploaded}
             urlUploaded={urlUploaded}
-            width={contentImg.current?.clientWidth}
-            height={contentImg.current && sizeImage ?
-              (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
-              : 0
-            }
+            width={width}
+            height={height}
           />
         ) : (
           <Stage
-            width={contentImg.current?.clientWidth}
-            height={contentImg.current && sizeImage ?
-              (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
-              : 0
-            }
+            width={width}
+            height={height}
             ref={stageRef}
           >
             {
@@ -111,17 +73,33 @@ const DrawKonva = ({ prevLines, setPrevLines, sizeImage, open, data, color, slid
                   prevLines={prevLines}
                   setPrevLines={setPrevLines}
                   sizeImage={sizeImage}
-                  width={contentImg.current?.clientWidth}
-                  height={contentImg.current && sizeImage ?
-                    (contentImg.current?.clientWidth / sizeImage?.width) * sizeImage?.height
-                    : 0
-                  }
+                  width={width}
+                  height={height}
                 />
               )
             }
           </Stage>
         )
       }
+      {!typeEdit ? (
+        <SendResult
+          width={width}
+          height={height}
+          stageRef={stageRef}
+          isLoading={isLoading}
+          sendMask={sendMask}
+        />
+      ) : (
+        <BtnModal
+          data={data}
+          width={width}
+          height={height}
+          stageRef={stageRef}
+          sendMask={sendMask}
+          isLoading={isLoading}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   )
 }

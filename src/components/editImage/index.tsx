@@ -1,17 +1,21 @@
 import { useState, Dispatch, SetStateAction, useEffect, useRef } from 'react'
 import DrawKonva from './tools/DrawKonva'
 import ListIcon from './tools/view/ListIcon'
-import { Lines, Size, Url } from '../../models'
+import { Lines, ResponseImg, Size, Url } from '../../models'
 
 interface IProps {
     data?: Url,
-    open: boolean,
+    typeEdit?: string,
+    open?: boolean,
+    isLoading: boolean,
     prevLines?: Lines[],
     imgUploaded: string,
-    setPrevLines: Dispatch<SetStateAction<Lines[]>>,
+    closeModal: () => void,
+    sendMask: ((maskFile: FormDataEntryValue | null) => void) | ((maskFile: FormDataEntryValue | null, typeEdit: string, data: ResponseImg) => void),
+    setPrevLines?: Dispatch<SetStateAction<Lines[]>>,
 }
 
-const EditImage = ({ prevLines, setPrevLines, open, imgUploaded, data }: IProps) => {
+const EditImage = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPrevLines, open, imgUploaded, data }: IProps) => {
 
     const [color, setColor] = useState('FF0000')
     const [slider, setSlider] = useState<number>(12)
@@ -20,7 +24,7 @@ const EditImage = ({ prevLines, setPrevLines, open, imgUploaded, data }: IProps)
     const [localImg, setLocalImg] = useState<string>(imgUploaded)
     const [sizeImage, setSizeImage] = useState<Size>()
 
-    const contentImg = useRef(null);
+    const contentImg = useRef<HTMLElement>(null);
 
     const changeSlider = (event: Event, newValue: number | number[]) =>
         typeof newValue === 'number' && setSlider(newValue);
@@ -42,6 +46,7 @@ const EditImage = ({ prevLines, setPrevLines, open, imgUploaded, data }: IProps)
             img.src = imgUploaded;
     }, [])
 
+
     return (
         <div
             ref={contentImg}
@@ -56,14 +61,18 @@ const EditImage = ({ prevLines, setPrevLines, open, imgUploaded, data }: IProps)
                 type={type}
                 data={data}
                 open={open}
+                typeEdit={typeEdit}
                 color={color}
                 slider={slider}
                 prevLines={prevLines}
+                isLoading={isLoading}
                 setPrevLines={setPrevLines}
+                closeModal={closeModal}
                 typeRect={typeRect}
                 isFullScreen={false}
                 sizeImage={sizeImage}
                 urlUploaded={localImg}
+                sendMask={sendMask}
                 setUrlUploaded={setLocalImg}
             />
             <ListIcon

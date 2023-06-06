@@ -1,5 +1,5 @@
 import { ReactElement, useState, Dispatch, MouseEvent, SetStateAction } from 'react'
-import { Divider, Menu } from '@mui/material';
+import { Divider, Menu, SvgIcon } from '@mui/material';
 import WidthStroke from './WidthStroke';
 import ColorStroke from './ColorStroke';
 

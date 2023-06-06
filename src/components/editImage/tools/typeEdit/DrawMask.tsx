@@ -12,7 +12,7 @@ interface IProps {
   width?: number,
   type: string,
   color: string,
-  setPrevLines?: Dispatch<SetStateAction<Lines[] | undefined>>,
+  setPrevLines?: Dispatch<SetStateAction<Lines[]>>,
 }
 
 const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, height, type, image }: IProps) => {
@@ -55,11 +55,14 @@ const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, he
     }
   };
 
-  const removeLine = (e) => {
+  const removeLine = (e: any) => {
     const clickedLineIndex = e.target.index;
     setLines((prevLines) =>
       prevLines.filter((line, index) => index !== clickedLineIndex - 1)
     );
+    prevLines && setPrevLines && setPrevLines((prevLines) =>
+      prevLines.filter((line, index) => index !== clickedLineIndex - 1)
+    )
   }
 
   const newLines = prevLines ? prevLines : lines
