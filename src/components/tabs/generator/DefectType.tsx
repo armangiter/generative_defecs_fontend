@@ -89,7 +89,7 @@ const DefectType = ({ listDefect }: IProps) => {
         <Slider
           valueLabelDisplay="auto"
           value={progress}
-          onChange={changeProgress}
+          onChange={(event: Event, newValue: number | number[]) => mask === 'Random' && changeProgress(event, newValue)}
           aria-label="Default"
           color='secondary'
           max={100}
@@ -99,7 +99,7 @@ const DefectType = ({ listDefect }: IProps) => {
         <Label className='!mb-1'>{t('number_of_images')}</Label>
         <Input
           value={numberMask}
-          onChange={e => mask === 'Random' && setNumberMask(+e.target.value)}
+          onChange={e => setNumberMask(+e.target.value)}
           type='number'
           size='small'
         />
