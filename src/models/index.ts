@@ -43,6 +43,27 @@ export interface TimeDate {
 export interface Url {
   id: number | string,
   file: string,
+  blob?: string | File,
   isLoaded?: boolean,
   newUploaded?: true
+}
+
+export interface Size {
+  width: number,
+  height: number,
+}
+
+export interface Lines {
+  points: number[],
+  strokeWidth: number,
+  color: string
+}
+
+export interface ResponseImg {
+  id: number,
+  file: string,
+  mask_file: string,
+  defect_type: number,
+  isLoaded: boolean,
+  blob: string
 }

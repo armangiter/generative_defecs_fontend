@@ -1,11 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
-import ListIcon from './edit/view/ListIcon';
-import DrawKonva from './edit/DrawKonva';
-import { ReactComponent as FullScreen } from '../../../assets/icons/fullScreen.svg'
-import { ReactComponent as SmallScreen } from '../../../assets/icons/smallScreen.svg'
 import i18next from 'i18next';
+import ListIcon from '../../editImage/tools/view/ListIcon';
+import DeleteImg from '../../editImage/tools/typeEdit/DeleteImg';
+import DrawKonva from '../../editImage/tools/DrawKonva';
+import { Lines, Size, Url } from '../../../models';
+import FullScreen from './modal/FullScreen';
+import MoreIcon from '../../editImage/tools/view/MoreIcon';
+import { v4 } from 'uuid';
+import { request } from '../../../services/api';
 
 const UploadImage = () => {
 
@@ -15,34 +19,73 @@ const UploadImage = () => {
   const [typeRect, setTypeRect] = useState<string>('MouseDraw')
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
   const [slider, setSlider] = useState<number>(12)
+  const [sizeImage, setSizeImage] = useState<Size>()
+  const [prevLines, setPrevLines] = useState<Lines[]>([]);
   const [urlUploaded, setUrlUploaded] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [localBlob, setLocalBlob] = useState<File | null>()
 
   const changeSlider = (event: Event, newValue: number | number[]) =>
     typeof newValue === 'number' && setSlider(newValue);
 
-  const readDataURL = (event: any) => {
+  const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     let reader = new FileReader();
+    setLocalBlob(event.target.files[0])
 
     reader.onload = () => typeof reader.result === 'string' && setUrlUploaded(reader.result)
 
-    reader.readAsDataURL(event.currentTarget.files[0]);
+    event.currentTarget && event.currentTarget.files && reader.readAsDataURL(event.currentTarget.files[0]);
   }
+
+  const sendMask = (maskFile: FormDataEntryValue | null) => {
+    setIsLoading(true)
+
+    const formData: FormData | null = new FormData()
+    if (localBlob) {
+      formData.append('file', localBlob)
+    }
+    const defect = 16
+
+    if (formData.get('file') && maskFile && defect)
+      request.uploadImage(formData.get('file'), maskFile, defect)
+        .then(() => {
+          setLocalBlob(null)
+          setIsLoading(false)
+        })
+    else
+      setIsLoading(false)
+  }
+
+  useEffect(() => {
+    const img: HTMLImageElement = new window.Image()
+    img.onload = () => {
+      let size: Size = {
+        width: 0,
+        height: 0
+      };
+      size.width = img.width
+      size.height = img.height
+      setSizeImage(size)
+    }
+    if (urlUploaded) img.src = urlUploaded
+  }, [urlUploaded])
 
   return (
     <div className='w-full md:w-1/2'>
       <p className='text-sm	font-medium mb-1'>{t('your_image')}</p>
       {urlUploaded ?
-        <div
-          className={`w-full rounded-md overflow-hidden 
-          ${isFullScreen ? 'h-full absolute left-0 top-0 z-20 rounded-r-2xl rounded-bl-2xl' :
-              'relative h-96'}`}
-        >
+        <div className='w-full rounded-md overflow-hidden relative'>
           <DrawKonva
             type={type}
             color={color}
             slider={slider}
             typeRect={typeRect}
+            prevLines={prevLines}
+            setPrevLines={setPrevLines}
+            sizeImage={sizeImage}
             urlUploaded={urlUploaded}
+            sendMask={sendMask}
+            isLoading={isLoading}
             isFullScreen={isFullScreen}
             setUrlUploaded={setUrlUploaded}
           />
@@ -56,15 +99,14 @@ const UploadImage = () => {
             setTypeRect={setTypeRect}
             changeSlider={changeSlider}
           />
-          <div
-            className='absolute right-6 top-6 bg-light-100 py-[12px] px-[13px] flex items-center 
-          justify-center rounded-lg shadow-[0px_4px_4px_rgba(0,0,0,0.08)]'
-            onClick={() => setIsFullScreen(!isFullScreen)}
-          >
-            {isFullScreen ?
-              <SmallScreen className='cursor-pointer flex items-center' /> :
-              <FullScreen className='cursor-pointer flex items-center' />}
-          </div>
+          <MoreIcon
+            prevLines={prevLines}
+            urlUploaded={urlUploaded}
+            isFullScreen={isFullScreen}
+            setPrevLines={setPrevLines}
+            setUrlUploaded={setUrlUploaded}
+            setIsFullScreen={setIsFullScreen}
+          />
         </div> :
         <div
           className="relative w-full bg-dark-200 border border-dashed h-64 lg:h-96

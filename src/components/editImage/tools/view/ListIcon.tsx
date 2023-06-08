@@ -1,11 +1,11 @@
 import { ReactElement, useState, Dispatch, MouseEvent, SetStateAction } from 'react'
-import { Divider, Menu } from '@mui/material';
+import { Divider, Menu, SvgIcon } from '@mui/material';
 import WidthStroke from './WidthStroke';
 import ColorStroke from './ColorStroke';
 
 // Icons
-import { ReactComponent as Crop } from '../../../../../assets/icons/crop.svg';
-import { ReactComponent as Eraser } from '../../../../../assets/icons/eraser.svg';
+import { ReactComponent as Crop } from '../../../../assets/icons/crop.svg';
+import { ReactComponent as Eraser } from '../../../../assets/icons/eraser.svg';
 import GestureIcon from '@mui/icons-material/Gesture';
 
 interface ListIcon {

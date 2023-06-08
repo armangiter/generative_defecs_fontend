@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { Input, Label, MenuList, SelectList } from '../../../mui/customize'
 import { SelectChangeEvent, Slider, Button } from '@mui/material'
 import { DefectType as Defect } from '../../../models';
-import { request } from '../../../services/api'
 import i18next from 'i18next';
 
 interface Selects {
@@ -20,12 +19,13 @@ interface IProps {
 const DefectType = ({ listDefect }: IProps) => {
 
   const { t } = i18next;
+  const listMask: string[] = ['Random', 'In Paint']
   const [progress, setProgress] = useState<number>(17)
   const [listModel, setListModel] = useState<string[]>(['Scratch-1', 'Scratch-2', 'Scratch-3'])
-  const [listMask, setListMask] = useState<string[]>(['Random', 'In Paint'])
   const [defect, setDefect] = useState<number>()
   const [model, setModel] = useState<string>(listModel[0])
   const [mask, setMask] = useState<string>(listMask[0])
+  const [numberMask, setNumberMask] = useState<number>(20)
   const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
     name === 'model' ? setModel(event.target.value as string) :
       name === 'mask' ? setMask(event.target.value as string) :
@@ -89,7 +89,7 @@ const DefectType = ({ listDefect }: IProps) => {
         <Slider
           valueLabelDisplay="auto"
           value={progress}
-          onChange={changeProgress}
+          onChange={(event: Event, newValue: number | number[]) => mask === 'Random' && changeProgress(event, newValue)}
           aria-label="Default"
           color='secondary'
           max={100}
@@ -98,7 +98,9 @@ const DefectType = ({ listDefect }: IProps) => {
       <div className='flex flex-col mt-6'>
         <Label className='!mb-1'>{t('number_of_images')}</Label>
         <Input
-          value={20}
+          value={numberMask}
+          onChange={e => setNumberMask(+e.target.value)}
+          type='number'
           size='small'
         />
       </div>

@@ -1,11 +1,10 @@
 import { useState, useEffect } from "react";
 import DefectType from "./DefectType"
 import UploadImage from "./UploadImage"
-import i18next from 'i18next';
+import { t } from 'i18next';
 import { DefectType as Defect, Url } from "../../../models";
 import { request } from "../../../services/api";
-import axios from "axios";
-import { urlToBlob } from "../../../helper";
+import { urlToLocal } from "../../../helper";
 
 interface IProps {
   listDefect: Defect[] | undefined,
@@ -17,7 +16,6 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
 
   const [urlUploaded, setUrlUploaded] = useState<Url[]>([])
   const [defect, setDefect] = useState<number>();
-  const { t } = i18next;
 
   const getListImage = () => {
     request.listImage()
@@ -25,12 +23,12 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
         const responseUrl = response.data
         setUrlUploaded(responseUrl.reverse())
         responseUrl.map(async (item: Url) => {
-          const blob = await urlToBlob(item.file)
+          const blob = await urlToLocal(item.file)
           let listUrl = responseUrl
           const urlToUpdate = listUrl.find((i: Url) => i.id === item.id);
           if (urlToUpdate) {
             urlToUpdate.isLoaded = true;
-            urlToUpdate.file = blob;
+            urlToUpdate.blob = blob;
             setUrlUploaded([...listUrl]);
           }
         })
@@ -42,6 +40,7 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
       setDefect(listDefect[0].id)
     }
   }, [listDefect])
+
   useEffect(() => {
     getListImage()
   }, [])

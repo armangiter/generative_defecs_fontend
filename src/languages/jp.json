@@ -1,5 +1,7 @@
 {
   "footer": "2023 Rutilea. All Rights Reserved",
+  "failed_to_load_img": "Image failed to load",
+  "upload": "Upload",
   "eng": "ENG",
   "jp": "JP",
   "fine_tune": "Fine Tune",

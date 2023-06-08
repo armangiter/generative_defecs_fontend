@@ -6,8 +6,8 @@ import i18next from 'i18next';
 interface IProps {
   width: number | undefined,
   height: number | undefined,
-  urlUploaded: string,
-  setUrlUploaded: Dispatch<SetStateAction<string>>
+  urlUploaded: string | undefined,
+  setUrlUploaded: Dispatch<SetStateAction<string | undefined>> | Dispatch<SetStateAction<string>> | undefined
 }
 
 const Crop = ({ height, width, urlUploaded, setUrlUploaded }: IProps) => {

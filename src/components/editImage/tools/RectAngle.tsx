@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
-import { Annotations } from '../../../../models';
+import { Annotations } from '../../../models';
 import RectAngles from './shape/RectAngles';
 
 interface IProps {

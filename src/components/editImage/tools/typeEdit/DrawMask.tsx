@@ -1,25 +1,23 @@
-import { useRef, useState, useEffect } from 'react'
+import { useRef, useState, Dispatch, SetStateAction } from 'react'
 import { Layer, Image, Line } from 'react-konva'
+import { Lines, Size, Url } from '../../../../models'
 
 interface IProps {
+  prevLines?: Lines[] | undefined,
+  data: Url | undefined,
+  sizeImage: Size | undefined,
   image: HTMLImageElement | undefined,
   slider: number,
   height?: number,
   width?: number,
   type: string,
   color: string,
+  setPrevLines?: Dispatch<SetStateAction<Lines[]>>,
 }
 
-interface Lines {
-  points: number[],
-  strokeWidth: number,
-  color: string
-}
+const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, height, type, image }: IProps) => {
 
-const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
-
-  const [lines, setLines] = useState<Lines[]>([]);
-  const [percentLines, setPercentLines] = useState<Lines[]>([])
+  const [lines, setLines] = useState<Lines[]>(prevLines || []);
 
   const isDrawing = useRef(false);
 
@@ -27,8 +25,9 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
     if (type === 'MouseDraw' && width && height) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
-      setLines([...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]);
-      // setPercentLines([...lines, { points: [pos.x / width, pos.y / height] }]);
+      const result = [...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]
+      setLines(result);
+      prevLines && setPrevLines && setPrevLines(result)
     }
   };
 
@@ -45,7 +44,7 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
       }
       lines.splice(lines.length - 1, 1, lastLine);
       setLines(lines.concat());
-      // setPercentLines(lines.concat());
+      prevLines && setPrevLines && setPrevLines(lines.concat())
     }
   };
 
@@ -56,17 +55,19 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
     }
   };
 
-  const removeLine = (e) => {
+  const removeLine = (e: any) => {
     const clickedLineIndex = e.target.index;
     setLines((prevLines) =>
       prevLines.filter((line, index) => index !== clickedLineIndex - 1)
     );
-    setPercentLines((prevLines) =>
+    prevLines && setPrevLines && setPrevLines((prevLines) =>
       prevLines.filter((line, index) => index !== clickedLineIndex - 1)
-    );
+    )
   }
 
-  const responsiveLine = lines.map((line: Lines) => {
+  const newLines = prevLines ? prevLines : lines
+
+  const responsiveLine = newLines.map((line: Lines) => {
     if (width && height) {
       return {
         color: line.color,
@@ -87,7 +88,9 @@ const DrawMask = ({ color, slider, width, height, type, image }: IProps) => {
       onMousemove={handleMouseMove}
       onMouseup={handleMouseUp}
     >
-      <Image width={width} height={height} alt='img' image={image} />
+      {sizeImage && width ? (
+        <Image width={width} height={(width / sizeImage.width) * sizeImage.height} alt='img' image={image} />
+      ) : <></>}
       {responsiveLine.map((line, i) => !!line && (
         <Line
           key={i}
