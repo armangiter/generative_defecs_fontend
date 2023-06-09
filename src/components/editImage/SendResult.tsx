@@ -48,11 +48,20 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
         const layer = new Konva.Layer();
         stage.add(layer);
 
+        // Bg Black
+        const fullRect = new Konva.Rect({
+            width,
+            height,
+            fill: 'black'
+        })
+
+        layer.add(fullRect)
+
         // Line
         const listLine: any = []
         points.map((item: Point) => listLine.push(new Konva.Line({
             points: item.points,
-            stroke: 'black',
+            stroke: 'white',
             strokeWidth: item.strokeWidth,
             tension: 0.5,
             lineCap: "round"
@@ -65,6 +74,7 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
 
         // convert stage to file
         const dataUrl = stage.toDataURL();
+
         const response = await fetch(dataUrl);
 
         const blob = await response.blob();
