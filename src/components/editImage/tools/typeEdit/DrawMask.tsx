@@ -1,6 +1,6 @@
-import { useRef, useState, Dispatch, SetStateAction } from 'react'
+import { useRef, useState, useEffect, Dispatch, SetStateAction } from 'react'
 import { Layer, Image, Line } from 'react-konva'
-import { Lines, Size, Url } from '../../../../models'
+import { Lines, Point, Size, Url } from '../../../../models'
 
 interface IProps {
   prevLines?: Lines[] | undefined,
@@ -64,6 +64,58 @@ const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, he
       prevLines.filter((line, index) => index !== clickedLineIndex - 1)
     )
   }
+
+  // useEffect(() => {
+  //   const points: Point[] = []
+  //   lines.map((item: Lines) =>
+  //     item.points && points.push({
+  //       strokeWidth: item.strokeWidth,
+  //       points: item.points,
+  //     })
+  //   );
+
+  //   // Stage
+  //   const div = document.createElement('div')
+  //   div.classList.add('drawMask');
+  //   const stage = new Konva.Stage({
+  //     container: div,
+  //     width,
+  //     height,
+  //   });
+
+  //   // Layer
+  //   const layer = new Konva.Layer();
+  //   stage.add(layer);
+
+  //   // Bg Black
+  //   const fullRect = new Konva.Rect({
+  //     width,
+  //     height,
+  //     fill: 'black'
+  //   })
+
+  //   layer.add(fullRect)
+
+  //   // Line
+  //   const listLine: any = []
+  //   points.map((item: Point) => listLine.push(new Konva.Line({
+  //     points: item.points,
+  //     stroke: 'white',
+  //     strokeWidth: item.strokeWidth,
+  //     tension: 0.5,
+  //     lineCap: "round"
+  //   })))
+
+  //   // Add Line
+  //   listLine.map((item: any) => layer.add(item))
+
+  //   layer.draw();
+
+  //   // convert stage to file
+  //   const dataUrl = stage.toDataURL();
+  //   const formData = new FormData();
+  //   formData.append('mask_file', dataUrl)
+  // }, [lines])
 
   const newLines = prevLines ? prevLines : lines
 

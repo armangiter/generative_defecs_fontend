@@ -10,6 +10,7 @@ import BtnModal from './BtnModal';
 
 interface IProps {
   data?: Url,
+  tab?: string,
   type: string,
   typeEdit?: string,
   open?: boolean,
@@ -27,7 +28,7 @@ interface IProps {
   setUrlUploaded?: Dispatch<SetStateAction<string | undefined>> | Dispatch<SetStateAction<string>>,
 }
 
-const DrawKonva = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPrevLines, sizeImage, open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const DrawKonva = ({ tab, closeModal, typeEdit, isLoading, sendMask, prevLines, setPrevLines, sizeImage, open, data, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef<Konva.Stage>(null);
   const [image, setImage] = useState<HTMLImageElement>()
@@ -81,7 +82,7 @@ const DrawKonva = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPr
           </Stage>
         )
       }
-      {!typeEdit ? (
+      {!typeEdit && !tab ? (
         <SendResult
           width={width}
           height={height}
@@ -89,7 +90,7 @@ const DrawKonva = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPr
           isLoading={isLoading}
           sendMask={sendMask}
         />
-      ) : (
+      ) : !tab ? (
         <BtnModal
           data={data}
           width={width}
@@ -99,7 +100,7 @@ const DrawKonva = ({ closeModal, typeEdit, isLoading, sendMask, prevLines, setPr
           isLoading={isLoading}
           closeModal={closeModal}
         />
-      )}
+      ) : ''}
     </div>
   )
 }

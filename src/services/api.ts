@@ -5,11 +5,7 @@ export const request = {
   createDefect: (name: string) => api.post('types/', {
     name
   }),
-  uploadImage: (file: FormDataEntryValue | null, mask_file: FormDataEntryValue | null, defect_type_id: number) => api.post('images/', {
-    file,
-    mask_file: file,
-    defect_type_id,
-  }, {
+  uploadImage: (file: FormData) => api.post('images/', file, {
     headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -17,5 +13,6 @@ export const request = {
   listImage: () => api.get('images/'),
   deleteImage: (id: number) => api.delete(`images/${id}`),
   createFineTune: () => api.post('fine_tune/'),
-  getResult: () => api.get('results')
+  getResult: () => api.get('results/'),
+  getModels: () => api.get('models/')
 }

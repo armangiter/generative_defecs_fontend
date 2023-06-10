@@ -4,7 +4,7 @@ import { t } from 'i18next';
 import { Stage } from 'konva/lib/Stage';
 import Konva from 'konva';
 import { LoadingButton } from '@mui/lab';
-import { ResponseImg, Url } from '../../../models';
+import { Point, ResponseImg, Url } from '../../../models';
 
 interface IProps {
     data?: Url | ResponseImg | undefined,
@@ -14,11 +14,6 @@ interface IProps {
     isLoading: boolean,
     sendMask: ((maskFile: FormDataEntryValue | null) => void) | ((maskFile: FormDataEntryValue | null, typeEdit: string, data: ResponseImg) => void),
     closeModal: () => void
-}
-
-interface Point {
-    points: number[],
-    strokeWidth: number,
 }
 
 const BtnModal = ({ data, width, height, isLoading, sendMask, stageRef, closeModal }: IProps) => {
@@ -50,6 +45,13 @@ const BtnModal = ({ data, width, height, isLoading, sendMask, stageRef, closeMod
         // Layer
         const layer = new Konva.Layer();
         stage.add(layer);
+
+        // Bg Black
+        const fullRect = new Konva.Rect({
+            width,
+            height,
+            fill: 'black'
+        })
 
         // Line
         const listLine: any = []

@@ -1,40 +1,46 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Dispatch, SetStateAction } from 'react'
 import { Input, Label, MenuList, SelectList } from '../../../mui/customize'
-import { SelectChangeEvent, Slider, Button } from '@mui/material'
-import { DefectType as Defect } from '../../../models';
+import { SelectChangeEvent } from '@mui/material'
+import { DefectType as Defect, Models } from '../../../models';
 import i18next from 'i18next';
+import { LoadingButton } from '@mui/lab';
 
 interface Selects {
   id: number,
   name: string,
-  value: string,
+  value: number | string,
   label: string,
-  list: string[]
+  list: string[],
 }
 
 interface IProps {
-  listDefect: Defect[] | undefined
+  model: number | undefined,
+  listDefect: Defect[] | undefined,
+  isLoading: boolean,
+  numberMask: number,
+  defect: number | undefined,
+  listModels: Models[],
+  setNumberMask: Dispatch<SetStateAction<number>>,
+  setDefect: Dispatch<SetStateAction<number | undefined>>,
+  setModel: Dispatch<SetStateAction<number | undefined>>,
+  sendMask: () => void
 }
 
-const DefectType = ({ listDefect }: IProps) => {
+const DefectType = ({ isLoading, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
 
   const { t } = i18next;
   const listMask: string[] = ['Random', 'In Paint']
   const [progress, setProgress] = useState<number>(17)
-  const [listModel, setListModel] = useState<string[]>(['Scratch-1', 'Scratch-2', 'Scratch-3'])
-  const [defect, setDefect] = useState<number>()
-  const [model, setModel] = useState<string>(listModel[0])
   const [mask, setMask] = useState<string>(listMask[0])
-  const [numberMask, setNumberMask] = useState<number>(20)
   const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
-    name === 'model' ? setModel(event.target.value as string) :
+    name === 'model' ? setModel(event.target.value as number) :
       name === 'mask' ? setMask(event.target.value as string) :
         setDefect(event.target.value as number)
 
   const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
 
   const listSelect: Selects[] = [
-    { id: 1, name: 'model', value: model, label: t('model'), list: listModel },
+    { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
     { id: 2, name: 'mask', value: mask, label: t('mask_mode'), list: listMask }
   ]
 
@@ -60,23 +66,21 @@ const DefectType = ({ listDefect }: IProps) => {
           )}
         </SelectList>
       </div>
-      {listSelect.map((item: Selects) =>
-        <div key={item.id} className='flex items-start flex-col mt-6'>
-          <Label className='!mb-1'>{item.label}</Label>
-          <SelectList
-            size='small'
-            value={item.value}
-            onChange={(event) => changeModal(event, item.name)}
-          >
-            {item.list.map((i, idx) =>
-              <MenuList key={idx} value={i}>
-                {i}
-              </MenuList>
-            )}
-          </SelectList>
-        </div>
-      )}
-      <div className='flex flex-col mt-6'>
+      <div className='flex items-start flex-col mt-6'>
+        <Label className='!mb-1'>{t('model')}</Label>
+        <SelectList
+          size='small'
+          value={model || ''}
+          onChange={(event) => changeModal(event, 'model')}
+        >
+          {listModels.map((item: Models) =>
+            <MenuList key={item.id} value={item.id}>
+              {item.name}
+            </MenuList>
+          )}
+        </SelectList>
+      </div>
+      {/* <div className='flex flex-col mt-6'>
         <div className='flex items-center justify-between'>
           <Label>{t('number_of_masks')}</Label>
           <p
@@ -94,17 +98,26 @@ const DefectType = ({ listDefect }: IProps) => {
           color='secondary'
           max={100}
         />
-      </div>
+      </div> */}
       <div className='flex flex-col mt-6'>
         <Label className='!mb-1'>{t('number_of_images')}</Label>
         <Input
+          inputProps={{ min: 0, max: 100 }}
           value={numberMask}
-          onChange={e => setNumberMask(+e.target.value)}
+          onChange={e => +e.target.value >= 0 && +e.target.value <= 100 && setNumberMask(+e.target.value)}
           type='number'
           size='small'
         />
       </div>
-      <Button fullWidth className='!mt-6' variant='contained' color='success'>{t('generate')}</Button>
+      <LoadingButton
+        loading={isLoading}
+        onClick={sendMask}
+        variant='contained'
+        sx={{ background: isLoading ? '#283543 !important' : '#F97316' }}
+        className='!mt-6'
+        color='success'
+        fullWidth
+      >{t('generate')}</LoadingButton>
     </div>
   )
 }

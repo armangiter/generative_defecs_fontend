@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab'
 import { t } from 'i18next'
 import Konva from 'konva'
 import { Stage } from 'konva/lib/Stage'
-import { ResponseImg } from '../../models'
+import { Point, ResponseImg } from '../../models'
 
 interface IProps {
     width: number | undefined,
@@ -11,11 +11,6 @@ interface IProps {
     isLoading: boolean,
     sendMask: ((maskFile: FormDataEntryValue | null) => void) | ((maskFile: FormDataEntryValue | null, typeEdit: string, data: ResponseImg) => void),
     stageRef: RefObject<Stage>,
-}
-
-interface Point {
-    points: number[],
-    strokeWidth: number,
 }
 
 const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) => {
@@ -95,6 +90,7 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
             onClick={async () => {
                 const maskFile: FormDataEntryValue | null = await uploadFile()
                 sendMask(maskFile)
+
             }}
             className='!absolute right-6 bottom-6'
         >{t('upload')}</LoadingButton>

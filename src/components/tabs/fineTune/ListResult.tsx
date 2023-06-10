@@ -3,6 +3,7 @@ import { Url } from "../../../models"
 import { Button, Skeleton, CircularProgress } from '@mui/material';
 import OpenEdit from "./modal/OpenEdit";
 import remove from '../../../assets/icons/delete.svg';
+import { useEffect } from "react";
 
 interface IProps {
     urlUploaded: Url[],
