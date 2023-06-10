@@ -28,16 +28,17 @@ const Generator = ({ listDefect }: IProps) => {
 
     const formData: FormData | null = new FormData()
     if (localBlob && defect) {
-      formData.append('file', localBlob)
+      formData.append('image_file', localBlob)
       formData.append('mask_file', maskFile)
       formData.append('defect_type_id', JSON.stringify(defect))
       formData.append('defect_model_id', JSON.stringify(model))
       formData.append('number_of_images', JSON.stringify(numberMask))
+      formData.append('mask_mode', 'random')
     }
 
     if (formData)
-      request.uploadImage(formData)
-        .then((res) => {
+      request.sendGenerate(formData)
+        .then(() => {
           setPrevLines([])
           setUrlUploaded('')
           setLocalBlob(null)

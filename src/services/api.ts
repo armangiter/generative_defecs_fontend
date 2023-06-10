@@ -5,7 +5,16 @@ export const request = {
   createDefect: (name: string) => api.post('types/', {
     name
   }),
-  uploadImage: (file: FormData) => api.post('images/', file, {
+  uploadImage: (file: FormDataEntryValue | null, mask_file: FormDataEntryValue | null, defect_type_id: number) => api.post('images/', {
+    file,
+    mask_file: file,
+    defect_type_id,
+  }, {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  }),
+  sendGenerate: (file: FormData) => api.post('generate/', file, {
     headers: {
       "Content-Type": "multipart/form-data"
     }
