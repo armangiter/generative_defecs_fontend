@@ -64,11 +64,12 @@ const Generator = ({ listDefect }: IProps) => {
       div.classList.add('drawMask');
       if (generate && generate.current) {
         const { current: { children } } = generate;
+        const { clientWidth, clientHeight } = children[0]
 
         const stage = new Konva.Stage({
           container: div,
-          width: children[0].clientWidth,
-          height: children[0].clientHeight,
+          width: clientWidth,
+          height: clientHeight,
         });
 
         // Layer
@@ -77,8 +78,8 @@ const Generator = ({ listDefect }: IProps) => {
 
         // Bg Black
         const fullRect = new Konva.Rect({
-          width: children[0].clientWidth,
-          height: children[0].clientHeight,
+          width: clientWidth,
+          height: clientHeight,
           fill: 'black'
         })
 
@@ -87,12 +88,13 @@ const Generator = ({ listDefect }: IProps) => {
         // Line
         const listLine: any = []
         points.map((item: Point) => listLine.push(new Konva.Line({
-          points: item.points,
+          points: item.points.map((item, idx) => idx % 2 === 0 ? item * clientWidth : item * clientHeight),
           stroke: 'white',
           strokeWidth: item.strokeWidth,
           tension: 0.5,
           lineCap: "round"
         })))
+
 
         // Add Line
         listLine.map((item: any) => layer.add(item))
@@ -101,6 +103,7 @@ const Generator = ({ listDefect }: IProps) => {
 
         // convert stage to file
         const dataUrl = stage.toDataURL();
+
         const response = await fetch(dataUrl);
 
         const blob = await response.blob();
