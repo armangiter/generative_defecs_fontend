@@ -78,7 +78,6 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
         const formData = new FormData();
         formData.append('mask_file', file)
 
-
         return formData.get('mask_file')
     }
 
