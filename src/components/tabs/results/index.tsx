@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import ListResult from "./ListResult"
-import { DefectType, Result, TimeDate } from "../../../models"
+import { DefectType, Models, Result, TimeDate } from "../../../models"
 import i18next from 'i18next';
 import { request } from "../../../services/api";
 import FilterDate from "./filter/FilterDate";
@@ -18,6 +18,7 @@ const Results = ({ listDefect, value }: IProps) => {
   const pageRef = useRef()
   const [page, setPage] = useState<number>(1);
   const [listResult, setListResult] = useState<Result[]>()
+  const [listModel, setListModel] = useState<Models[]>([])
   const [dateRange, setDateRange] = useState<TimeDate[]>([
     {
       startDate: addDays(new Date(), -7),
@@ -45,6 +46,8 @@ const Results = ({ listDefect, value }: IProps) => {
         }
         )
         setListResult(filteredData)
+        request.getModels()
+          .then(res => setListModel(res.data))
       })
   }
 
@@ -77,7 +80,7 @@ const Results = ({ listDefect, value }: IProps) => {
       />
       <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
         {!!filteredDate && !!filteredDate.length && filteredDate.map((item: Result, idx: number) =>
-          <ListResult key={idx} data={item} />
+          <ListResult key={idx} data={item} listModel={listModel} />
         )}
       </ul>
       {

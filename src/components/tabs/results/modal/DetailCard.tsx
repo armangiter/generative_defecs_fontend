@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import { Modal, Box, Button } from '@mui/material';
 import { Label, Input } from '../../../../mui/customize';
-import { Result } from "../../../../models"
+import { Models, Result } from "../../../../models"
 import style from '../../../../mui/style';
 import CloseIcon from '@mui/icons-material/Close';
 import download from '../../../../assets/icons/download.svg';
@@ -11,10 +11,11 @@ import axios from 'axios';
 interface IProps {
   open: boolean,
   data: Result,
+  listModel: Models[],
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const DetailCard = ({ open, setOpen, data }: IProps) => {
+const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
 
   const { t } = i18next;
   const openModal = () => setOpen(true);
@@ -110,7 +111,12 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
               <Label className='!mb-1'>{t('model')}</Label>
               <Input
                 size='small'
-                value='Scratch-1'
+                value={
+                  listModel && listModel.length ?
+                    listModel.find((item: Models) =>
+                      item.id === data.defect_model_id
+                    )?.name : 'Loading...'
+                }
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
