@@ -1,64 +1,54 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button, Modal, Box } from '@mui/material';
 import style from '../../../../mui/style';
 import i18next from 'i18next';
 import amazingLoading from '../../../../assets/loading.gif'
 import { request } from '../../../../services/api';
 import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 interface IProps {
-  getListImage: () => void
+  openModal: boolean,
+  isLoadingB: boolean,
+  getListImage: (from: string) => void,
+  setOpenModal: Dispatch<SetStateAction<boolean>>,
 }
 
-const StartTuning = ({ getListImage }: IProps) => {
+const StartTuning = ({ isLoadingB, openModal, setOpenModal, getListImage }: IProps) => {
 
   const { t } = i18next;
-  const [open, setOpen] = useState(false);
-  const openModal = () => setOpen(true);
   const closeModal = (e: any) =>
     e.preventDefault();
 
-  const checkStatus = (type: string) => {
-    type === 'click' && openModal()
+  const checkStatus = (modal: string) => {
     const interval = setInterval(() => {
       request.statusFine()
         .then(res => {
           if (res.data.status !== 'training') {
-            setOpen(false)
+            modal === 'first' && setOpenModal(false)
             clearInterval(interval)
-            if (type === 'click') {
-              toast.success(t('over_fine_progress'), {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              })
-              getListImage()
-            }
           } else
-            openModal();
+            setOpenModal(true);
         })
     }, 5000)
   }
 
   useEffect(() => {
-    checkStatus('useEffect')
+    checkStatus(openModal ? 'first' : 'notFirst')
   }, [])
 
   return (
     <div>
-      <Button
+      <LoadingButton
+        loading={isLoadingB}
+        sx={{ background: isLoadingB ? '#1F2937 !important' : '' }}
         variant="contained"
         color="success"
         className='!mt-6 !w-[99.8%] !mx-auto'
-        onClick={() => checkStatus('click')}
-      >{t('fine_tune')}</Button>
+        onClick={() => getListImage('fineTune')}
+      >{t('fine_tune')}</LoadingButton>
       <Modal
-        open={open}
+        open={openModal}
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"

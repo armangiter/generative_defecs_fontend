@@ -5,6 +5,7 @@ import i18next from 'i18next';
 import { DefectType as Defect, Lines, Models, Point } from "../../../models";
 import Konva from "konva";
 import { request } from "../../../services/api";
+import { toast } from "react-toastify";
 
 interface IProps {
   listDefect: Defect[] | undefined
@@ -13,6 +14,7 @@ interface IProps {
 const Generator = ({ listDefect }: IProps) => {
 
   const { t } = i18next;
+  const [open, setOpen] = useState(false);
   const generate = useRef<HTMLDivElement>()
   const [defect, setDefect] = useState<number>()
   const [model, setModel] = useState<number>()
@@ -43,6 +45,27 @@ const Generator = ({ listDefect }: IProps) => {
           setUrlUploaded('')
           setLocalBlob(null)
           setIsLoading(false)
+          setOpen(true)
+          const interval = setInterval(() => {
+            request.statusGenerate()
+              .then(res => {
+                if (res.data.status !== 'generating') {
+                  setOpen(false)
+                  clearInterval(interval)
+                  toast.success(t('over_generate_progress'), {
+                    position: "top-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                  })
+                } else
+                  setOpen(true);
+              })
+          }, 5000)
         })
     else
       setIsLoading(false)
@@ -141,6 +164,7 @@ const Generator = ({ listDefect }: IProps) => {
         />
         <DefectType
           defect={defect}
+          isLoading={isLoading}
           model={model}
           numberMask={numberMask}
           setDefect={setDefect}
@@ -150,6 +174,8 @@ const Generator = ({ listDefect }: IProps) => {
           setModel={setModel}
           setNumberMask={setNumberMask}
           localBlob={localBlob}
+          open={open}
+          setOpen={setOpen}
         />
       </div>
     </div>

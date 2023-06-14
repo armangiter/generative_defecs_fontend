@@ -15,7 +15,7 @@ interface IProps {
   defect: number | undefined,
   urlUploaded: Url[],
   setUrlUploaded: Dispatch<SetStateAction<Url[]>>,
-  getListImage: () => void
+  getListImage: (from: string) => void
 }
 
 const UploadImage = ({ setUrlUploaded, urlUploaded, getListImage, defect }: IProps) => {

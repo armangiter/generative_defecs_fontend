@@ -1,61 +1,52 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { Button, Modal, Box } from '@mui/material';
 import style from '../../../../mui/style';
 import i18next from 'i18next';
 import amazingLoading from '../../../../assets/loading.gif'
 import { request } from '../../../../services/api';
 import { toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 interface IProps {
   sendMask: () => void,
+  isLoading: boolean,
+  open: boolean,
+  setOpen: Dispatch<SetStateAction<boolean>>,
   localBlob: File | null | undefined
 }
 
-const StartGenerating = ({ localBlob, sendMask }: IProps) => {
+const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IProps) => {
 
   const { t } = i18next;
-  const [open, setOpen] = useState(false);
   const openModal = () => setOpen(true);
   const closeModal = (e: any) =>
     e.preventDefault();
 
-  const checkStatus = (type: string) => {
-    type === 'click' && openModal()
+  const checkStatus = (modal: string) => {
     const interval = setInterval(() => {
       request.statusGenerate()
         .then(res => {
           if (res.data.status !== 'generating') {
-            setOpen(false)
+            modal === 'first' && setOpen(false)
             clearInterval(interval)
-            if (type === 'click') {
-              sendMask()
-              toast.success(t('over_generate_progress'), {
-                position: "top-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-              })
-            }
           } else
-            openModal();
+            setOpen(true)
         })
     }, 5000)
   }
 
   useEffect(() => {
-    checkStatus('useEffect')
+    checkStatus(open ? 'first' : 'notFirst')
   }, [])
 
   return (
     <div>
-      <Button
+      <LoadingButton
+        loading={isLoading}
+        sx={{ background: isLoading ? '#1F2937 !important' : '' }}
         onClick={() => {
           localBlob ?
-            checkStatus('click') :
+            sendMask() :
             toast.warn(t('empty_img'), {
               position: "top-center",
               autoClose: 5000,
@@ -71,7 +62,7 @@ const StartGenerating = ({ localBlob, sendMask }: IProps) => {
         className='!mt-6'
         color='success'
         fullWidth
-      >{t('generate')}</Button>
+      >{t('generate')}</LoadingButton>
       <Modal
         open={open}
         onClose={closeModal}

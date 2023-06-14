@@ -14,19 +14,22 @@ import StartGenerating from './modal/StartGenerating';
 // }
 
 interface IProps {
+  isLoading: boolean,
+  open: boolean,
   model: number | undefined,
   listDefect: Defect[] | undefined,
   numberMask: number,
   defect: number | undefined,
   listModels: Models[],
   localBlob: File | null | undefined,
+  setOpen: Dispatch<SetStateAction<boolean>>,
   setNumberMask: Dispatch<SetStateAction<number>>,
   setDefect: Dispatch<SetStateAction<number | undefined>>,
   setModel: Dispatch<SetStateAction<number | undefined>>,
   sendMask: () => void
 }
 
-const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
+const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
 
   const { t } = i18next;
   const listMask: string[] = ['Random', 'In Paint']
@@ -38,10 +41,6 @@ const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, def
         setDefect(event.target.value as number)
 
   const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
-
-  const handleGenerate = () => {
-    
-  }
 
   // const listSelect: Selects[] = [
   //   { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
@@ -114,8 +113,11 @@ const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, def
         />
       </div>
       <StartGenerating
-        sendMask={handleGenerate}
+        sendMask={sendMask}
+        isLoading={isLoading}
         localBlob={localBlob}
+        open={open}
+        setOpen={setOpen}
       />
     </div>
   )
