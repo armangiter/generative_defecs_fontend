@@ -11,6 +11,8 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   error => {
+    console.log(error);
+    
     if (error.response && error.response.status === 403) {
       window.location.reload()
     } else {

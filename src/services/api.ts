@@ -2,8 +2,8 @@ import api from "./http.service";
 
 export const request = {
   listDefect: () => api.get('types/'),
-  createDefect: (name: string) => api.post('types/', {
-    name
+  createDefect: (name: string, command: string) => api.post('types/', {
+    name, command
   }),
   uploadImage: (file: FormDataEntryValue | null, mask_file: FormDataEntryValue | null, defect_type_id: number) => api.post('images/', {
     file,
@@ -23,5 +23,7 @@ export const request = {
   deleteImage: (id: number) => api.delete(`images/${id}`),
   createFineTune: () => api.post('fine_tune/'),
   getResult: () => api.get('results/'),
-  getModels: () => api.get('models/')
+  getModels: () => api.get('models/'),
+  statusFine: () => api.get('fine_tune/status/'),
+  statusGenerate: () => api.get('generate/status/')
 }

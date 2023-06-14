@@ -3,30 +3,30 @@ import { Input, Label, MenuList, SelectList } from '../../../mui/customize'
 import { SelectChangeEvent } from '@mui/material'
 import { DefectType as Defect, Models } from '../../../models';
 import i18next from 'i18next';
-import { LoadingButton } from '@mui/lab';
+import StartGenerating from './modal/StartGenerating';
 
-interface Selects {
-  id: number,
-  name: string,
-  value: number | string,
-  label: string,
-  list: string[],
-}
+// interface Selects {
+//   id: number,
+//   name: string,
+//   value: number | string,
+//   label: string,
+//   list: string[],
+// }
 
 interface IProps {
   model: number | undefined,
   listDefect: Defect[] | undefined,
-  isLoading: boolean,
   numberMask: number,
   defect: number | undefined,
   listModels: Models[],
+  localBlob: File | null | undefined,
   setNumberMask: Dispatch<SetStateAction<number>>,
   setDefect: Dispatch<SetStateAction<number | undefined>>,
   setModel: Dispatch<SetStateAction<number | undefined>>,
   sendMask: () => void
 }
 
-const DefectType = ({ isLoading, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
+const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
 
   const { t } = i18next;
   const listMask: string[] = ['Random', 'In Paint']
@@ -39,10 +39,10 @@ const DefectType = ({ isLoading, numberMask, setNumberMask, model, setModel, def
 
   const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
 
-  const listSelect: Selects[] = [
-    { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
-    { id: 2, name: 'mask', value: mask, label: t('mask_mode'), list: listMask }
-  ]
+  // const listSelect: Selects[] = [
+  //   { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
+  //   { id: 2, name: 'mask', value: mask, label: t('mask_mode'), list: listMask }
+  // ]
 
   useEffect(() => {
     if (listDefect) {
@@ -109,15 +109,10 @@ const DefectType = ({ isLoading, numberMask, setNumberMask, model, setModel, def
           size='small'
         />
       </div>
-      <LoadingButton
-        loading={isLoading}
-        onClick={sendMask}
-        variant='contained'
-        sx={{ background: isLoading ? '#283543 !important' : '#F97316' }}
-        className='!mt-6'
-        color='success'
-        fullWidth
-      >{t('generate')}</LoadingButton>
+      <StartGenerating
+        sendMask={sendMask}
+        localBlob={localBlob}
+      />
     </div>
   )
 }

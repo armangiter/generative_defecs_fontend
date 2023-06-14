@@ -149,7 +149,7 @@ const Generator = ({ listDefect }: IProps) => {
           listModels={listModels}
           setModel={setModel}
           setNumberMask={setNumberMask}
-          isLoading={isLoading}
+          localBlob={localBlob}
         />
       </div>
     </div>

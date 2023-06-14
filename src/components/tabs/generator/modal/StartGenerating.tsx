@@ -7,10 +7,11 @@ import { request } from '../../../../services/api';
 import { toast } from 'react-toastify';
 
 interface IProps {
-  getListImage: () => void
+  sendMask: () => void,
+  localBlob: File | null | undefined
 }
 
-const StartTuning = ({ getListImage }: IProps) => {
+const StartGenerating = ({ localBlob, sendMask }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState(false);
@@ -21,13 +22,13 @@ const StartTuning = ({ getListImage }: IProps) => {
   const checkStatus = (type: string) => {
     type === 'click' && openModal()
     const interval = setInterval(() => {
-      request.statusFine()
+      request.statusGenerate()
         .then(res => {
-          if (res.data.status !== 'training') {
+          if (res.data.status !== 'generating') {
             setOpen(false)
-            getListImage()
+            sendMask()
             clearInterval(interval)
-            toast.success(t('over_progress'), {
+            toast.error(t('over_progress'), {
               position: "top-center",
               autoClose: 5000,
               hideProgressBar: false,
@@ -50,11 +51,25 @@ const StartTuning = ({ getListImage }: IProps) => {
   return (
     <div>
       <Button
-        variant="contained"
-        color="success"
-        className='!mt-6 !w-[99.8%] !mx-auto'
-        onClick={() => checkStatus('click')}
-      >{t('fine_tune')}</Button>
+        onClick={() => {
+          localBlob ?
+            checkStatus('click') :
+            toast.warn(t('empty_img'), {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            })
+        }}
+        variant='contained'
+        className='!mt-6'
+        color='success'
+        fullWidth
+      >{t('generate')}</Button>
       <Modal
         open={open}
         onClose={closeModal}
@@ -62,7 +77,7 @@ const StartTuning = ({ getListImage }: IProps) => {
         aria-describedby="modal-modal-description"
       >
         <Box className='!w-[60vw]' sx={style}>
-          <p className='px-8 font-extrabold	text-2xl text-light-100'>{t('fine_tuning_progress')}</p>
+          <p className='px-8 font-extrabold	text-2xl text-light-100'>{t('generating_progress')}</p>
           <div className='relative flex items-center justify-center my-10 mx-8'>
             {Array(7).fill({}).map((_, idx: number) =>
               <img className='bg-transparent w-[14%]' key={idx} src={amazingLoading} alt='loading' />
@@ -81,4 +96,4 @@ const StartTuning = ({ getListImage }: IProps) => {
   )
 }
 
-export default StartTuning
+export default StartGenerating

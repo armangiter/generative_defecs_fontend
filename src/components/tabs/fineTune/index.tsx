@@ -48,7 +48,7 @@ const FineTune = ({ getListDefect, listDefect, isLoading }: IProps) => {
   return (
     <div>
       <p className='text-light-100 font-extrabold	text-2xl'>{t('fine_tune_defect_types')}</p>
-      <div className='flex flex-col md:flex-row items-start justify-center md:gap-8 mt-12'>
+      <div className='flex flex-col md:flex-row items-start justify-center gap-5 md:gap-8 mt-12'>
         <UploadImage
           defect={defect}
           getListImage={getListImage}

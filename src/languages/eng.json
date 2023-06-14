@@ -1,6 +1,8 @@
 {
   "footer": "2023 Rutilea. All Rights Reserved",
   "failed_to_load_img": "Image failed to load",
+  "over_progress": "Fine tuning progress is over",
+  "empty_img": "The image is empty",
   "upload": "Upload",
   "save_change": "Save Changes",
   "eng": "ENG",
@@ -19,6 +21,7 @@
   "discard": "Discard",
   "save": "Save",
   "fine_tuning_progress": "Fine Tuning In Progress...",
+  "generating_progress": "Generating In Progress...",
   "cancel": "Cancel",
   "model": "Model",
   "mask_mode": "Mask Mode",
