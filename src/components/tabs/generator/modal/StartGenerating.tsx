@@ -43,7 +43,7 @@ const StartGenerating = ({ localBlob, sendMask }: IProps) => {
           } else
             openModal();
         })
-    }, 1000)
+    }, 5000)
   }
 
   useEffect(() => {
