@@ -39,6 +39,10 @@ const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, def
 
   const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
 
+  const handleGenerate = () => {
+    
+  }
+
   // const listSelect: Selects[] = [
   //   { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
   //   { id: 2, name: 'mask', value: mask, label: t('mask_mode'), list: listMask }
@@ -110,7 +114,7 @@ const DefectType = ({ localBlob, numberMask, setNumberMask, model, setModel, def
         />
       </div>
       <StartGenerating
-        sendMask={sendMask}
+        sendMask={handleGenerate}
         localBlob={localBlob}
       />
     </div>
