@@ -26,18 +26,20 @@ const StartGenerating = ({ localBlob, sendMask }: IProps) => {
         .then(res => {
           if (res.data.status !== 'generating') {
             setOpen(false)
-            sendMask()
             clearInterval(interval)
-            toast.error(t('over_progress'), {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            })
+            if (type === 'click') {
+              sendMask()
+              toast.success(t('over_generate_progress'), {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              })
+            }
           } else
             openModal();
         })

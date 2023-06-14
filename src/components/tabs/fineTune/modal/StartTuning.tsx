@@ -25,18 +25,20 @@ const StartTuning = ({ getListImage }: IProps) => {
         .then(res => {
           if (res.data.status !== 'training') {
             setOpen(false)
-            getListImage()
             clearInterval(interval)
-            toast.success(t('over_progress'), {
-              position: "top-center",
-              autoClose: 5000,
-              hideProgressBar: false,
-              closeOnClick: true,
-              pauseOnHover: true,
-              draggable: true,
-              progress: undefined,
-              theme: "light",
-            })
+            if (type === 'click') {
+              toast.success(t('over_fine_progress'), {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+              })
+              getListImage()
+            }
           } else
             openModal();
         })

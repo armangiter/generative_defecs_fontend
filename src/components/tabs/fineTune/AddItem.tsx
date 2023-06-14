@@ -55,7 +55,7 @@ const AddItem = ({ isLoading, setIsInput, getListDefect }: IProps) => {
           size='small'
         />
         <TextField
-          placeholder='Add New Defect'
+          placeholder='Add New Command'
           value={detailAdd.commandName}
           onKeyDown={(e) => e.stopPropagation()}
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
