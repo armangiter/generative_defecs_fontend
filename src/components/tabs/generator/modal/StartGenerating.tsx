@@ -27,7 +27,7 @@ const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IPro
       request.statusGenerate()
         .then(res => {
           if (res.data.status !== 'generating') {
-            modal === 'first' && setOpen(false)
+            setOpen(false)
             clearInterval(interval)
           } else
             setOpen(true)
