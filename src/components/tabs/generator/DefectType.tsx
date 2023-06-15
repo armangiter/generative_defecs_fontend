@@ -33,6 +33,7 @@ const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumber
 
   const { t } = i18next;
   const listMask: string[] = ['Random', 'In Paint']
+  
   const [progress, setProgress] = useState<number>(17)
   const [mask, setMask] = useState<string>(listMask[0])
   const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
