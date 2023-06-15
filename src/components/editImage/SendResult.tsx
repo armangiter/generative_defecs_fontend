@@ -3,7 +3,7 @@ import { LoadingButton } from '@mui/lab'
 import { t } from 'i18next'
 import Konva from 'konva'
 import { Stage } from 'konva/lib/Stage'
-import { ResponseImg } from '../../models'
+import { Point, ResponseImg } from '../../models'
 
 interface IProps {
     width: number | undefined,
@@ -11,11 +11,6 @@ interface IProps {
     isLoading: boolean,
     sendMask: ((maskFile: FormDataEntryValue | null) => void) | ((maskFile: FormDataEntryValue | null, typeEdit: string, data: ResponseImg) => void),
     stageRef: RefObject<Stage>,
-}
-
-interface Point {
-    points: number[],
-    strokeWidth: number,
 }
 
 const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) => {
@@ -48,11 +43,20 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
         const layer = new Konva.Layer();
         stage.add(layer);
 
+        // Bg Black
+        const fullRect = new Konva.Rect({
+            width,
+            height,
+            fill: 'black'
+        })
+
+        layer.add(fullRect)
+
         // Line
         const listLine: any = []
         points.map((item: Point) => listLine.push(new Konva.Line({
             points: item.points,
-            stroke: 'black',
+            stroke: 'white',
             strokeWidth: item.strokeWidth,
             tension: 0.5,
             lineCap: "round"
@@ -65,6 +69,7 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
 
         // convert stage to file
         const dataUrl = stage.toDataURL();
+
         const response = await fetch(dataUrl);
 
         const blob = await response.blob();
@@ -72,7 +77,6 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
 
         const formData = new FormData();
         formData.append('mask_file', file)
-
 
         return formData.get('mask_file')
     }
@@ -85,6 +89,7 @@ const SendResult = ({ width, height, stageRef, isLoading, sendMask }: IProps) =>
             onClick={async () => {
                 const maskFile: FormDataEntryValue | null = await uploadFile()
                 sendMask(maskFile)
+
             }}
             className='!absolute right-6 bottom-6'
         >{t('upload')}</LoadingButton>

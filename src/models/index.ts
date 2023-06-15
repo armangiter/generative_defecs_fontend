@@ -67,3 +67,15 @@ export interface ResponseImg {
   isLoaded: boolean,
   blob: string
 }
+
+export interface Point {
+  points: number[],
+  strokeWidth: number,
+  color?: string
+}
+
+export interface Models {
+  id: number,
+  file: string,
+  name: string
+}

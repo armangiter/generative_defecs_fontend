@@ -1,17 +1,25 @@
-import { useState, useEffect, ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { Button } from '@mui/material';
 import gallery from '../../../assets/images/gallery.png';
 import i18next from 'i18next';
 import ListIcon from '../../editImage/tools/view/ListIcon';
-import DeleteImg from '../../editImage/tools/typeEdit/DeleteImg';
 import DrawKonva from '../../editImage/tools/DrawKonva';
 import { Lines, Size, Url } from '../../../models';
-import FullScreen from './modal/FullScreen';
 import MoreIcon from '../../editImage/tools/view/MoreIcon';
-import { v4 } from 'uuid';
 import { request } from '../../../services/api';
 
-const UploadImage = () => {
+interface IProps {
+  isLoading: boolean,
+  prevLines: Lines[],
+  urlUploaded: string | undefined,
+  localBlob: File | null | undefined,
+  setUrlUploaded: Dispatch<SetStateAction<string | undefined>>,
+  setIsLoading: Dispatch<SetStateAction<boolean>>,
+  setPrevLines: Dispatch<SetStateAction<Lines[]>>,
+  setLocalBlob: Dispatch<SetStateAction<File | null | undefined>>
+}
+
+const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isLoading, setIsLoading, localBlob, setLocalBlob }: IProps) => {
 
   const { t } = i18next;
   const [color, setColor] = useState('FF0000')
@@ -20,10 +28,6 @@ const UploadImage = () => {
   const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
   const [slider, setSlider] = useState<number>(12)
   const [sizeImage, setSizeImage] = useState<Size>()
-  const [prevLines, setPrevLines] = useState<Lines[]>([]);
-  const [urlUploaded, setUrlUploaded] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [localBlob, setLocalBlob] = useState<File | null>()
 
   const changeSlider = (event: Event, newValue: number | number[]) =>
     typeof newValue === 'number' && setSlider(newValue);
@@ -88,6 +92,7 @@ const UploadImage = () => {
             isLoading={isLoading}
             isFullScreen={isFullScreen}
             setUrlUploaded={setUrlUploaded}
+            tab='generate'
           />
           <ListIcon
             type={type}

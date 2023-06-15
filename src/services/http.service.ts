@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"
 
-const BASE_URL = 'http://128.65.167.198:81/api/defects/'
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 const api = axios.create({
   baseURL: BASE_URL,

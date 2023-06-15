@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { Label } from "../../../mui/customize"
-import { DefectType, Result, ResultImg } from "../../../models";
+import { Models, Result, ResultImg } from "../../../models";
 import DetailCard from './modal/DetailCard'
 import i18next from 'i18next';
 import { updateUrl } from "../../../helper";
 
 interface IProps {
   data: Result,
+  listModel: Models[]
 }
 
-const ListResult = ({ data }: IProps) => {
+const ListResult = ({ listModel, data }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
@@ -23,17 +24,23 @@ const ListResult = ({ data }: IProps) => {
             <img onClick={() => setOpen(true)} src={updateUrl(item.file)} alt='result' className="w-full h-full object-cover rounded opacity-[0.85] cursor-pointer" />
           </li>
         )}
-        <DetailCard 
+        <DetailCard
           open={open}
           setOpen={setOpen}
           data={data}
+          listModel={listModel}
         />
       </ul>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
         {t('type')}: {data.defect_type_name}
       </p>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
-        {t('model')}: Scratch-1
+        {t('model')}: {
+          listModel && listModel.length ?
+            listModel.find((item: Models) =>
+              item.id === data.defect_model_id
+            )?.name : 'Loading...'
+        }
         {/* {t('model')}: {data.defect_model_id} */}
       </p>
     </li>

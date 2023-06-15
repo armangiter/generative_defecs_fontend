@@ -123,3 +123,11 @@ p {
   color: #FFFFFF !important;
   padding: 10px !important;
 }
+
+.Toastify__toast {
+  background: #111827;
+}
+
+.Toastify__close-button svg {
+  fill: #fff;
+}

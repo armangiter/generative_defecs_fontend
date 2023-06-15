@@ -10,15 +10,18 @@ import { MenuItem, SelectChangeEvent, Button, FormControl, CircularProgress } fr
 import AddCircleOutlinedIcon from '@mui/icons-material/AddCircleOutlined';
 
 interface IProps {
+  openModal: boolean,
+  isLoadingB: boolean,
   defect: number | undefined,
   isLoading: boolean,
   listDefect: Defect[] | undefined,
+  setOpenModal: Dispatch<SetStateAction<boolean>>,
   setDefect: Dispatch<SetStateAction<number | undefined>>,
-  getListImage: () => void,
+  getListImage: (from: string) => void,
   getListDefect: () => void
 }
 
-const DefectType = ({ getListImage, defect, setDefect, listDefect, isLoading, getListDefect }: IProps) => {
+const DefectType = ({ isLoadingB, openModal, setOpenModal, getListImage, defect, setDefect, listDefect, isLoading, getListDefect }: IProps) => {
 
   const { t } = i18next;
   const [open, setOpen] = useState<boolean>(false);
@@ -78,7 +81,12 @@ const DefectType = ({ getListImage, defect, setDefect, listDefect, isLoading, ge
           )}
         </SelectList>
       </FormControl>
-      <StartTuning getListImage={getListImage} />
+      <StartTuning
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        getListImage={getListImage}
+        isLoadingB={isLoadingB}
+      />
     </div>
   )
 }
