@@ -4,7 +4,7 @@ import gallery from '../../../assets/images/gallery.png';
 import i18next from 'i18next';
 import ListIcon from '../../editImage/tools/view/ListIcon';
 import DrawKonva from '../../editImage/tools/DrawKonva';
-import { Lines, Size, Url } from '../../../models';
+import { Lines, Size } from '../../../models';
 import MoreIcon from '../../editImage/tools/view/MoreIcon';
 import { request } from '../../../services/api';
 

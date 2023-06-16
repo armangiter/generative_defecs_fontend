@@ -22,8 +22,6 @@ const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
       i18next.changeLanguage(language.toLowerCase())
     }
   }
-  console.log(currencyLanguage);
-
 
   return (
     <>

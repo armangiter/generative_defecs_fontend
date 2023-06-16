@@ -62,7 +62,9 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
       >
         <Box className='!w-[90%] h-[80vh] !max-h-[640px] !px-8' sx={style}>
           <div className='flex items-center justify-between'>
-            <p className='font-extrabold text-2xl text-light-100'>{data.created.split('T')[0]}</p>
+            <p className='font-extrabold text-2xl text-light-100'>
+            {data.created.split('T')[0]} {data.created.split('T')[1].split('.')[0]}
+            </p>
             <CloseIcon
               className='!text-light-100 border border-light-100 rounded-full p-1 cursor-pointer'
               onClick={closeModal}
