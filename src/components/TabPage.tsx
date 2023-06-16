@@ -90,7 +90,7 @@ const TabPage = () => {
 
   return (
     <Box className='!w-full'>
-      <AppBar position="static" className='!w-[281px] sm:!w-[321px] !bg-transparent !border-transparent'>
+      <AppBar position="static" className='!w-[281px] sm:!w-fit !bg-transparent !border-transparent'>
         <Tabs
           value={value}
           onChange={handleChange}

@@ -94,7 +94,7 @@ const Results = ({ listDefect, value }: IProps) => {
       {
         !!listResult && !!listResult.length && listResult.length > 12 &&
         <Pagination
-          count={Math.floor(listResult.length / 12)}
+          count={Math.ceil(listResult.length / 12)}
           page={page}
           onChange={(event: React.MouseEvent<HTMLButtonElement> | null, newPage) => handleChangePage(event, newPage)}
           ref={pageRef}

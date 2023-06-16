@@ -22,6 +22,8 @@ const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
       i18next.changeLanguage(language.toLowerCase())
     }
   }
+  console.log(currencyLanguage);
+
 
   return (
     <>
@@ -43,7 +45,7 @@ const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
       >
         {listLanguage.map((item: string) =>
           <MenuItem
-            className='!mx-2 rounded-md'
+            className={`!mx-2 rounded-md ${currencyLanguage === item ? '!text-light-100' : '!text-light-300'}`}
             sx={{
               backgroundColor: currencyLanguage === item ? 'rgba(31, 41, 55, 0.2)' : '',
               transition: '0.3s',
@@ -56,7 +58,7 @@ const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
             onClick={() => changeLang(item)}
           >{item}</MenuItem>
         )}
-      </Menu>
+      </Menu >
     </>
   )
 }
