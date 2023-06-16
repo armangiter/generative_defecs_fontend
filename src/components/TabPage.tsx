@@ -48,7 +48,11 @@ const TabPage = () => {
   const { t } = i18next;
   const [listDefect, setListDefect] = useState<DefectType[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const listTab: string[] = [t('fine_tune'), t('generator'), t('results')];
+  const listTab: string[] = [
+    // t('fine_tune'),
+    t('generator'),
+    t('result')
+  ];
   const getListDefect = () => {
     setIsLoading(true)
     request.listDefect()
@@ -60,13 +64,13 @@ const TabPage = () => {
       })
       .catch(() => setIsLoading(false))
   }
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(1);
   const listComponent: ReactNode[] = [
-    <FineTune
-      getListDefect={getListDefect}
-      listDefect={listDefect}
-      isLoading={isLoading}
-    />,
+    // <FineTune
+    //   getListDefect={getListDefect}
+    //   listDefect={listDefect}
+    //   isLoading={isLoading}
+    // />,
     <Generator
       listDefect={listDefect}
     />,
