@@ -17,6 +17,7 @@ const Results = ({ listDefect, value }: IProps) => {
   const { t } = i18next;
   const pageRef = useRef()
   const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(true)
   const [listResult, setListResult] = useState<Result[]>()
   const [listModel, setListModel] = useState<Models[]>([])
   const [dateRange, setDateRange] = useState<TimeDate[]>([
@@ -35,8 +36,10 @@ const Results = ({ listDefect, value }: IProps) => {
   ])
 
   const getListResult = () => {
+    setIsLoading(true)
     request.getResult()
       .then(response => {
+        setIsLoading(false)
         const filteredData = response.data.map((item: Result) => {
           return {
             ...item,
@@ -53,7 +56,7 @@ const Results = ({ listDefect, value }: IProps) => {
 
   useEffect(() => {
     getListResult()
-  }, [listDefect, value])
+  }, [])
 
   const handleChangePage = (event: React.MouseEvent<HTMLButtonElement> | null, newPage: number) => {
     setPage(newPage);
@@ -67,7 +70,8 @@ const Results = ({ listDefect, value }: IProps) => {
 
   const filteredDate = filteredPagination?.filter((item: Result) =>
     new Date(dateRange[0].startDate) <= new Date(item.created) && new Date(item.created) <= new Date(dateRange[0].endDate)
-  )
+  );
+
   const updateDateRange = (name: string) => name === 'cancel' ? setEditDateRange(dateRange) : setDateRange(editDateRange);
 
   return (
@@ -86,10 +90,12 @@ const Results = ({ listDefect, value }: IProps) => {
             ))
           }
         </ul>
-      ) : (
+      ) : isLoading ? (
         <CircularProgress
           className="!mx-auto !block my-24"
         />
+      ) : !isLoading && (
+        <p className="block text-center text-lg font-semibold">{t('empty_results')}</p>
       )}
       {
         !!listResult && !!listResult.length && listResult.length > 12 &&
