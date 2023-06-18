@@ -53,6 +53,7 @@ const StartTuning = ({ isLoadingB, openModal, setOpenModal, getListImage }: IPro
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
+        
         <Box className='!w-[60vw]' sx={style}>
           <p className='px-8 font-extrabold	text-2xl text-light-100'>{t('fine_tuning_progress')}</p>
           <div className='relative flex items-center justify-center my-10 mx-8'>

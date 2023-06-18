@@ -2,6 +2,7 @@ import api from "./http.service";
 
 export const request = {
   listDefect: () => api.get('types/'),
+  listDefectModels: (model: number) => api.get(`types/?defect_model_id=${model}`),
   createDefect: (name: string, command: string) => api.post('types/', {
     name, command
   }),

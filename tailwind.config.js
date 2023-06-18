@@ -24,6 +24,7 @@ export default {
         'light-500': '#434B57',
         'light-600': '#F9F9F9',
         'light-700': '#F97316',
+        'light-800': '#FEF08A',
         'dark-100': '#1F2937',
         'dark-200': '#374151',
         'green-100': '#22C55E',

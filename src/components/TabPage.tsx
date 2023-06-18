@@ -71,9 +71,7 @@ const TabPage = () => {
     //   listDefect={listDefect}
     //   isLoading={isLoading}
     // />,
-    <Generator
-      listDefect={listDefect}
-    />,
+    <Generator />,
     <Results
       listDefect={listDefect}
       value={value}

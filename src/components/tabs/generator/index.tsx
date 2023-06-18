@@ -7,16 +7,12 @@ import Konva from "konva";
 import { request } from "../../../services/api";
 import { toast } from "react-toastify";
 
-interface IProps {
-  listDefect: Defect[] | undefined
-}
-
-const Generator = ({ listDefect }: IProps) => {
+const Generator = () => {
 
   const { t } = i18next;
   const [open, setOpen] = useState(false);
   const generate = useRef<HTMLDivElement>()
-  const [defect, setDefect] = useState<number>()
+  const [defect, setDefect] = useState<number | null | undefined>()
   const [model, setModel] = useState<number>()
   const [numberMask, setNumberMask] = useState<number>(5)
   const [prevLines, setPrevLines] = useState<Lines[]>([]);
@@ -24,6 +20,8 @@ const Generator = ({ listDefect }: IProps) => {
   const [localBlob, setLocalBlob] = useState<File | null>()
   const [listModels, setListModels] = useState<Models[]>([]);
   const [urlUploaded, setUrlUploaded] = useState<string>();
+  const [progress, setProgress] = useState<number>(0);
+  const [listDefect, setListDefect] = useState<Defect[]>();
 
   const sendMask = (maskFile: File) => {
     setIsLoading(true)
@@ -46,11 +44,18 @@ const Generator = ({ listDefect }: IProps) => {
           setLocalBlob(null)
           setIsLoading(false)
           setOpen(true)
+          let prevProgress = progress
           const interval = setInterval(() => {
             request.statusGenerate()
               .then(res => {
-                if (res.data.status !== 'generating') {
-                  setOpen(false)
+                if (res.data.status === 'generating') {
+                  setOpen(true);
+                  if (prevProgress < 90) {
+                    setProgress(prev => prev + 10)
+                    prevProgress += 10
+                  }
+                } else {
+                  setProgress(100);
                   clearInterval(interval)
                   toast.success(t('over_generate_progress'), {
                     position: "top-center",
@@ -62,8 +67,11 @@ const Generator = ({ listDefect }: IProps) => {
                     progress: undefined,
                     theme: "light",
                   })
-                } else
-                  setOpen(true);
+                  setTimeout(() => {
+                    setOpen(false)
+                    setProgress(0);
+                  }, 1000);
+                }
               })
           }, 5000)
         })
@@ -137,22 +145,44 @@ const Generator = ({ listDefect }: IProps) => {
     }
   }
 
+  const getListDefect = (model: number) => {
+    request.listDefectModels(model)
+      .then((res) => {
+        if (res.data.length) {
+          setListDefect(res.data)
+          setDefect(res.data[0].id)
+        } else {
+          setListDefect([])
+          setDefect(undefined)
+        }
+      })
+  }
+
   useEffect(() => {
     request.getModels()
       .then(res => {
         const { data } = res
         if (data.length) {
-          setModel(data[0].id)
+          const firstItem = data[0].id
+          setModel(firstItem)
           setListModels(data)
+          getListDefect(firstItem)
         }
       })
   }, [])
+
+  useEffect(() => {
+    if (model) {
+      getListDefect(model)
+    }
+  }, [model])
 
   return (
     <div>
       <p className='text-light-100 font-extrabold	text-2xl'>{t('generate_new_images')}</p>
       <div ref={generate} className='flex flex-col md:flex-row items-start justify-center gap-8 mt-12'>
         <UploadImage
+          defect={defect}
           isLoading={isLoading}
           localBlob={localBlob}
           prevLines={prevLines}
@@ -176,6 +206,8 @@ const Generator = ({ listDefect }: IProps) => {
           localBlob={localBlob}
           open={open}
           setOpen={setOpen}
+          progress={progress}
+          setProgress={setProgress}
         />
       </div>
     </div>

@@ -15,33 +15,41 @@ import StartGenerating from './modal/StartGenerating';
 
 interface IProps {
   isLoading: boolean,
+  defect: number | null | undefined,
+  progress: number,
   open: boolean,
   model: number | undefined,
   listDefect: Defect[] | undefined,
   numberMask: number,
-  defect: number | undefined,
   listModels: Models[],
   localBlob: File | null | undefined,
   setOpen: Dispatch<SetStateAction<boolean>>,
   setNumberMask: Dispatch<SetStateAction<number>>,
-  setDefect: Dispatch<SetStateAction<number | undefined>>,
+  setDefect: Dispatch<SetStateAction<number | null | undefined>>,
   setModel: Dispatch<SetStateAction<number | undefined>>,
+  setProgress: Dispatch<SetStateAction<number>>,
   sendMask: () => void
 }
 
-const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumberMask, model, setModel, defect, setDefect, listModels, listDefect, sendMask }: IProps) => {
+const DefectType = ({
+  progress, setProgress, isLoading, open, setOpen, localBlob, numberMask, setNumberMask, model, setModel, defect
+  , setDefect, listModels, listDefect, sendMask
+}: IProps) => {
 
   const { t } = i18next;
   const listMask: string[] = ['Random', 'In Paint']
-  
-  const [progress, setProgress] = useState<number>(17)
-  const [mask, setMask] = useState<string>(listMask[0])
-  const changeModal = (event: SelectChangeEvent<unknown>, name: string) =>
-    name === 'model' ? setModel(event.target.value as number) :
-      name === 'mask' ? setMask(event.target.value as string) :
-        setDefect(event.target.value as number)
 
-  const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
+  // const [progress, setProgress] = useState<number>(17)
+  const [mask, setMask] = useState<string>(listMask[0])
+  const changeModal = (event: SelectChangeEvent<unknown>, name: string) => {
+    if (event.target && event.target.value) {
+      name === 'model' ? setModel(event.target.value as number) :
+        name === 'mask' ? setMask(event.target.value as string) :
+          setDefect(event.target.value as number)
+    }
+  }
+
+  // const changeProgress = (event: Event, newValue: number | number[]) => setProgress(newValue as number);
 
   // const listSelect: Selects[] = [
   //   { id: 1, name: 'model', value: model, label: t('model'), list: listModels },
@@ -49,21 +57,23 @@ const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumber
   // ]
 
   useEffect(() => {
-    if (listDefect) {
+    if (listDefect && listDefect.length) {
       setDefect(listDefect[0].id)
     }
   }, [listDefect])
+  console.log(defect);
+
 
   return (
     <div className='w-full md:w-1/2'>
       <div className='flex items-start flex-col'>
-        <Label className='!mb-1'>{t('defect_type')}</Label>
+        <Label className='!mb-1'>{t('part')}</Label>
         <SelectList
           size='small'
-          value={defect || ''}
-          onChange={(event) => changeModal(event, 'defect')}
+          value={model || ''}
+          onChange={(event) => changeModal(event, 'model')}
         >
-          {listDefect && listDefect.length && listDefect.map((item: Defect) =>
+          {listModels.map((item: Models) =>
             <MenuList key={item.id} value={item.id}>
               {item.name}
             </MenuList>
@@ -71,13 +81,13 @@ const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumber
         </SelectList>
       </div>
       <div className='flex items-start flex-col mt-6'>
-        <Label className='!mb-1'>{t('model')}</Label>
+        <Label className='!mb-1'>{t('defect_type')}</Label>
         <SelectList
           size='small'
-          value={model || ''}
-          onChange={(event) => changeModal(event, 'model')}
+          value={defect ? defect : ''}
+          onChange={(event) => changeModal(event, 'defect')}
         >
-          {listModels.map((item: Models) =>
+          {listDefect && listDefect.length && listDefect.map((item: Defect) =>
             <MenuList key={item.id} value={item.id}>
               {item.name}
             </MenuList>
@@ -114,9 +124,12 @@ const DefectType = ({ isLoading, open, setOpen, localBlob, numberMask, setNumber
         />
       </div>
       <StartGenerating
+      defect={defect}
         sendMask={sendMask}
         isLoading={isLoading}
         localBlob={localBlob}
+        progress={progress}
+        setProgress={setProgress}
         open={open}
         setOpen={setOpen}
       />

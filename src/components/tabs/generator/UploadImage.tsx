@@ -9,6 +9,7 @@ import MoreIcon from '../../editImage/tools/view/MoreIcon';
 import { request } from '../../../services/api';
 
 interface IProps {
+  defect: number | null | undefined,
   isLoading: boolean,
   prevLines: Lines[],
   urlUploaded: string | undefined,
@@ -19,7 +20,9 @@ interface IProps {
   setLocalBlob: Dispatch<SetStateAction<File | null | undefined>>
 }
 
-const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isLoading, setIsLoading, localBlob, setLocalBlob }: IProps) => {
+const UploadImage = ({
+  defect, prevLines, setPrevLines, urlUploaded, setUrlUploaded, isLoading, setIsLoading, localBlob, setLocalBlob
+}: IProps) => {
 
   const { t } = i18next;
   const [color, setColor] = useState('FF0000')
@@ -48,8 +51,6 @@ const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isL
     if (localBlob) {
       formData.append('file', localBlob)
     }
-    const defect = 16
-
     if (formData.get('file') && maskFile && defect)
       request.uploadImage(formData.get('file'), maskFile, defect)
         .then(() => {
