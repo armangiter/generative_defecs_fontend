@@ -64,7 +64,7 @@ const TabPage = () => {
       })
       .catch(() => setIsLoading(false))
   }
-  const [value, setValue] = useState<number>(0);
+  const [value, setValue] = useState<number>(1);
   const listComponent: ReactNode[] = [
     // <FineTune
     //   getListDefect={getListDefect}

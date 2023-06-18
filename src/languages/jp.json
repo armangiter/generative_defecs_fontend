@@ -1,5 +1,7 @@
 {
   "part": "Part",
+  "set_date": "Set Date",
+  "empty_results": "The result list is empty",
   "footer": "2023 Rutilea. All Rights Reserved",
   "failed_to_load_img": "画像の読み込みに失敗しました",
   "over_fine_progress": "ファインチューニングが完了しました",
