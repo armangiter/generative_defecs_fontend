@@ -18,10 +18,6 @@ p {
   background: url(assets/images/ellipse.png);
 }
 
-.absShape::before {
-  background: url(assets/images/shape.png);
-}
-
 .MuiPaper-root {
   margin-top: 8px;
   background-repeat: 5px;
