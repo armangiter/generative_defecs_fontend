@@ -9,6 +9,7 @@ import { DateRange } from 'react-date-range';
 import { enAU, ja } from 'date-fns/locale';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
+import { t } from 'i18next';
 
 interface IProps {
   editDateRange: TimeDate[],
@@ -53,7 +54,7 @@ const DatePicker = ({ closeModal, updateDateRange, editDateRange, setEditDateRan
               closeModal();
               setFilter(8);
             }}
-          >Cancel</Button>
+          >{t('cancel')}</Button>
           <Button
             variant='contained'
             color='success'
@@ -61,7 +62,7 @@ const DatePicker = ({ closeModal, updateDateRange, editDateRange, setEditDateRan
               updateDateRange('update');
               closeModal();
             }}
-          >Set Date</Button>
+          >{t('set_date')}</Button>
         </div>
       </div>
     </div>
