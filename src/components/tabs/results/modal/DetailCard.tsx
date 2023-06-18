@@ -43,6 +43,8 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
 
   const downloadAllImg = () =>
     data.result_images.map(item => downloadImg(item.file));
+  console.log(data);
+
 
   return (
     <div className='w-1/4'>
@@ -75,7 +77,7 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
               <Label className='!mb-1'>{t('defect_type')}</Label>
               <Input
                 size='small'
-                value={data.defect_type_name}
+                value={data.defect_type.name}
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
