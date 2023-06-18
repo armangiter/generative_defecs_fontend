@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
-import { Button, Modal, Box } from '@mui/material';
+import { Button, Modal, Box, CircularProgress } from '@mui/material';
 import style from '../../../../mui/style';
 import i18next from 'i18next';
 import amazingLoading from '../../../../assets/loading.gif'
@@ -18,7 +18,7 @@ interface IProps {
 const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IProps) => {
 
   const { t } = i18next;
-  const openModal = () => setOpen(true);
+  const [progress, setProgress] = useState<number>(0);
   const closeModal = (e: any) =>
     e.preventDefault();
 
@@ -29,8 +29,10 @@ const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IPro
           if (res.data.status !== 'generating') {
             setOpen(false)
             clearInterval(interval)
-          } else
+          } else {
             setOpen(true)
+            progress < 90 && setProgress(prev => prev + 10)
+          }
         })
     }, 5000)
   }
@@ -64,7 +66,7 @@ const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IPro
         fullWidth
       >{t('generate')}</LoadingButton>
       <Modal
-        open={open}
+        open={true}
         onClose={closeModal}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -72,9 +74,12 @@ const StartGenerating = ({ isLoading, open, setOpen, localBlob, sendMask }: IPro
         <Box className='!w-[60vw]' sx={style}>
           <p className='px-8 font-extrabold	text-2xl text-light-100'>{t('generating_progress')}</p>
           <div className='relative flex items-center justify-center my-10 mx-8'>
-            {Array(7).fill({}).map((_, idx: number) =>
+            {/* {Array(7).fill({}).map((_, idx: number) =>
               <img className='bg-transparent w-[14%]' key={idx} src={amazingLoading} alt='loading' />
-            )}
+            )} */}
+            <CircularProgress
+              value={progress}
+            />
           </div>
           {/* <div className='w-full flex justify-center'>
             <Button
