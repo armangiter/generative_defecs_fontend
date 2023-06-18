@@ -61,8 +61,6 @@ const DefectType = ({
       setDefect(listDefect[0].id)
     }
   }, [listDefect])
-  console.log(defect);
-
 
   return (
     <div className='w-full md:w-1/2'>
