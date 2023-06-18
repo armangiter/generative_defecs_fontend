@@ -32,7 +32,7 @@ const ListResult = ({ listModel, data }: IProps) => {
         />
       </ul>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
-        {t('type')}: {data.defect_type_name}
+        {t('type')}: {data.defect_type.name}
       </p>
       <p className='w-full mt-2 opacity-[0.8] rounded px-3 py-1.5 font-normal text-xs text-primary bg-dark-200' >
         {t('model')}: {

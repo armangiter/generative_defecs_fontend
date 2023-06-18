@@ -46,24 +46,11 @@ function a11yProps(index: number) {
 const TabPage = () => {
 
   const { t } = i18next;
-  const [listDefect, setListDefect] = useState<DefectType[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(true)
   const listTab: string[] = [
     // t('fine_tune'),
     t('generator'),
     t('result')
   ];
-  const getListDefect = () => {
-    setIsLoading(true)
-    request.listDefect()
-      .then(response => {
-        setIsLoading(false)
-        if (response.data.length) {
-          setListDefect(response.data)
-        }
-      })
-      .catch(() => setIsLoading(false))
-  }
   const [value, setValue] = useState<number>(1);
   const listComponent: ReactNode[] = [
     // <FineTune
@@ -73,7 +60,6 @@ const TabPage = () => {
     // />,
     <Generator />,
     <Results
-      listDefect={listDefect}
       value={value}
     />
   ]
@@ -81,10 +67,6 @@ const TabPage = () => {
 
   const handleChange = (event: SyntheticEvent, newValue: number) => setValue(newValue);
   const changeIndex = (index: number) => setValue(index);
-
-  useEffect(() => {
-    getListDefect()
-  }, [])
 
   return (
     <Box className='!w-full'>

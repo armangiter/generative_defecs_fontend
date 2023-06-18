@@ -3,15 +3,19 @@ export interface ResultImg {
   file: string
 }
 
+interface DefectResult {
+  id: number,
+  name: string
+}
+
 export interface Result {
   id: number,
   image: number,
   created: string,
   mask_image: number,
-  defect_type_id: number,
   defect_model_id: number,
-  defect_type_name?: string,
   result_images: ResultImg[],
+  defect_type: DefectResult
 }
 
 export interface Annotation {

@@ -9,10 +9,9 @@ import { CircularProgress, Pagination } from "@mui/material";
 
 interface IProps {
   value: number,
-  listDefect: DefectType[] | undefined
 }
 
-const Results = ({ listDefect, value }: IProps) => {
+const Results = ({ value }: IProps) => {
 
   const { t } = i18next;
   const pageRef = useRef()
@@ -40,15 +39,7 @@ const Results = ({ listDefect, value }: IProps) => {
     request.getResult()
       .then(response => {
         setIsLoading(false)
-        const filteredData = response.data.map((item: Result) => {
-          return {
-            ...item,
-            defect_type_name:
-              listDefect && listDefect.length ? listDefect.find((defect: DefectType) => defect.id === item.defect_type_id)?.name : 'not found'
-          }
-        }
-        )
-        setListResult(filteredData)
+        setListResult(response.data)
         request.getModels()
           .then(res => setListModel(res.data))
       })
