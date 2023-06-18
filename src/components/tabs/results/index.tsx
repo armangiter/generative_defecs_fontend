@@ -5,7 +5,7 @@ import i18next from 'i18next';
 import { request } from "../../../services/api";
 import FilterDate from "./filter/FilterDate";
 import { addDays } from 'date-fns';
-import { Pagination } from "@mui/material";
+import { CircularProgress, Pagination } from "@mui/material";
 
 interface IProps {
   value: number,
@@ -78,17 +78,25 @@ const Results = ({ listDefect, value }: IProps) => {
         updateDateRange={updateDateRange}
         setEditDateRange={setEditDateRange}
       />
-      <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
-        {!!filteredDate && !!filteredDate.length && filteredDate.map((item: Result, idx: number) =>
-          <ListResult key={idx} data={item} listModel={listModel} />
-        )}
-      </ul>
+      {!!filteredDate && !!filteredDate.length ? (
+        <ul className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8'>
+          {
+            filteredDate.map((item: Result, idx: number) => (
+              <ListResult key={idx} data={item} listModel={listModel} />
+            ))
+          }
+        </ul>
+      ) : (
+        <CircularProgress
+          className="!mx-auto !block my-24"
+        />
+      )}
       {
         !!listResult && !!listResult.length && listResult.length > 12 &&
         <Pagination
-          count={Math.floor(listResult.length / 12)}
+          count={Math.ceil(listResult.length / 12)}
           page={page}
-          onChange={handleChangePage}
+          onChange={(event: React.MouseEvent<HTMLButtonElement> | null, newPage) => handleChangePage(event, newPage)}
           ref={pageRef}
           sx={{
             marginTop: '32px',
@@ -99,7 +107,7 @@ const Results = ({ listDefect, value }: IProps) => {
               color: '#A5ACBA',
             },
             '.MuiPagination-ul': {
-              background: '#2F3949',
+              background: '#FFFFFF',
               boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.04)',
               borderRadius: '25px',
               width: 'fit-content',

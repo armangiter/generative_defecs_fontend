@@ -22,28 +22,28 @@ const DrawMask = ({ prevLines, setPrevLines, sizeImage, color, slider, width, he
   const isDrawing = useRef(false);
 
   const handleMouseDown = (e: any) => {
-    if (type === 'MouseDraw' && width && height) {
+    if (type === 'MouseDraw' && width && height && prevLines) {
       isDrawing.current = true;
       const pos = e.target.getStage().getPointerPosition();
-      const result = [...lines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]
+      const result = [...prevLines, { points: [pos.x / width, pos.y / height], strokeWidth: slider, color: color }]
       setLines(result);
       prevLines && setPrevLines && setPrevLines(result)
     }
   };
 
   const handleMouseMove = (e: any) => {
-    if (type === 'MouseDraw' && width && height) {
+    if (type === 'MouseDraw' && width && height && prevLines) {
       if (!isDrawing.current) {
         return;
       }
       const stage = e.target.getStage();
       const point = stage.getPointerPosition();
-      let lastLine = lines[lines.length - 1];
+      let lastLine = prevLines[prevLines.length - 1];
       if (lastLine && lastLine.points) {
         lastLine.points = lastLine.points.concat([point.x / width, point.y / height]);
       }
-      lines.splice(lines.length - 1, 1, lastLine);
-      setLines(lines.concat());
+      prevLines.splice(prevLines.length - 1, 1, lastLine);
+      setLines(prevLines.concat());
       prevLines && setPrevLines && setPrevLines(lines.concat())
     }
   };

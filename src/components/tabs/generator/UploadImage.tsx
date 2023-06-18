@@ -4,11 +4,12 @@ import gallery from '../../../assets/images/gallery.png';
 import i18next from 'i18next';
 import ListIcon from '../../editImage/tools/view/ListIcon';
 import DrawKonva from '../../editImage/tools/DrawKonva';
-import { Lines, Size, Url } from '../../../models';
+import { Lines, Size } from '../../../models';
 import MoreIcon from '../../editImage/tools/view/MoreIcon';
 import { request } from '../../../services/api';
 
 interface IProps {
+  defect: number | null | undefined,
   isLoading: boolean,
   prevLines: Lines[],
   urlUploaded: string | undefined,
@@ -19,7 +20,9 @@ interface IProps {
   setLocalBlob: Dispatch<SetStateAction<File | null | undefined>>
 }
 
-const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isLoading, setIsLoading, localBlob, setLocalBlob }: IProps) => {
+const UploadImage = ({
+  defect, prevLines, setPrevLines, urlUploaded, setUrlUploaded, isLoading, setIsLoading, localBlob, setLocalBlob
+}: IProps) => {
 
   const { t } = i18next;
   const [color, setColor] = useState('FF0000')
@@ -48,8 +51,6 @@ const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isL
     if (localBlob) {
       formData.append('file', localBlob)
     }
-    const defect = 16
-
     if (formData.get('file') && maskFile && defect)
       request.uploadImage(formData.get('file'), maskFile, defect)
         .then(() => {
@@ -114,13 +115,13 @@ const UploadImage = ({ prevLines, setPrevLines, urlUploaded, setUrlUploaded, isL
           />
         </div> :
         <div
-          className="relative w-full bg-dark-200 border border-dashed h-64 lg:h-96
+          className="relative w-full bg-light-100 border border-dashed h-64 lg:h-96
         border-light-400 rounded-md flex justify-center items-center flex-col py-6"
         >
           <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer z-10' />
           <img src={gallery} alt='gallery' />
           <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
-          <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
+          <Button className='!rounded-md !border-light-400' variant='outlined' color='primary'>{t('browse')}</Button>
         </div>
       }
     </div>

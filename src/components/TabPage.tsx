@@ -48,7 +48,11 @@ const TabPage = () => {
   const { t } = i18next;
   const [listDefect, setListDefect] = useState<DefectType[]>();
   const [isLoading, setIsLoading] = useState<boolean>(true)
-  const listTab: string[] = [t('fine_tune'), t('generator'), t('results')];
+  const listTab: string[] = [
+    // t('fine_tune'),
+    t('generator'),
+    t('result')
+  ];
   const getListDefect = () => {
     setIsLoading(true)
     request.listDefect()
@@ -62,14 +66,12 @@ const TabPage = () => {
   }
   const [value, setValue] = useState<number>(0);
   const listComponent: ReactNode[] = [
-    <FineTune
-      getListDefect={getListDefect}
-      listDefect={listDefect}
-      isLoading={isLoading}
-    />,
-    <Generator
-      listDefect={listDefect}
-    />,
+    // <FineTune
+    //   getListDefect={getListDefect}
+    //   listDefect={listDefect}
+    //   isLoading={isLoading}
+    // />,
+    <Generator />,
     <Results
       listDefect={listDefect}
       value={value}
@@ -86,7 +88,7 @@ const TabPage = () => {
 
   return (
     <Box className='!w-full'>
-      <AppBar position="static" className='!w-[281px] sm:!w-[321px] !bg-transparent !border-transparent'>
+      <AppBar position="static" className='!w-[281px] !shadow-none sm:!w-fit !bg-transparent !border-transparent'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -95,11 +97,11 @@ const TabPage = () => {
           sx={{
             '& .MuiTabs-indicator': { background: 'transparent' },
             '& Button': {
-              border: '1px solid #374151', borderTopLeftRadius: '5px', borderTopRightRadius: '5px',
+              borderTopLeftRadius: '5px', borderTopRightRadius: '5px',
               color: '#A5ACBA', fontWeight: 500, fontSize: '16px', lineHeight: '24px'
             },
             '& .Mui-selected': {
-              background: '#111827', color: '#ffffff !important', border: 'none'
+              background: '#FFEDD5', color: '#2C2E36 !important', border: 'none'
             }
           }}
         >

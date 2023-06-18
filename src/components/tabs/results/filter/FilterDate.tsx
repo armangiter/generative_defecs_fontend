@@ -22,7 +22,7 @@ const FilterDate = ({ editDateRange, setEditDateRange, updateDateRange }: IProps
   return (
     <div className='flex items-center justify-between my-8 flex-wrap gap-3'>
       <div className='flex items-center'>
-        <img src={filter} alt='filter' />
+        {/* <img src={filter} alt='filter' /> */}
         <p className='text-sm font-medium text-light-300 ml-2'>{t('filters')}</p>
       </div>
       <div>

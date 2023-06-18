@@ -82,7 +82,7 @@ const DrawKonva = ({ tab, closeModal, typeEdit, isLoading, sendMask, prevLines, 
           </Stage>
         )
       }
-      {!typeEdit && !tab ? (
+      {/* {!typeEdit && !tab && (
         <SendResult
           width={width}
           height={height}
@@ -90,7 +90,8 @@ const DrawKonva = ({ tab, closeModal, typeEdit, isLoading, sendMask, prevLines, 
           isLoading={isLoading}
           sendMask={sendMask}
         />
-      ) : !tab ? (
+      ) 
+      : !tab ? (
         <BtnModal
           data={data}
           width={width}
@@ -100,7 +101,7 @@ const DrawKonva = ({ tab, closeModal, typeEdit, isLoading, sendMask, prevLines, 
           isLoading={isLoading}
           closeModal={closeModal}
         />
-      ) : ''}
+      ) : ''} */}
     </div>
   )
 }

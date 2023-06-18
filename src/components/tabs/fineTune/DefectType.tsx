@@ -73,7 +73,7 @@ const DefectType = ({ isLoadingB, openModal, setOpenModal, getListImage, defect,
           ) : listDefect && listDefect.length && (
             listDefect.reverse().map((item: Defect) =>
               <MenuItem
-                sx={{ color: '#F9F9F9', '&:hover': { background: 'rgba(116, 122, 139, 0.15)' } }}
+                sx={{ color: '#2C2E36', '&:hover': { background: 'rgba(116, 122, 139, 0.15)' } }}
                 key={item.id}
                 value={item.id}
               >{item.name}</MenuItem>

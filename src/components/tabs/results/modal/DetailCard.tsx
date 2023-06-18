@@ -48,7 +48,7 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
     <div className='w-1/4'>
       {data.result_images.length > 4 &&
         <li
-          className="w-full h-10 p-1.5 bg-dark-100 rounded flex justify-center items-center cursor-pointer"
+          className="w-full h-10 p-1.5 bg-dark-600 rounded flex justify-center items-center cursor-pointer"
           onClick={openModal}
         >
           <Label className="text-light-100">+{data.result_images.length - 3}</Label>
@@ -62,9 +62,11 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
       >
         <Box className='!w-[90%] h-[80vh] !max-h-[640px] !px-8' sx={style}>
           <div className='flex items-center justify-between'>
-            <p className='font-extrabold text-2xl text-light-100'>{data.created.split('T')[0]}</p>
+            <p className='font-extrabold text-2xl text-light-100'>
+              {data.created.split('T')[0]} {data.created.split('T')[1].split('.')[0]}
+            </p>
             <CloseIcon
-              className='!text-light-100 border border-light-100 rounded-full p-1 cursor-pointer'
+              className='!text-light-100light-100 border border-light-100 rounded-full p-1 cursor-pointer'
               onClick={closeModal}
             />
           </div>
@@ -77,10 +79,10 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#D1D5DB",
+                    WebkitTextFillColor: "#374151B",
                   },
                 }}
-                className='!bg-primary'
+                className='!bg-dark-600'
               />
               <ul
                 className='grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
@@ -120,10 +122,10 @@ const DetailCard = ({ listModel, open, setOpen, data }: IProps) => {
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
-                    WebkitTextFillColor: "#D1D5DB",
+                    WebkitTextFillColor: "#374151",
                   },
                 }}
-                className='!bg-primary'
+                className='!bg-dark-600'
               />
               <div className='relative h-full mt-8 rounded-md overflow-hidden'>
                 <img className='w-full h-full object-cover' src={selectedImg} alt='result' />

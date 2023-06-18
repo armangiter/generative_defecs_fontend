@@ -34,7 +34,7 @@ const DatePicker = ({ closeModal, updateDateRange, editDateRange, setEditDateRan
         editDateRange={editDateRange}
         setEditDateRange={setEditDateRange}
       />
-      <div className='border-0 border-l-[1px] border-l-[#3F4959]'>
+      <div className='border-0 border-l-[1px] border-l-[#F3F4F6]'>
         <DateRange
           editableDateInputs={true}
           onChange={(item: any) => changeDatePicker([item.selection])}
@@ -43,9 +43,9 @@ const DatePicker = ({ closeModal, updateDateRange, editDateRange, setEditDateRan
           className='bg-dark-400'
           ranges={editDateRange}
         />
-        <div className='flex justify-end items-center gap-2 p-3 pb-1 border-0 border-t-[1px] border-t-[#3F4959]'>
+        <div className='flex justify-end items-center gap-2 p-3 pb-1 border-0 border-t-[1px] border-t-[#F3F4F6]'>
           <Button
-            className='!bg-dark-500'
+            className='!bg-transparent !text-light-600 !shadow-none !border !border-solid !border-dark-400'
             variant='contained'
             color='primary'
             onClick={() => {
