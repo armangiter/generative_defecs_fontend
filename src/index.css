@@ -5,12 +5,12 @@
 @tailwind utilities;
 
 body {
-  background: #1F2937;
+  background: #FFFFFF;
   font-family: 'Inter', sans-serif;
 }
 
 p {
-  color: #D1D5DB;
+  color: #374151;
 }
 
 .absImg::before,
@@ -30,10 +30,6 @@ p {
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.04);
 }
 
-.MuiList-root {
-  background: #374151;
-}
-
 .activeIcon path {
   stroke: #F97316;
 }
@@ -47,7 +43,7 @@ p {
 }
 
 .rdrDay .rdrDayNumber span {
-  color: #FFFFFF !important;
+  color: #2C2E36 !important;
 }
 
 .rdrDayPassive .rdrDayNumber span {
@@ -55,7 +51,7 @@ p {
 }
 
 .rdrInRange {
-  background: #3F4959;
+  background: #F3F4F6;
   top: 4px !important;
 }
 
@@ -99,15 +95,16 @@ p {
 
 .rdrNextButton:hover,
 .rdrPprevButton:hover {
-  background: #1F2937;
+  transition: 0.3s all;
+  background: #f1f1f1;
 }
 
 .rdrNextButton i {
-  border-color: transparent transparent transparent #FFFFFF;
+  border-color: transparent transparent transparent #2C2E36;
 }
 
 .rdrPprevButton i {
-  border-color: transparent #FFFFFF transparent transparent;
+  border-color: transparent #2C2E36 transparent transparent;
 }
 
 .rdrYearPicker {
@@ -117,17 +114,12 @@ p {
 .rdrMonthPicker select {
   pointer-events: none;
   background: transparent !important;
-  color: #FFFFFF !important;
   font-weight: 600 !important;
   font-size: 14px !important;
-  color: #FFFFFF !important;
+  color: #2C2E36 !important;
   padding: 10px !important;
 }
 
 .Toastify__toast {
-  background: #111827;
-}
-
-.Toastify__close-button svg {
-  fill: #fff;
+  background: #FFEDD5;
 }

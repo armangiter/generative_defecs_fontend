@@ -88,7 +88,7 @@ const TabPage = () => {
 
   return (
     <Box className='!w-full'>
-      <AppBar position="static" className='!w-[281px] sm:!w-fit !bg-transparent !border-transparent'>
+      <AppBar position="static" className='!w-[281px] !shadow-none sm:!w-fit !bg-transparent !border-transparent'>
         <Tabs
           value={value}
           onChange={handleChange}
@@ -97,11 +97,11 @@ const TabPage = () => {
           sx={{
             '& .MuiTabs-indicator': { background: 'transparent' },
             '& Button': {
-              border: '1px solid #374151', borderTopLeftRadius: '5px', borderTopRightRadius: '5px',
+              borderTopLeftRadius: '5px', borderTopRightRadius: '5px',
               color: '#A5ACBA', fontWeight: 500, fontSize: '16px', lineHeight: '24px'
             },
             '& .Mui-selected': {
-              background: '#111827', color: '#ffffff !important', border: 'none'
+              background: '#FFEDD5', color: '#2C2E36 !important', border: 'none'
             }
           }}
         >

@@ -107,7 +107,7 @@ const Results = ({ listDefect, value }: IProps) => {
               color: '#A5ACBA',
             },
             '.MuiPagination-ul': {
-              background: '#2F3949',
+              background: '#FFFFFF',
               boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.04)',
               borderRadius: '25px',
               width: 'fit-content',

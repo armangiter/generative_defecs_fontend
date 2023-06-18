@@ -63,7 +63,12 @@ const StartGenerating = ({ defect, progress, setProgress, isLoading, open, setOp
   }
 
   useEffect(() => {
-    checkStatus(open ? 'first' : 'notFirst')
+    request.statusGenerate()
+      .then(res => {
+        if (res.data.status === 'generating') {
+          checkStatus(open ? 'first' : 'notFirst')
+        }
+      })
   }, [])
   const defectToBoolean = defect ? false : true
 
@@ -71,7 +76,7 @@ const StartGenerating = ({ defect, progress, setProgress, isLoading, open, setOp
     <div>
       <LoadingButton
         loading={isLoading}
-        sx={{ background: isLoading || defectToBoolean ? '#1F2937 !important' : '' }}
+        sx={{ background: isLoading || defectToBoolean ? '#b3aea6 !important' : '' }}
         disabled={defectToBoolean}
         onClick={() => {
           localBlob ?
@@ -105,13 +110,13 @@ const StartGenerating = ({ defect, progress, setProgress, isLoading, open, setOp
               <img className='bg-transparent w-[14%]' key={idx} src={amazingLoading} alt='loading' />
             )} */}
             <BorderLinearProgress
+              sx={{ background: '#F3F4F6 !important' }}
               className='!my-12'
               variant="determinate"
               value={progress}
             />
             <p
-              className={`absolute font-semibold text-xs left-1/2 top-1/2 translate-x-[-50%] translate-y-[-44%]
-              ${progress < 50 ? 'text-light-800' : 'text-dark-200'}`}
+              className='absolute font-semibold text-xs left-1/2 top-1/2 translate-x-[-50%] translate-y-[-44%] text-light-100'
             >{progress}%</p>
 
           </div>

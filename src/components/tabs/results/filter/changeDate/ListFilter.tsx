@@ -69,7 +69,7 @@ const ListFilter = ({ filter, setFilter,editDateRange, setEditDateRange }: IProp
           onClick={() => updateDate(item)}
           className={`
           !mr-auto !w-full !text-light-100 !text-sm !font-light hover:!text-light-700 !flex !justify-start 
-          ${filter === item.id && '!bg-dark-500 !text-light-700'}
+          ${filter === item.id && '!bg-dark-600 !text-light-700'}
           `}
         >
           {item.title}

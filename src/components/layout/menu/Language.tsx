@@ -31,7 +31,7 @@ const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
         color="secondary"
         variant="text"
       >
-        <LanguageIcon className="text-light-100" />
+        <LanguageIcon className="text-dark-300" />
       </Button>
       <Menu
         open={open}

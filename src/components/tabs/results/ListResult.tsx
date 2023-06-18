@@ -16,9 +16,9 @@ const ListResult = ({ listModel, data }: IProps) => {
   const [open, setOpen] = useState<boolean>(false);
 
   return (
-    <li className='bg-dark-300 p-2 rounded-md	'>
-      <Label>{data.created.split('T')[0]}</Label>
-      <ul className="p-1 border border-light-400 h-12 gap-1 rounded flex items-center justify-start">
+    <li className='bg-dark-200 p-2 rounded-md'>
+      <Label className="!text-light-300">{data.created.split('T')[0]}</Label>
+      <ul className="p-1 h-12 gap-1 rounded flex items-center justify-start">
         {data.result_images.slice(0, data.result_images.length > 4 ? 3 : 4).map((item: ResultImg) =>
           <li key={item.id} className="w-1/4 h-full">
             <img onClick={() => setOpen(true)} src={updateUrl(item.file)} alt='result' className="w-full h-full object-cover rounded opacity-[0.85] cursor-pointer" />

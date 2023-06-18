@@ -122,7 +122,7 @@ const DefectType = ({
         />
       </div>
       <StartGenerating
-      defect={defect}
+        defect={defect}
         sendMask={sendMask}
         isLoading={isLoading}
         localBlob={localBlob}

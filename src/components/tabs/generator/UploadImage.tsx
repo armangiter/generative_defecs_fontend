@@ -115,13 +115,13 @@ const UploadImage = ({
           />
         </div> :
         <div
-          className="relative w-full bg-dark-200 border border-dashed h-64 lg:h-96
+          className="relative w-full bg-light-100 border border-dashed h-64 lg:h-96
         border-light-400 rounded-md flex justify-center items-center flex-col py-6"
         >
           <input onChange={readDataURL} type="file" className='absolute w-full h-full opacity-0 cursor-pointer z-10' />
           <img src={gallery} alt='gallery' />
           <p className='text-primary font-normal text-xs mt-4 mb-6'>{t('drag_drop_text')}</p>
-          <Button className='!rounded-md !border-light-400' variant='outlined' color='secondary'>{t('browse')}</Button>
+          <Button className='!rounded-md !border-light-400' variant='outlined' color='primary'>{t('browse')}</Button>
         </div>
       }
     </div>
