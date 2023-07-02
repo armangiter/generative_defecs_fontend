@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react'
+import { useState, ChangeEvent, Dispatch, SetStateAction } from 'react'
 import { Title } from "../../../../mui/customize"
 import ListIcon from './konva/view/ListIcon'
 import MoreIcon from './konva/view/MoreIcon'
@@ -11,12 +11,16 @@ import Konva from './konva'
 import Gallery from "../../../../assets/icons/Gallery"
 
 interface IProps {
-  isOpen: boolean
+  urlUploaded: string,
+  isOpen: boolean,
+  lines: Lines[],
+  setLines: Dispatch<SetStateAction<Lines[]>>,
+  setUrlUploaded: Dispatch<SetStateAction<string>>
+  setLocalBlob: Dispatch<SetStateAction<File | null | undefined>>
 }
 
-function UploadImage({ isOpen }: IProps) {
+function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUrlUploaded }: IProps) {
 
-  const [urlUploaded, setUrlUploaded] = useState<string>('');
   const [color, setColor] = useState('FF0000')
   const [slider, setSlider] = useState<number>(12)
   const [typeRect, setTypeRect] = useState<string>('MouseDraw')
@@ -29,20 +33,25 @@ function UploadImage({ isOpen }: IProps) {
 
   const readDataURL = (event: ChangeEvent<HTMLInputElement>) => {
     let reader = new FileReader();
+    if (event && event.currentTarget && event.currentTarget.files) {
+      setLocalBlob(event.currentTarget.files[0])
 
-    reader.onload = () => typeof reader.result === 'string' && setUrlUploaded(reader.result)
+      reader.onload = () => typeof reader.result === 'string' && setUrlUploaded(reader.result)
 
-    event && event.currentTarget && event.currentTarget.files && reader.readAsDataURL(event.currentTarget.files[0]);
+      reader.readAsDataURL(event.currentTarget.files[0]);
+    }
   }
 
 
   return (
-    <div className="w-1/2">
+    <div className="w-1/2 mb-auto">
       <Title className='!mb-1.5'>{t('your_image')}</Title>
       {urlUploaded ? (
         <div className='w-full rounded-md overflow-hidden relative'>
           <Konva
             type={type}
+            lines={lines}
+            setLines={setLines}
             color={color}
             slider={slider}
             isOpen={isOpen}
@@ -67,6 +76,7 @@ function UploadImage({ isOpen }: IProps) {
             isFullScreen={isFullScreen}
             setPrevLines={setPrevLines}
             setUrlUploaded={setUrlUploaded}
+            setLocalBlob={setLocalBlob}
             setIsFullScreen={setIsFullScreen}
           />
         </div>

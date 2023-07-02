@@ -6,24 +6,33 @@ import { t } from "i18next"
 import Defect from "./field/Defect"
 import NumImg from "./field/NumImg"
 import Part from "./field/Part"
-import { Defects, Values } from "../../../../models"
+import { Data } from "../../../../models"
+import { LoadingButton } from "@mui/lab"
 
 interface IProps {
-  defects: Defects,
-  values: Values,
-  setValues: Dispatch<SetStateAction<Values>>
+  data: Data,
+  isLoading: boolean,
+  setData: Dispatch<SetStateAction<Data>>,
+  createMask: () => void,
 }
 
-function Field({ defects, values, setValues }: IProps) {
+function Field({ data, setData, createMask, isLoading }: IProps) {
 
-  const [part, setPart] = useState<number>(10);
+  const { numImg, defects: { value: defectValue }, models: { value: ModelValue } } = data
 
   return (
     <div className="w-1/2 gap-6 flex flex-col justify-start mb-auto h-full">
-      <Part part={part} setPart={setPart} />
-      <NumImg />
-      <Defect defects={defects} values={values} setValues={setValues} />
-      <Button className="!bg-btn" color="secondary" fullWidth>{t('generate')}</Button>
+      <Part data={data} setData={setData} />
+      <NumImg data={data} setData={setData} />
+      <Defect data={data} setData={setData} />
+      <LoadingButton
+        disabled={numImg && defectValue && ModelValue ? false : true}
+        className="!bg-btn"
+        color="secondary"
+        loading={isLoading}
+        onClick={() => createMask()}
+        fullWidth
+      >{t('generate')}</LoadingButton>
     </div>
   )
 }

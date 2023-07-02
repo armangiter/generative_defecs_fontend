@@ -4,18 +4,22 @@ import SideBar from "./SideBar"
 
 interface IProps {
     isOpen: boolean,
+    logined: boolean,
     children: ReactNode,
     setIsOpen: Dispatch<SetStateAction<boolean>>,
 }
 
-function Layout({ children, isOpen, setIsOpen }: IProps) {
+function Layout({ children, isOpen, setIsOpen, logined }: IProps) {
+
     return (
         <div className="flex flex-col">
             <Header />
-            <div className="flex">
-                <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
-                {children}
-            </div>
+            {logined ? (
+                <div className="flex">
+                    <SideBar isOpen={isOpen} setIsOpen={setIsOpen} />
+                    {children}
+                </div>
+            ) : children}
         </div>
     )
 }

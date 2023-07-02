@@ -7,18 +7,20 @@ import CloseIcon from '@mui/icons-material/Close';
 import Download from '../../../../../assets/icons/Download';
 import axios from 'axios';
 import { t } from 'i18next';
+import { Models } from '../../../../../models';
 
 interface IProps {
   open: boolean,
   data: Result,
+  models: Models[],
   setOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const DetailCard = ({ open, setOpen, data }: IProps) => {
+const DetailCard = ({ open, setOpen, data, models }: IProps) => {
 
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
-  const [selectedImg, setSelectedImg] = useState(data && data.images && data.images.length && data.images[0])
+  const [selectedImg, setSelectedImg] = useState(data && data.result_images && data.result_images.length && data.result_images[0].id)
 
   const downloadImg = (url: string) => {
     axios.get(url, {
@@ -39,18 +41,19 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
       })
   }
 
+  const model = !!models.length &&
+    models.find(item => item.id === data.defect_model_id) ?
+    models.find(item => item.id === data.defect_model_id).name : ""
+
   return (
-    <div className='w-1/4'>
-      {data.images.length > 4 &&
-        <li
-          className="w-full h-10 bg-dark-100 rounded flex justify-center items-center cursor-pointer"
-          onClick={openModal}
-        >
-          <Label
-            className="text-inactive border border-border h-full w-full flex justify-center items-center rounded"
-          >+{data.images.length - 3}</Label>
-        </li>
-      }
+    <div className='w-full'>
+      <Button
+        className='!text-sm !border !border-solid !border-border !rounded-md !mt-auto'
+        fullWidth
+        onClick={openModal}
+      >
+        {t('view_result')}
+      </Button>
       <Modal
         open={open}
         onClose={closeModal}
@@ -59,7 +62,7 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
       >
         <Box className='!w-[90%] h-[80vh] !max-h-[640px] !px-8' sx={style}>
           <div className='flex items-center justify-between'>
-            <Head>{data.part}</Head>
+            <Head>{model}</Head>
             <CloseIcon
               className='!text-light-100 border border-light-100 rounded-full p-1 cursor-pointer'
               onClick={closeModal}
@@ -70,7 +73,7 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
               <Label className='!mb-1'>{t('model')}</Label>
               <Input
                 size='small'
-                value={data.part}
+                value={model}
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
@@ -84,25 +87,35 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
                 grid-rows-[min-content] mb-auto h-[55%] gap-2.5 rounded-md p-6 mt-8 border 
                 border-light-400 overflow-auto'
               >
-                {data.images.map((item, idx) =>
-                  <li key={idx} className='w-full cursor-pointer max-h-20' onClick={() => setSelectedImg(item.file)}>
+                {data.result_images.map((item, idx) =>
+                  <li key={idx} className='w-full cursor-pointer max-h-20' onClick={() => setSelectedImg(item.id)}>
                     <img
-                      src={item}
+                      src={item.file}
                       alt='result'
                       className={`rounded-md transition object-cover h-full w-full border-[3px] border-transparent 
-                        ${selectedImg === item.file && '!border-light-100'}`
+                        ${selectedImg === item.id && '!border-light-100'}`
                       }
                     />
                   </li>
                 )}
               </ul>
-              <Button fullWidth className='!mt-6' color='success' variant='contained'>{t('download_all')}</Button>
+              <Button
+                fullWidth
+                className='!mt-6'
+                color='success'
+                variant='contained'
+                onClick={() => {
+                  data.result_images.length && data.result_images.map(item =>
+                    downloadImg(item.file)
+                  )
+                }}
+              >{t('download_all')}</Button>
             </div>
             <div className='flex flex-col h-full justify-start w-full sm:w-1/2'>
               <Label className='!mb-1'>{t('defect_type')}</Label>
               <Input
                 size='small'
-                value={data.defect}
+                value={data.defect_type.name}
                 disabled
                 sx={{
                   "& .MuiInputBase-input.Mui-disabled": {
@@ -112,11 +125,14 @@ const DetailCard = ({ open, setOpen, data }: IProps) => {
                 className='!bg-primary'
               />
               <div className='relative h-full mt-8 rounded-md overflow-hidden'>
-                <img className='w-full h-full object-cover' src={selectedImg} alt='result' />
-                <Download
-                  className='absolute top-6 right-6 bg-light-100 p-2 shadow-[0px_4px_4px_rgba(0,0,0,0.08)] rounded-lg cursor-pointer'
-                  onClick={() => downloadImg(selectedImg)}
-                />
+                <img className='w-full h-full object-cover' src={data.result_images.length && data.result_images.find(item => item.id === selectedImg).file} alt='result' />
+                <div
+                  onClick={() =>
+                    downloadImg(data.result_images.length && data.result_images.find(item => item.id === selectedImg).file)
+                  }
+                >
+                  <Download />
+                </div>
               </div>
             </div>
           </div>

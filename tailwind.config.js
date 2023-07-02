@@ -10,7 +10,8 @@ export default {
         'primary': '#FFF',
         'active': '#F1F5F9',
         'btn': '#475569',
-        'svg': '#E2E8F0'
+        'svg': '#E2E8F0',
+        'dark-100': '#64748B'
       },
       colors: {
         'border': '#E2E8F0',

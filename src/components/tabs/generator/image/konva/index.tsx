@@ -3,19 +3,22 @@ import { Stage } from 'react-konva'
 import "cropperjs/dist/cropper.css";
 import Crop from './type/Crop';
 import DrawMask from './type/DrawMask';
+import { Lines } from '../../../../../models';
 
 interface IProps {
   type: string,
   color: string,
+  lines: Lines[],
   slider: number,
   isOpen: boolean,
   typeRect: string,
   urlUploaded: string,
   isFullScreen: boolean,
+  setLines: Dispatch<SetStateAction<Lines[]>>,
   setUrlUploaded: Dispatch<SetStateAction<string>>
 }
 
-const Konva = ({ isOpen, color, slider, urlUploaded, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef(null);
   const contentImg = useRef<HTMLDivElement>(null);
@@ -48,6 +51,8 @@ const Konva = ({ isOpen, color, slider, urlUploaded, isFullScreen, setUrlUploade
               typeRect === 'MouseDraw' && (
                 <DrawMask
                   type={type}
+                  lines={lines}
+                  setLines={setLines}
                   isOpen={isOpen}
                   color={color}
                   image={image}

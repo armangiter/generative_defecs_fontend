@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react'
+import { useRef, useState, Dispatch, SetStateAction } from 'react'
 import { Layer, Image, Line } from 'react-konva'
 
 interface IProps {
+  lines: Lines[],
   image: HTMLImageElement | undefined,
   isOpen: boolean,
   height?: number,
@@ -10,15 +11,14 @@ interface IProps {
   stageRef: any,
   color: string,
   type: string,
+  setLines: Dispatch<SetStateAction<Lines[]>>
 }
 
 interface Lines {
   points: number[]
 }
 
-const DrawMask = ({ isOpen, color, slider, width, height, type, image, stageRef }: IProps) => {
-
-  const [lines, setLines] = useState<Lines[]>([]);
+const DrawMask = ({ lines, setLines, color, slider, width, height, type, image }: IProps) => {
 
   const isDrawing = useRef(false);
 

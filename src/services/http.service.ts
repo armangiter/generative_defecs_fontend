@@ -1,17 +1,30 @@
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"
+import Cookies from "universal-cookie";
 
-const BASE_URL = 'http://153.156.254.150:50088/api/defects/'
+const BASE_URL = 'http://153.156.254.150:50088/api/'
+
+const cookies: Cookies = new Cookies()
 
 const api = axios.create({
   baseURL: BASE_URL,
 })
 
+api.interceptors.request.use(
+  (request) => {
+    if (cookies.get("access")) {
+      request.headers.authorization = `Bearer ${cookies.get("access")}`;
+    }
+    return request;
+  },
+  (err) => Promise.reject(err),
+);
+
 api.interceptors.response.use(
   response => response,
   error => {
-    if (error.response.status === 403) {
+    if (error.response && error.response.status === 403) {
       window.location.reload()
     } else {
       try {
