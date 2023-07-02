@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from '@mui/material';
-import theme from './mui/style.tsx';
+import theme from './mui/theme.ts';
 
 // I18N
 import i18n from 'i18next';

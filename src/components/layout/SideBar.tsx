@@ -1,24 +1,30 @@
-import { ReactNode, useState } from "react"
+import { ReactNode, useState, Dispatch, SetStateAction } from "react"
 import Result from "../../assets/icons/Result"
 import Generator from "../../assets/icons/Generator"
-import { Link } from "react-router-dom"
+import { Link, useLocation } from "react-router-dom"
 import OpenSide from "../../assets/icons/OpenSide"
 import { t } from "i18next"
 
-interface Tabs {
-    id: number,
-    name: string,
-    icon: ReactNode,
-    link: string
+interface IProps {
+    isOpen: boolean,
+    setIsOpen: Dispatch<SetStateAction<boolean>>,
 }
 
-function SideBar() {
+interface Tabs {
+    icon: ReactNode,
+    name: string,
+    link: string,
+    id: number,
+}
 
-    const [selectedTab, setSelectedTab] = useState<string>('Generator');
-    const [isOpen, setIsOpen] = useState<boolean>(true);
+function SideBar({ isOpen, setIsOpen }: IProps) {
+    const location = useLocation()
+
+    const [selectedTab, setSelectedTab] = useState<string>(location && location.pathname.split('/')[1]);
+
     const listTab: Tabs[] = [
-        { id: 1, name: t('generator'), icon: <Generator isActive={selectedTab === 'Generator'} />, link: 'generator' },
-        { id: 2, name: t('results'), icon: <Result isActive={selectedTab === 'Results'} />, link: 'result' }
+        { id: 1, name: t('generator'), icon: <Generator isActive={selectedTab === 'generator'} />, link: 'generator' },
+        { id: 2, name: t('result'), icon: <Result isActive={selectedTab === 'results'} />, link: 'results' }
     ]
 
     return (
@@ -40,24 +46,24 @@ function SideBar() {
                 </div>
                 <ul>
                     {listTab.map((tab: Tabs, idx: number) => (
-                        <Link key={tab.id} to={`/${tab.link}`} onClick={() => setSelectedTab(tab.name)}>
+                        <Link key={tab.id} to={`/${tab.link}`} onClick={() => setSelectedTab(tab.name.toLowerCase())}>
                             <li
                                 className={`
                                 py-2 flex items-center justify-start gap-2 transition
                                 ${isOpen ? 'px-4 min-w-[192px]' : 'p-0'}
                                 ${idx > 0 && 'mt-4'}
-                                ${selectedTab === tab.name && 'bg-active rounded-md'}
+                                ${selectedTab === tab.name.toLowerCase() && 'bg-active rounded-md'}
                             `}
                             >
                                 {tab.icon}{' '}
                                 {!!isOpen && (
                                     <p
                                         className={`
-                                    ${selectedTab === tab.name ?
+                                    ${selectedTab === tab.name.toLowerCase() ?
                                                 '!text-active text-sm font-semibold' :
                                                 '!text-inactive text-sm font-medium'
                                             }`}
-                                    >{tab.name}</p>
+                                    >{tab.name.toLowerCase()}</p>
                                 )}
                             </li>
                         </Link>

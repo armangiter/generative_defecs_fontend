@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react'
 import { t } from "i18next"
 import { Head } from "../../../mui/customize"
 import { Defects, Values } from "../../../models"
@@ -7,7 +8,11 @@ import UploadImage from "./image/UploadImage"
 import Field from "./data"
 import { useState } from "react"
 
-function Generator() {
+interface IProps {
+  isOpen: boolean,
+}
+
+function Generator({ isOpen }: IProps) {
 
   const [defects, setDefects] = useState<Defects[]>([
     { id: 1, name: 'Print Imperfect' },
@@ -23,7 +28,7 @@ function Generator() {
     <div>
       <Head>{t('generate_new_image')}</Head>
       <div className="flex items-center justify-center gap-8">
-        <UploadImage />
+        <UploadImage isOpen={isOpen} />
         <Field defects={defects} values={values} setValues={setValues} />
       </div>
     </div>

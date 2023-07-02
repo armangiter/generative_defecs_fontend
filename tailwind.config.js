@@ -8,14 +8,15 @@ export default {
     extend: {
       backgroundColor: {
         'primary': '#FFF',
-        'secondary': '#F1F5F9',
         'active': '#F1F5F9',
-        'btn': '#475569'
+        'btn': '#475569',
+        'svg': '#E2E8F0'
       },
       colors: {
         'border': '#E2E8F0',
         'active': '#0F172A',
-        'inactive': '#64748BFF'
+        'inactive': '#64748BFF',
+        'light-100': '#64748B'
       }
     },
   },

@@ -8,6 +8,10 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+svg {
+    cursor: pointer;
+}
+
 .absSubtract::after {
     background: url(assets/images/subtract.png);
 }

@@ -8,5 +8,8 @@
   "drag_drop_text": "Drag & drop your files here",
   "generate": "Generate",
   "part": "Part",
-  "number_of_image": "Number of Images"
+  "number_of_image": "Number of Images",
+  "paer": "Part",
+  "defect_type": "Defect Type",
+  "model": "Model"
 }
