@@ -11,8 +11,6 @@ function Result() {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [results, setResults] = useState<ResultType[]>([])
     const [models, setModels] = useState<Models[]>([])
-    console.log(results);
-
 
     useEffect(() => {
         setIsLoading(true)

@@ -3,7 +3,7 @@ import { Stage } from 'react-konva'
 import "cropperjs/dist/cropper.css";
 import Crop from './type/Crop';
 import DrawMask from './type/DrawMask';
-import { Lines } from '../../../../../models';
+import { Lines, Size } from '../../../../../models';
 
 interface IProps {
   type: string,
@@ -23,28 +23,43 @@ const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, isFullScre
   const stageRef = useRef(null);
   const contentImg = useRef<HTMLDivElement>(null);
   const [image, setImage] = useState<HTMLImageElement>()
+  const [sizeImg, setSizeImg] = useState<Size>({})
 
   useEffect(() => {
     const img: HTMLImageElement = new window.Image()
     img.crossOrigin = 'anonymous'
+
+    img.onload = () => {
+      let size: Size = {
+        width: 0,
+        height: 0
+      };
+      size.width = img.width
+      size.height = img.height
+
+      setImage(img)
+      setSizeImg(size)
+    }
     img.src = urlUploaded
-    setImage(img)
   }, [urlUploaded, isFullScreen, isOpen])
 
+  const width = contentImg.current?.clientWidth
+  const height = contentImg.current && width && sizeImg ? (width / sizeImg?.width) * sizeImg?.height : 0
+
   return (
-    <div className='w-full h-96 relative rounded-lg overflow-hidden' ref={contentImg}>
+    <div className='w-full relative rounded-lg overflow-hidden' ref={contentImg}>
       {
         typeRect === 'Crop' ? (
           <Crop
             setUrlUploaded={setUrlUploaded}
             urlUploaded={urlUploaded}
-            width={contentImg.current?.clientWidth}
-            height={contentImg.current?.clientHeight}
+            width={width}
+            height={height}
           />
         ) : (
           <Stage
-            width={contentImg.current?.clientWidth}
-            height={contentImg.current?.clientHeight}
+            width={width}
+            height={height}
             ref={stageRef}
           >
             {
@@ -58,8 +73,8 @@ const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, isFullScre
                   image={image}
                   slider={slider}
                   stageRef={stageRef}
-                  width={contentImg.current?.clientWidth}
-                  height={contentImg.current?.clientHeight}
+                  width={width}
+                  height={height}
                 />
               )
             }

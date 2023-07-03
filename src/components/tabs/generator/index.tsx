@@ -83,9 +83,6 @@ function Generator({ isOpen }: IProps) {
   const sendMask = (maskFile: File) => {
     setIsLoading(true)
     const { defects: { value: defectValue }, models: { value: modelValue }, numImg } = data
-    console.log(numImg);
-    console.log(typeof numImg);
-
 
     const formData: FormData | null = new FormData()
     if (localBlob) {
@@ -93,7 +90,9 @@ function Generator({ isOpen }: IProps) {
       formData.append('mask_file', maskFile)
       formData.append('defect_type_id', JSON.stringify(defectValue))
       formData.append('defect_model_id', JSON.stringify(modelValue))
-      formData.append('number_of_images', JSON.stringify(numImg))
+      typeof numImg === 'string' ?
+        formData.append('number_of_images', numImg) :
+        formData.append('number_of_images', JSON.stringify(numImg))
       formData.append('mask_mode', 'random')
     }
 

@@ -85,7 +85,12 @@ interface Models {
     name: string
 }
 
+export interface Size {
+    width: number,
+    height: number,
+}
+
 export type {
-    ActiveNode, Values, Results, ResultImg, Lines, Defect, Defects,
+    ActiveNode, Values, Results, ResultImg, Lines, Defect, Defects, Size,
     Module, Modules, Data, SelectLogin, Point, ResultImage, Result, Models
 }
