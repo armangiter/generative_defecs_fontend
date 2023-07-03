@@ -6,13 +6,28 @@ import DetailCard from "./modal/DetailCard";
 
 function Card(props: any) {
 
-    const { result_images, defect_model_id, models, defect_type: { name: defectName } } = props
+    const { result_images, status, defect_model_id, models, defect_type: { name: defectName } } = props
     const [open, setOpen] = useState<boolean>(false);
 
     return (
         <li className='p-2 flex flex-col justify-between rounded-md bg-primary'>
             <div>
-                <Label>{defectName}</Label>
+                <div className="flex items-center justify-between">
+                    <Label>{defectName}</Label>
+                    {!!status && (
+                        <p
+                            className={
+                                `py-0.5 px-2 rounded-[5px] ${status === 'p' ? 'bg-[#D7DDE4] text-[#6B7280]' : status === 'g' ?
+                                    'bg-[#FCF3D3] text-[#DC7700]' : status === 'f' && 'bg-[#D3FCDF] text-[#49716A]'}`
+                            }
+                        >{
+                                status === 'p' ?
+                                    'Pending...' : status === 'g' ?
+                                        'generating...' : status === 'f' &&
+                                        'generated'
+                            }</p>
+                    )}
+                </div>
                 <ul className="p-1 h-12 mt-4 gap-1 rounded flex items-center justify-start">
                     {!!result_images.length &&
                         result_images.slice(0, result_images.length > 4 ? 3 : 4).map((item: ResultImg, idx: number) =>
@@ -27,7 +42,7 @@ function Card(props: any) {
                         )}
                     {result_images.length > 4 && (
                         <li
-                            className="w-full h-10 bg-primary rounded flex justify-center items-center cursor-pointer"
+                            className="w-1/4 h-10 bg-primary rounded flex justify-center items-center cursor-pointer"
                         >
                             <Label
                                 className="text-inactive border border-border h-full w-full flex justify-center items-center rounded"

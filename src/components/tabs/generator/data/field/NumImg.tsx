@@ -17,12 +17,18 @@ function NumImg({ data, setData }: IProps) {
       <Title className="!mb-1.5">{t('number_of_image')}</Title>
       <Input
         fullWidth
-        type="number"
         value={numImg}
-        onChange={(event) => setData({
-          ...data,
-          numImg: +event.target.value
-        })}
+        onChange={(event) => {
+          const newValue = event.target.value
+          const pattern = /^[0-9]+$/;
+
+          if (newValue === '' || pattern.test(newValue)) {
+            setData({
+              ...data,
+              numImg: newValue
+            })
+          }
+        }}
       />
     </div>
   )

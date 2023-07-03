@@ -1,5 +1,4 @@
 import { Dispatch, SetStateAction, useState } from "react"
-import { Button } from "@mui/material"
 import { t } from "i18next"
 
 // Components
@@ -12,19 +11,22 @@ import { LoadingButton } from "@mui/lab"
 interface IProps {
   data: Data,
   isLoading: boolean,
+  isLoadingD: boolean,
   setData: Dispatch<SetStateAction<Data>>,
+  setIsLoadingD: Dispatch<SetStateAction<boolean>>,
   createMask: () => void,
+  updateDefects: (id: number) => void
 }
 
-function Field({ data, setData, createMask, isLoading }: IProps) {
+function Field({ data, setData, createMask, isLoading, setIsLoadingD, isLoadingD, updateDefects }: IProps) {
 
   const { numImg, defects: { value: defectValue }, models: { value: ModelValue } } = data
 
   return (
     <div className="w-1/2 gap-6 flex flex-col justify-start mb-auto h-full">
-      <Part data={data} setData={setData} />
+      <Part setIsLoadingD={setIsLoadingD} data={data} setData={setData} updateDefects={updateDefects} />
       <NumImg data={data} setData={setData} />
-      <Defect data={data} setData={setData} />
+      <Defect isLoadingD={isLoadingD} data={data} setData={setData} />
       <LoadingButton
         disabled={numImg && defectValue && ModelValue ? false : true}
         className="!bg-btn"

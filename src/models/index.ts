@@ -43,13 +43,13 @@ interface Defects {
 
 interface Defect {
     list: Defects[],
-    value?: number
+    value?: number,
 }
 
 interface Data {
     models: Module,
     defects: Defect,
-    numImg: number
+    numImg: number | string
 }
 
 interface SelectLogin {

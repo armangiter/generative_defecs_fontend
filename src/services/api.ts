@@ -32,5 +32,6 @@ export const request = {
   }),
   signup: (email: string, password: string, password2: string) => api.post('auth/signup/', {
     email, password, password2
-  })
+  }),
+  user: () => api.get('auth/user')
 }

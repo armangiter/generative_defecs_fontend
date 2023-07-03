@@ -17,7 +17,10 @@ export default {
         'border': '#E2E8F0',
         'active': '#0F172A',
         'inactive': '#64748BFF',
-        'light-100': '#64748B'
+        'light-100': '#64748B',
+        'light-200': '#6B7280',
+        'dark-100': '#111827',
+        'red-100': '#EF4444'
       }
     },
   },

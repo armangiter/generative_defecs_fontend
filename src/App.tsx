@@ -45,7 +45,7 @@ function App() {
           grid place-items-center'
           >
             <Routes>
-              <Route path="/" element={<Navigate to='/login' />} />
+              <Route path="/*" element={<Navigate to='/login' />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
             </Routes>

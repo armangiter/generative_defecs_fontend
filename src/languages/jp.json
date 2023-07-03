@@ -29,5 +29,6 @@
   "dont_have_account": "Don’t have an account?",
   "successfully_created": "Account successfully created",
   "view_result": "View Results",
-  "download_all": "Download All"
+  "download_all": "Download All",
+  "logout": "Logout"
 }

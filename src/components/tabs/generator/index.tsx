@@ -19,6 +19,7 @@ function Generator({ isOpen }: IProps) {
   const generate = useRef<HTMLDivElement>()
   const [urlUploaded, setUrlUploaded] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isLoadingD, setIsLoadingD] = useState<boolean>(true)
   const [localBlob, setLocalBlob] = useState<File | null>()
   const [lines, setLines] = useState<Lines[]>([]);
 
@@ -27,36 +28,64 @@ function Generator({ isOpen }: IProps) {
       list: [],
     },
     defects: {
-      list: []
+      list: [],
     },
     numImg: 10
   })
 
+  const updateDefects = (id: number) => {
+    setIsLoadingD(true)
+    request.listDefectModels(id)
+      .then(res => {
+        const listDefect = res.data
+        setIsLoadingD(false)
+        setData(prev => {
+          return {
+            ...prev,
+            defects: {
+              list: listDefect || [],
+              value: !!listDefect.length && listDefect[0].id,
+            }
+          }
+        })
+      })
+  }
+
   useEffect(() => {
+    setIsLoadingD(true)
     request.getModels()
       .then(response => {
-        request.listDefect()
-          .then(res => {
-            const listModel = response.data
-            const listDefect = res.data
-            setData({
-              ...data,
-              models: {
-                list: listModel || [],
-                value: !!listModel.length && listModel[0].id
-              },
-              defects: {
-                list: listDefect || [],
-                value: !!listDefect.length && listDefect[0].id
-              }
-            })
+        const listModel = response.data
+        if (listModel.length) {
+          setData({
+            ...data,
+            models: {
+              list: listModel || [],
+              value: !!listModel.length && listModel[0].id
+            }
           })
+          updateDefects(listModel[0].id)
+        } else {
+          setData({
+            ...data,
+            models: {
+              list: listModel || [],
+              value: !!listModel.length && listModel[0].id
+            },
+            defects: {
+              ...data.defects,
+            }
+          })
+        }
       })
   }, [])
 
   const sendMask = (maskFile: File) => {
     setIsLoading(true)
     const { defects: { value: defectValue }, models: { value: modelValue }, numImg } = data
+    console.log(numImg);
+    console.log(typeof numImg);
+
 
     const formData: FormData | null = new FormData()
     if (localBlob) {
@@ -160,7 +189,15 @@ function Generator({ isOpen }: IProps) {
           isOpen={isOpen}
           setLocalBlob={setLocalBlob}
         />
-        <Field isLoading={isLoading} createMask={createMask} data={data} setData={setData} />
+        <Field
+          isLoading={isLoading}
+          createMask={createMask}
+          data={data}
+          setData={setData}
+          updateDefects={updateDefects}
+          isLoadingD={isLoadingD}
+          setIsLoadingD={setIsLoadingD}
+        />
       </div>
     </div>
   )

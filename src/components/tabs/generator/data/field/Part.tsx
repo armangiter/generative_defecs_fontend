@@ -6,10 +6,12 @@ import { Data } from "../../../../../models"
 
 interface IProps {
   data: Data,
-  setData: Dispatch<SetStateAction<Data>>
+  setIsLoadingD: boolean,
+  setData: Dispatch<SetStateAction<Data>>,
+  updateDefects: (id: number) => void
 }
 
-function Part({ data, setData }: IProps) {
+function Part({ data, setData, setIsLoadingD, updateDefects }: IProps) {
 
   const { models: { list, value } } = data
 
@@ -20,12 +22,15 @@ function Part({ data, setData }: IProps) {
         value={value || ''}
         fullWidth
         onChange={(event) => {
-          typeof event.target.value === 'number' &&
+          setIsLoadingD(true)
+          const newValue: number = event.target.value
+          updateDefects(newValue)
+          typeof newValue === 'number' &&
             setData({
               ...data,
               models: {
                 ...data.models,
-                value: event.target.value
+                value: newValue
               }
             })
         }}

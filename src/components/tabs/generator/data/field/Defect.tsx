@@ -6,10 +6,11 @@ import { CircularProgress } from "@mui/material"
 
 interface IProps {
   data: Data,
+  isLoadingD: boolean,
   setData: Dispatch<SetStateAction<Data>>
 }
 
-function Defect({ data, setData }: IProps) {
+function Defect({ data, setData, isLoadingD }: IProps) {
 
   const { defects: { list, value } } = data
 
@@ -17,7 +18,9 @@ function Defect({ data, setData }: IProps) {
     <div>
       <Title className="!mb-1.5">{t('defect_type')}</Title>
       <ul className="relative grid grid-cols-4 min-h-[80px] grid-rows-[auto] gap-2.5">
-        {list.length ? (
+        {isLoadingD ? (
+          <CircularProgress className="!absolute !left-1/2 !top-1/2 !transform !-translate-x-1/2 !-translate-y-1/2" />
+        ) : !!list.length && (
           list.map((defect: Defects) => (
             <li
               key={defect.id}
@@ -32,8 +35,6 @@ function Defect({ data, setData }: IProps) {
               border border-solid border-border ${value === defect.id && '!border-active'}`}
             >{defect.name}</li>
           ))
-        ) : (
-          <CircularProgress className="!absolute !left-1/2 !top-1/2 !transform !-translate-x-1/2 !-translate-y-1/2" />
         )}
       </ul>
     </div>
