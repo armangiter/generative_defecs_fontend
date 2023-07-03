@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useEffect, useRef } from 'react';
 import { Modal, Box, Button } from '@mui/material';
 import { Label, Input, Head } from '../../../../../mui/customize'
 import { Result } from "../../../../models"
@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import Download from '../../../../../assets/icons/Download';
 import axios from 'axios';
 import { t } from 'i18next';
-import { Models } from '../../../../../models';
+import { Models, Size } from '../../../../../models';
 
 interface IProps {
   open: boolean,
@@ -18,8 +18,10 @@ interface IProps {
 
 const DetailCard = ({ open, setOpen, data, models }: IProps) => {
 
+  const contentImg = useRef<HTMLDivElement>(null);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
+  const [sizeImg, setSizeImg] = useState<Size>()
   const [selectedImg, setSelectedImg] = useState(data && data.result_images && data.result_images.length && data.result_images[0].id)
 
   const downloadImg = (url: string) => {
@@ -41,9 +43,31 @@ const DetailCard = ({ open, setOpen, data, models }: IProps) => {
       })
   }
 
+  const findSrc = (list: Models[], id: number) => list.find(item => item.id === id)?.file
+
   const model = !!models.length &&
     models.find(item => item.id === data.defect_model_id) ?
     models.find(item => item.id === data.defect_model_id).name : ""
+
+  useEffect(() => {
+    const src = findSrc(data.result_images, selectedImg)
+    const img: HTMLImageElement = new window.Image()
+    img.onload = () => {
+      let size: Size = {
+        width: 0,
+        height: 0
+      };
+      size.width = img.width
+      size.height = img.height
+
+      setSizeImg(size)
+    }
+    if (src)
+      img.src = src
+  }, [selectedImg])
+
+  const width = contentImg.current?.clientWidth
+  const height = contentImg.current && width && sizeImg ? (width / sizeImg?.width) * sizeImg?.height : 0
 
   return (
     <div className='w-full'>
@@ -68,7 +92,7 @@ const DetailCard = ({ open, setOpen, data, models }: IProps) => {
               onClick={closeModal}
             />
           </div>
-          <div className='flex flex-col sm:flex-row items-start justify-center mt-8 gap-8 h-fit sm:h-[89%]'>
+          <div className='flex flex-col sm:flex-row items-start justify-center mt-8 gap-8 h-fit'>
             <div className='flex flex-col justify-center w-full sm:w-1/2 h-full'>
               <Label className='!mb-1'>{t('model')}</Label>
               <Input
@@ -111,7 +135,7 @@ const DetailCard = ({ open, setOpen, data, models }: IProps) => {
                 }}
               >{t('download_all')}</Button>
             </div>
-            <div className='flex flex-col h-full justify-start w-full sm:w-1/2'>
+            <div className='flex flex-col h-fit justify-start w-full sm:w-1/2'>
               <Label className='!mb-1'>{t('defect_type')}</Label>
               <Input
                 size='small'
@@ -124,8 +148,15 @@ const DetailCard = ({ open, setOpen, data, models }: IProps) => {
                 }}
                 className='!bg-primary'
               />
-              <div className='relative h-full mt-8 rounded-md overflow-hidden'>
-                <img className='w-full h-full object-cover' src={data.result_images.length && data.result_images.find(item => item.id === selectedImg).file} alt='result' />
+              <div
+                className='relative h-fit mt-8 rounded-md overflow-hidden'
+                ref={contentImg}
+              >
+                <img
+                  alt='result'
+                  className={`w-full h-[${height}px] object-cover`}
+                  src={data.result_images.length && data.result_images.find(item => item.id === selectedImg).file}
+                />
                 <div
                   onClick={() =>
                     downloadImg(data.result_images.length && data.result_images.find(item => item.id === selectedImg).file)

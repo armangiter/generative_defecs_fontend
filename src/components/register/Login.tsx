@@ -13,8 +13,8 @@ function Login() {
   const cookies: Cookies = new Cookies()
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [selector, setSelector] = useState<SelectLogin[]>([
-    { id: 1, title: t('email'), placeholder: t('email_placeholder'), value: '' },
-    { id: 2, title: t('password'), placeholder: t('password_placeholder'), value: '' },
+    { id: 1, title: t('email'), placeholder: t('email_placeholder'), value: '', type: 'email' },
+    { id: 2, title: t('password'), placeholder: t('password_placeholder'), value: '', type: 'password' },
   ])
 
   const login = () => {
@@ -50,6 +50,7 @@ function Login() {
               <Title className='!mb-1.5'>{item.title}</Title>
               <Input
                 fullWidth
+                type={item.type}
                 value={item.value}
                 placeholder={item.placeholder}
                 onChange={event => {

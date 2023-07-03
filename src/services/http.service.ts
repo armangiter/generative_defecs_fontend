@@ -3,7 +3,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios"
 import Cookies from "universal-cookie";
 
-const BASE_URL = 'http://153.156.254.150:50088/api/'
+const BASE_URL = import.meta.env.VITE_BASE_URL
 
 const cookies: Cookies = new Cookies()
 
@@ -24,23 +24,23 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    if (error.response && error.response.status === 403) {
-      window.location.reload()
+    console.log(error)
+    if (
+      error.response.data &&
+      error.response.data.detail &&
+      (error.response.data.detail ===
+        "Given token not valid for any token type" ||
+        error.response.data.detail === "User not found")
+    ) {
+      cookies.remove("access", { path: "/" });
+      cookies.remove("refresh", { path: "/" });
+      window.location.reload();
     } else {
-      try {
-        toast.error(error.message, {
-          position: "top-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-      } catch (err) {
-        Object.values(JSON.parse(error.request.response)).map((item, idx) => {
-          toast.error(`${Object.keys(JSON.parse(error.request.response))[idx]}: ${item}`, {
+      if (error.response && error.response.status === 403) {
+        window.location.reload()
+      } else {
+        try {
+          toast.error(error.message, {
             position: "top-center",
             autoClose: 5000,
             hideProgressBar: false,
@@ -50,7 +50,20 @@ api.interceptors.response.use(
             progress: undefined,
             theme: "light",
           });
-        })
+        } catch (err) {
+          Object.values(JSON.parse(error.request.response)).map((item, idx) => {
+            toast.error(`${Object.keys(JSON.parse(error.request.response))[idx]}: ${item}`, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
+          })
+        }
       }
     }
   }
