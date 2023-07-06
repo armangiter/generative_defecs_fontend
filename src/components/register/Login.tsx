@@ -35,6 +35,7 @@ function Login() {
           ])
         }
       })
+      .catch(() => setIsLoading(false))
   }
 
   return (

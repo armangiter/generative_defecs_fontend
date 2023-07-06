@@ -3,6 +3,7 @@ import { Data, Defects } from "../../../../../models"
 import { Title } from "../../../../../mui/customize"
 import { t } from "i18next"
 import { CircularProgress } from "@mui/material"
+import Info from "../../../../../assets/icons/Info"
 
 interface IProps {
   data: Data,
@@ -16,7 +17,10 @@ function Defect({ data, setData, isLoadingD }: IProps) {
 
   return (
     <div>
-      <Title className="!mb-1.5">{t('defect_type')}</Title>
+      <div className='flex items-center justify-start gap-1.5 mb-1.5'>
+        <Title>{t('defect_type')}</Title>
+        <Info infoText={t('part_info')} />
+      </div>
       <ul className="relative grid grid-cols-4 min-h-[80px] grid-rows-[auto] gap-2.5">
         {isLoadingD ? (
           <CircularProgress className="!absolute !left-1/2 !top-1/2 !transform !-translate-x-1/2 !-translate-y-1/2" />

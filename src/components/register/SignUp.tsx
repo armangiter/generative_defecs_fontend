@@ -40,6 +40,7 @@ function SignUp() {
           setIsLoading(false)
         }
       })
+      .catch(() => setIsLoading(false))
   }
 
   return (

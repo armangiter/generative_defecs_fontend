@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react"
 import { Input, Title } from "../../../../../mui/customize"
 import { t } from "i18next"
 import { Data } from "../../../../../models"
+import Info from "../../../../../assets/icons/Info"
 
 interface IProps {
   data: Data,
@@ -14,7 +15,10 @@ function NumImg({ data, setData }: IProps) {
 
   return (
     <div>
-      <Title className="!mb-1.5">{t('number_of_image')}</Title>
+      <div className='flex items-center justify-start gap-1.5 mb-1.5'>
+        <Title>{t('number_of_image')}</Title>
+        <Info infoText={t('num_img_info').replace('X', import.meta.env.VITE_MAX_NUMBER_IMAGE)} />
+      </div>
       <Input
         fullWidth
         value={numImg}
@@ -23,10 +27,12 @@ function NumImg({ data, setData }: IProps) {
           const pattern = /^[0-9]+$/;
 
           if (newValue === '' || pattern.test(newValue)) {
-            setData({
-              ...data,
-              numImg: newValue
-            })
+            const value = typeof newValue === 'string' ? +newValue : newValue
+            value <= +import.meta.env.VITE_MAX_NUMBER_IMAGE &&
+              setData({
+                ...data,
+                numImg: newValue
+              })
           }
         }}
       />

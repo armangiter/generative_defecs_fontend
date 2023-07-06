@@ -1,16 +1,81 @@
 import { useState, useEffect } from "react"
 import { Head } from "../../../mui/customize"
-import { Models, Result as ResultType } from "../../../models"
+import { Models, Result as ResultType, Results } from "../../../models"
 import ListResult from "./data/ListResult"
 import { request } from "../../../services/api"
 import { CircularProgress, Pagination } from "@mui/material"
+import ListGenerating from "./data/ListGenerating"
+import { t } from "i18next"
 
 function Result() {
 
     const [page, setPage] = useState<number>(1);
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [results, setResults] = useState<ResultType[]>([])
+    const [results, setResults] = useState<ResultType>({
+        generated: [],
+        generating: [],
+        pending: []
+    })
     const [models, setModels] = useState<Models[]>([])
+
+    const filterGenerate = (data: Results[]) => {
+        const newData: ResultType = {
+            generated: [],
+            generating: [],
+            pending: []
+        }
+        data.map(item =>
+            item.status === 'p' ? newData.pending.push(item) :
+                item.status === 'g' ? newData.generating.push(item) :
+                    item.status === 'f' && newData.generated.push(item)
+        )
+        return newData
+    }
+
+    const setPercent = (list: Results[], timeRepeat: number) => {
+        return list.map(result => {
+            if (result.status === 'g') {
+                return {
+                    ...result,
+                    percent: (timeRepeat * 5) < 95 ? timeRepeat * 5 : 95
+                }
+            } else {
+                return {
+                    ...result,
+                    percent: 0
+                }
+            }
+        })
+    }
+
+    const getData = (timeRepeat: number) => {
+        request.getResult()
+            .then(res => {
+                request.getModels()
+                    .then(response => {
+                        setModels(response.data || [])
+                        const newData = filterGenerate(res.data || [])
+                        const generating = setPercent(newData.generating, timeRepeat)
+                        const pending = setPercent(newData.pending, timeRepeat)
+
+                        const percentData = { generating, pending, generated: newData.generated }
+
+                        setResults(percentData)
+                    })
+            })
+    }
+
+    useEffect(() => {
+        if (!isLoading) {
+            let timeRepeat = 0
+            const interval = setInterval(() => {
+                timeRepeat++
+                window.location.pathname.includes('results') && window.location.pathname.includes('results/detail') ?
+                    getData(timeRepeat) :
+                    clearInterval(interval)
+            }, 1000)
+        }
+    }, [isLoading])
 
     useEffect(() => {
         setIsLoading(true)
@@ -19,7 +84,8 @@ function Result() {
                 request.getModels()
                     .then(response => {
                         setModels(response.data || [])
-                        setResults(res.data || [])
+                        const newData = filterGenerate(res.data || [])
+                        setResults(newData)
                         setIsLoading(false)
                     })
             })
@@ -29,7 +95,7 @@ function Result() {
         setPage(newPage);
     };
 
-    const filteredPagination = results?.filter((item: ResultType, idx: number) => {
+    const filteredPagination = results.generated?.filter((item: ResultType, idx: number) => {
         const minPage = page === 1 ? 0 : (page - 1) * 12
         const maxPage = page * 12
         return idx + 1 <= maxPage && idx + 1 > minPage
@@ -37,18 +103,23 @@ function Result() {
 
     return (
         <div className="h-full">
-            <Head>Your Results</Head>
+            <Head>{t('your_results')}</Head>
             {isLoading ? (
                 <div className="w-full h-[calc(100vh-350px)] relative">
                     <CircularProgress className="!absolute !left-1/2 !top-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                 </div>
             ) : (
-                <ListResult results={filteredPagination} models={models} />
+                <div className="flex flex-col gap-12">
+                    {!!results.generating.length && !!results.pending.length && (
+                        <ListGenerating data={results} />
+                    )}
+                    <ListResult results={filteredPagination} models={models} />
+                </div>
             )}
             {
-                !!results && !!results.length && results.length > 12 &&
+                !!results.generated && !!results.generated.length && results.generated.length > 12 &&
                 <Pagination
-                    count={Math.ceil(results.length / 12)}
+                    count={Math.ceil(results.generated.length / 12)}
                     page={page}
                     onChange={(event: React.MouseEvent<HTMLButtonElement> | null, newPage) => handleChangePage(event, newPage)}
                     sx={{

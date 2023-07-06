@@ -1,8 +1,9 @@
 import { Dispatch, SetStateAction } from "react"
-import { MenuItem } from "@mui/material"
+import { MenuItem, Tooltip } from "@mui/material"
 import { Selector, Title } from "../../../../../mui/customize"
 import { t } from "i18next"
 import { Data } from "../../../../../models"
+import Info from "../../../../../assets/icons/Info"
 
 interface IProps {
   data: Data,
@@ -17,7 +18,10 @@ function Part({ data, setData, setIsLoadingD, updateDefects }: IProps) {
 
   return (
     <div>
-      <Title className="!mb-1.5">{t('part')}</Title>
+      <div className='flex items-center justify-start gap-1.5 mb-1.5'>
+        <Title>{t('part')}</Title>
+        <Info infoText={t('part_info')} />
+      </div>
       <Selector
         value={value || ''}
         fullWidth

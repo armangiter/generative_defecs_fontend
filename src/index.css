@@ -21,3 +21,16 @@ svg {
 .absSubtract2::after {
     background: url(assets/images/subtract2.png);
 }
+
+.activeLink,
+.unActive {
+    display: inherit;
+    padding: 8px 16px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.activeLink {
+    transition: 0.3s all;
+    background: #F1F5F9;
+}

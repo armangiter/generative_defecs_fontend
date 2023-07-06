@@ -13,12 +13,11 @@ interface IProps {
   isOpen: boolean,
   typeRect: string,
   urlUploaded: string,
-  isFullScreen: boolean,
   setLines: Dispatch<SetStateAction<Lines[]>>,
   setUrlUploaded: Dispatch<SetStateAction<string>>
 }
 
-const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, isFullScreen, setUrlUploaded, type, typeRect }: IProps) => {
+const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, setUrlUploaded, type, typeRect }: IProps) => {
 
   const stageRef = useRef(null);
   const contentImg = useRef<HTMLDivElement>(null);
@@ -41,7 +40,7 @@ const Konva = ({ isOpen, color, slider, urlUploaded, lines, setLines, isFullScre
       setSizeImg(size)
     }
     img.src = urlUploaded
-  }, [urlUploaded, isFullScreen, isOpen])
+  }, [urlUploaded, isOpen])
 
   const width = contentImg.current?.clientWidth
   const height = contentImg.current && width && sizeImg ? (width / sizeImg?.width) * sizeImg?.height : 0

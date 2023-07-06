@@ -9,12 +9,15 @@ import UploadImage from "./image/UploadImage"
 import Field from "./data"
 import { useState } from "react"
 import Konva from 'konva'
+import { useNavigate } from 'react-router-dom'
 
 interface IProps {
   isOpen: boolean,
 }
 
 function Generator({ isOpen }: IProps) {
+
+  const navigate = useNavigate()
 
   const generate = useRef<HTMLDivElement>()
   const [urlUploaded, setUrlUploaded] = useState<string>('');
@@ -30,7 +33,7 @@ function Generator({ isOpen }: IProps) {
     defects: {
       list: [],
     },
-    numImg: 10
+    numImg: 1
   })
 
   const updateDefects = (id: number) => {
@@ -80,7 +83,7 @@ function Generator({ isOpen }: IProps) {
       })
   }, [])
 
-  const sendMask = (maskFile: File) => {
+  const sendMask = (maskFile: File, inRedirect: boolean) => {
     setIsLoading(true)
     const { defects: { value: defectValue }, models: { value: modelValue }, numImg } = data
 
@@ -98,17 +101,18 @@ function Generator({ isOpen }: IProps) {
 
     if (formData)
       request.sendGenerate(formData)
-        .then((res) => {
+        .then(() => {
           setLines([])
           setUrlUploaded('')
           setLocalBlob(null)
           setIsLoading(false)
+          inRedirect && navigate('/results')
         })
     else
       setIsLoading(false)
   }
 
-  const createMask = async () => {
+  const createMask = async (inRedirect: boolean) => {
 
     if (localBlob) {
       setIsLoading(true)
@@ -171,7 +175,7 @@ function Generator({ isOpen }: IProps) {
         const blob = await response.blob();
         const file = new File([blob], 'mask_file', { type: blob.type });
 
-        sendMask(file)
+        sendMask(file, inRedirect)
       }
     }
   }
@@ -196,6 +200,7 @@ function Generator({ isOpen }: IProps) {
           updateDefects={updateDefects}
           isLoadingD={isLoadingD}
           setIsLoadingD={setIsLoadingD}
+          urlUploaded={urlUploaded}
         />
       </div>
     </div>

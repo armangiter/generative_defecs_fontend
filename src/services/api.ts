@@ -24,6 +24,7 @@ export const request = {
   deleteImage: (id: number) => api.delete(`defects/images/${id}`),
   createFineTune: () => api.post('defects/fine_tune/'),
   getResult: () => api.get('defects/results/'),
+  getItemResult: (id: number) => api.get(`defects/results/${id}`),
   getModels: () => api.get('defects/models/'),
   statusFine: () => api.get('defects/fine_tune/status/'),
   statusGenerate: () => api.get('defects/generate/status/'),

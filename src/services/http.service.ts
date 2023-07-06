@@ -24,7 +24,6 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   response => response,
   error => {
-    console.log(error)
     if (
       error.response.data &&
       error.response.data.detail &&

@@ -2,10 +2,6 @@ interface ActiveNode {
     isActive: boolean
 }
 
-type Values = any
-
-type Results = any
-
 interface ResultImg {
     id: number,
     file: string
@@ -70,14 +66,30 @@ interface DefectResult {
     name: string
 }
 
-interface Result {
+interface Defects {
     id: number,
-    image: number,
+    name: string,
+    file: string
+}
+
+interface Results {
+    id: number,
+    image: string,
+    status: string,
+    user_id: number,
     created: string,
     mask_image: number,
-    defect_model_id: number,
+    defect_model_id?: number,
+    defect_model: Defects,
     result_images: ResultImg[],
-    defect_type: DefectResult
+    defect_type: DefectResult,
+    percent?: number
+}
+
+interface Result {
+    generated: Results[],
+    generating: Results[],
+    pending: Results[]
 }
 
 interface Models {
@@ -86,12 +98,12 @@ interface Models {
     name: string
 }
 
-export interface Size {
+interface Size {
     width: number,
     height: number,
 }
 
 export type {
-    ActiveNode, Values, Results, ResultImg, Lines, Defect, Defects, Size,
+    ActiveNode, ResultImg, Lines, Defect, Defects, Size, Results,
     Module, Modules, Data, SelectLogin, Point, ResultImage, Result, Models
 }

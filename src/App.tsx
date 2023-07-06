@@ -9,6 +9,7 @@ import Generator from "./components/tabs/generator"
 import Result from "./components/tabs/result"
 import Login from './components/register/Login'
 import SignUp from './components/register/SignUp'
+import Detail from './components/tabs/result/data/detail'
 
 function App() {
 
@@ -18,7 +19,7 @@ function App() {
 
   return (
     <Layout logined={!!token} isOpen={isOpen} setIsOpen={setIsOpen}>
-      <div className="bg-active w-full py-6 px-8">
+      <div className="bg-active w-full py-6 px-8 h-fit">
         <ToastContainer
           position="top-center"
           autoClose={5000}
@@ -38,6 +39,7 @@ function App() {
             <Route path="/login" element={<Navigate to='/generator' />} />
             <Route path="/generator" element={<Generator isOpen={isOpen} />} />
             <Route path="/results" element={<Result />} />
+            <Route path="/results/detail/:id" element={<Detail />} />
           </Routes>
         ) : (
           <div

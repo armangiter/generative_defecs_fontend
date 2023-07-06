@@ -1,7 +1,7 @@
 import { ReactNode, useState, Dispatch, SetStateAction } from "react"
 import Result from "../../assets/icons/Result"
 import Generator from "../../assets/icons/Generator"
-import { Link, useLocation } from "react-router-dom"
+import { NavLink, useLocation } from "react-router-dom"
 import OpenSide from "../../assets/icons/OpenSide"
 import { t } from "i18next"
 
@@ -20,7 +20,13 @@ interface Tabs {
 function SideBar({ isOpen, setIsOpen }: IProps) {
     const location = useLocation()
 
-    const [selectedTab, setSelectedTab] = useState<string>(location && location.pathname.split('/')[1]);
+    const path = location.pathname.split('/')[1]
+
+    const [selectedTab, setSelectedTab] = useState<string>(
+        location &&
+            path === 'login' ? 'generator' : path
+    );
+
 
     const listTab: Tabs[] = [
         { id: 1, name: t('generator'), icon: <Generator isActive={selectedTab === 'generator'} />, link: 'generator' },
@@ -30,7 +36,7 @@ function SideBar({ isOpen, setIsOpen }: IProps) {
     return (
         <div
             className={`
-                sticky top-[65px] left-0 h-[calc(100vh-65px)] transition-[width] 
+                sticky top-[65px] left-0 h-[calc(100vh-75px)] transition-[width] 
                 transition-ease-in duration-300 bg-primary
             `}
         >
@@ -44,16 +50,19 @@ function SideBar({ isOpen, setIsOpen }: IProps) {
                 >
                     <OpenSide isActive={isOpen} />
                 </div>
-                <ul>
+                <ul className="grid gap-2">
                     {listTab.map((tab: Tabs, idx: number) => (
-                        <Link key={tab.id} to={`/${tab.link}`} onClick={() => setSelectedTab(tab.name.toLowerCase())}>
+                        <NavLink
+                            className={({ isActive }) => isActive ? `activeLink` : 'unActive'}
+                            key={tab.id}
+                            to={`/${tab.link}`}
+                            onClick={() => setSelectedTab(tab.name.toLowerCase())}
+                        >
                             <li
                                 className={`
-                                py-2 flex items-center justify-start gap-2 transition
+                                flex items-center justify-start transition gap-2
                                 ${isOpen ? 'px-4 min-w-[192px]' : 'p-0'}
-                                ${idx > 0 && 'mt-4'}
-                                ${selectedTab === tab.name.toLowerCase() && 'bg-active rounded-md'}
-                            `}
+                                `}
                             >
                                 {tab.icon}{' '}
                                 {!!isOpen && (
@@ -66,7 +75,7 @@ function SideBar({ isOpen, setIsOpen }: IProps) {
                                     >{tab.name.toLowerCase()}</p>
                                 )}
                             </li>
-                        </Link>
+                        </NavLink>
                     ))}
                 </ul>
             </div>

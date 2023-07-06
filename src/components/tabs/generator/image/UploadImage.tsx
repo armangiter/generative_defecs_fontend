@@ -3,12 +3,13 @@ import { Title } from "../../../../mui/customize"
 import ListIcon from './konva/view/ListIcon'
 import MoreIcon from './konva/view/MoreIcon'
 import { Lines } from '../../../../models'
-import { Button } from "@mui/material"
+import { Button, Tooltip } from "@mui/material"
 import { t } from "i18next"
 import Konva from './konva'
 
 // Icons
 import Gallery from "../../../../assets/icons/Gallery"
+import Info from '../../../../assets/icons/Info'
 
 interface IProps {
   urlUploaded: string,
@@ -21,12 +22,10 @@ interface IProps {
 
 function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUrlUploaded }: IProps) {
 
-  const [color, setColor] = useState('FF0000')
+  const [color, setColor] = useState('0F172A')
   const [slider, setSlider] = useState<number>(12)
   const [typeRect, setTypeRect] = useState<string>('MouseDraw')
   const [type, setType] = useState<string>('MouseDraw')
-  const [isFullScreen, setIsFullScreen] = useState<boolean>(false)
-  const [prevLines, setPrevLines] = useState<Lines[]>([]);
 
   const changeSlider = (event: Event, newValue: number | number[]) =>
     typeof newValue === 'number' && setSlider(newValue);
@@ -45,7 +44,10 @@ function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUr
 
   return (
     <div className="w-1/2 mb-auto">
-      <Title className='!mb-1.5'>{t('your_image')}</Title>
+      <div className='flex items-center justify-start gap-1.5 mb-1.5'>
+        <Title>{t('your_image')}</Title>
+        <Info infoText={t('upload_info')} />
+      </div>
       {urlUploaded ? (
         <div className='w-full rounded-md overflow-hidden relative'>
           <Konva
@@ -57,7 +59,6 @@ function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUr
             isOpen={isOpen}
             typeRect={typeRect}
             urlUploaded={urlUploaded}
-            isFullScreen={isFullScreen}
             setUrlUploaded={setUrlUploaded}
           />
           <ListIcon
@@ -71,13 +72,9 @@ function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUr
             changeSlider={changeSlider}
           />
           <MoreIcon
-            prevLines={prevLines}
-            urlUploaded={urlUploaded}
-            isFullScreen={isFullScreen}
-            setPrevLines={setPrevLines}
             setUrlUploaded={setUrlUploaded}
             setLocalBlob={setLocalBlob}
-            setIsFullScreen={setIsFullScreen}
+            setLines={setLines}
           />
         </div>
       ) : (

@@ -7,6 +7,9 @@
   "browse": "Browse",
   "drag_drop_text": "Drag & drop your files here",
   "generate": "Generate",
+  "generated": "Generated",
+  "generating": "Generating",
+  "generate_in_background": "Generate in The Background",
   "part": "Part",
   "number_of_image": "Number of Images",
   "paer": "Part",
@@ -30,5 +33,15 @@
   "successfully_created": "Account successfully created",
   "view_result": "View Results",
   "download_all": "Download All",
-  "logout": "Logout"
+  "logout": "Logout",
+  "upload_info": "Please upload the image sample you want to add defect to",
+  "part_info": "Please select the part you want to add defect to ",
+  "num_img_info": "Enter a digit up to X for your desired number of generated images",
+  "defect_info": "Please select the type of defect you need to generate",
+  "in_progress": "In Progress...",
+  "pending": "Pending...",
+  "time": "Time",
+  "base_image": "Base Image",
+  "variant": "variant",
+  "generated_images": "Generated Images"
 }
