@@ -44,7 +44,7 @@ function Result() {
             if (result.status === 'g') {
                 return {
                     ...result,
-                    percent: (timeRepeat * 5) < 95 ? timeRepeat * 5 : 95
+                    percent: (timeRepeat * 10) < 90 ? timeRepeat * 10 : 90
                 }
             } else {
                 return {
