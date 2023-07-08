@@ -18,6 +18,12 @@ function Result() {
     })
     const [models, setModels] = useState<Models[]>([])
 
+    const setSession = (name: string, value: string | number) => {
+
+        sessionStorage.setItem(name, value)
+    }
+    const getSession = (name: string) => sessionStorage.getItem(name)
+
     const filterGenerate = (data: Results[]) => {
         const newData: ResultType = {
             generated: [],
@@ -33,6 +39,7 @@ function Result() {
     }
 
     const setPercent = (list: Results[], timeRepeat: number) => {
+
         return list.map(result => {
             if (result.status === 'g') {
                 return {
@@ -48,14 +55,24 @@ function Result() {
         })
     }
 
-    const getData = (timeRepeat: number) => {
+    const getData = () => {
         request.getResult()
             .then(res => {
                 request.getModels()
                     .then(response => {
-
                         setModels(response.data || [])
                         const newData = filterGenerate(res.data || [])
+                        let newInGenerate = sessionStorage.getItem('inGenerate')
+                        let timeRepeat: number = +getSession('timeRepeat')
+
+                        if (newData.generating.length && newInGenerate && newData.generating[0].id !== +newInGenerate) {
+                            setSession('timeRepeat', 0)
+                            sessionStorage.setItem('inGenerate', JSON.stringify(newData.generating[0]?.id))
+                            timeRepeat = 0
+                        } else {
+                            timeRepeat++
+                            setSession('timeRepeat', timeRepeat)
+                        }
                         const generating = setPercent(newData.generating, timeRepeat)
                         const pending = setPercent(newData.pending, timeRepeat)
 
@@ -68,11 +85,12 @@ function Result() {
 
     useEffect(() => {
         if (!isLoading) {
-            let timeRepeat = 0
+            setSession('inGenerate', results.generating[0]?.id)
+            setSession('timeRepeat', 0)
+
             const interval = setInterval(() => {
-                timeRepeat++
                 window.location.pathname.includes('results') && !window.location.pathname.includes('results/detail') ?
-                    getData(timeRepeat) :
+                    getData() :
                     clearInterval(interval)
             }, 1000)
         }

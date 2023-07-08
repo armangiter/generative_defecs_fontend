@@ -15,6 +15,9 @@ function Detail() {
 
         request.getItemResult(id)
             .then(res => {
+                const newData: Results = res.data
+                newData.result_images.map((img, idx) => img.variant_id = idx + 1)
+                console.log(newData)
                 setDetail(res.data)
                 setIsLoading(false)
 

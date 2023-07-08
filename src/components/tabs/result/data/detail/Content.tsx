@@ -34,6 +34,8 @@ function Content({ detail }: IProps) {
                 window.URL.revokeObjectURL(href);
             })
     }
+    console.log(detail);
+
 
     if (detail && detail.id)
         return (
@@ -48,11 +50,11 @@ function Content({ detail }: IProps) {
                     <div className='flex items-center justify-end gap-6'>
                         <div className='flex items-center justify-end gap-4'>
                             <DetailTag className='!text-light-100'>{t('part')}</DetailTag>
-                            <DetailTag className='!text-active !font-medium'>Test</DetailTag>
+                            <DetailTag className='!text-active !font-medium'>{detail.defect_model.name}</DetailTag>
                         </div>
                         <div className='flex items-center justify-end gap-4'>
                             <DetailTag className='!text-light-100'>{t('defect_type')}</DetailTag>
-                            <DetailTag className='!text-active !font-medium'>Test</DetailTag>
+                            <DetailTag className='!text-active !font-medium'>{detail.defect_type.name}</DetailTag>
                         </div>
                         <div className='flex items-center justify-end gap-4'>
                             <DetailTag className='!text-light-100'>{t('time')}</DetailTag>
@@ -93,7 +95,7 @@ function Content({ detail }: IProps) {
                     </div>
                 </div>
                 <div className='flex items-center justify-between mt-6'>
-                    <Title>{t('generated_images ')} ({detail.result_images.length})</Title>
+                    <Title>{t('generated_images')} ({detail.result_images.length})</Title>
                     <Button
                         color='secondary'
                         className='!bg-dark-100 !px-5'
@@ -117,7 +119,7 @@ function Content({ detail }: IProps) {
                                 src={item.file}
                                 alt='image'
                             />
-                            <Label className='!mt-2 !text-active'>{t('variant')}-{selectedImg.id}</Label>
+                            <Label className='!mt-2 !text-active'>{t('variant')}-{item.variant_id}</Label>
                         </li>
                     ))}
                 </ul>

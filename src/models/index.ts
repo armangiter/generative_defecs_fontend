@@ -4,7 +4,8 @@ interface ActiveNode {
 
 interface ResultImg {
     id: number,
-    file: string
+    file: string,
+    variant_id?: number
 }
 
 interface Point {
