@@ -1,11 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import Logo from "../../assets/icons/Logo"
 import { request } from "../../services/api";
 import Cookies from "universal-cookie";
 import Profile from "./menu/Profile";
 import Language from "./menu/Language";
 
-function Header() {
+interface IProps {
+  currencyLanguage: string,
+  setCurrencyLanguage: Dispatch<SetStateAction<string>>,
+}
+
+function Header({ currencyLanguage, setCurrencyLanguage }: IProps) {
 
   const cookies = new Cookies()
   const [email, setEmail] = useState<string>('')
@@ -25,11 +30,13 @@ function Header() {
     >
       <Logo />
       {
-        !!cookies.get('access') && (
+        cookies.get('access') ? (
           <div className="flex items-center justify-end gap-1">
-            <Language />
+            <Language currencyLanguage={currencyLanguage} setCurrencyLanguage={setCurrencyLanguage} />
             <Profile email={email} />
           </div>
+        ) : (
+          <Language currencyLanguage={currencyLanguage} setCurrencyLanguage={setCurrencyLanguage} />
         )
       }
     </div >

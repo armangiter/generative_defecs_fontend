@@ -23,7 +23,7 @@ i18n
         translation: jp
       }
     },
-    lng: 'eng',
+    lng: sessionStorage.getItem('lang') === "JP" ? 'jp' : 'eng',
     fallbackLng: ['eng', 'jp'],
     interpolation: {
       escapeValue: false

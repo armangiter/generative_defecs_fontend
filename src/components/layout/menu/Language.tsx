@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useState, Dispatch, SetStateAction } from "react";
 import { Menu, Button, MenuItem } from '@mui/material';
 import Lang from "../../../assets/icons/Language";
 import i18next from "i18next";
 
-const Language = () => {
+interface IProps {
+    currencyLanguage: string,
+    setCurrencyLanguage: Dispatch<SetStateAction<string>>,
+}
+
+const Language = ({ currencyLanguage, setCurrencyLanguage }: IProps) => {
 
     const listLanguage: string[] = ['ENG', 'JP'];
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const [currencyLanguage, setCurrencyLanguage] = useState<string>(i18next.language.toUpperCase());
     const open = Boolean(anchorEl);
     const openModal = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
     const closeModal = () => setAnchorEl(null);
     const changeLang = (language: string) => {
+        sessionStorage.setItem("lang", language.toUpperCase());
         closeModal();
         if (language !== currencyLanguage) {
             setCurrencyLanguage(language.toUpperCase())
