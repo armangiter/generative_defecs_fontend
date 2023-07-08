@@ -53,6 +53,7 @@ function Result() {
             .then(res => {
                 request.getModels()
                     .then(response => {
+
                         setModels(response.data || [])
                         const newData = filterGenerate(res.data || [])
                         const generating = setPercent(newData.generating, timeRepeat)
@@ -70,7 +71,7 @@ function Result() {
             let timeRepeat = 0
             const interval = setInterval(() => {
                 timeRepeat++
-                window.location.pathname.includes('results') && window.location.pathname.includes('results/detail') ?
+                window.location.pathname.includes('results') && !window.location.pathname.includes('results/detail') ?
                     getData(timeRepeat) :
                     clearInterval(interval)
             }, 1000)
@@ -110,9 +111,9 @@ function Result() {
                 </div>
             ) : (
                 <div className="flex flex-col gap-12">
-                    {!!results.generating.length && !!results.pending.length && (
+                    {results.generating.length || results.pending.length ? (
                         <ListGenerating data={results} />
-                    )}
+                    ) : null}
                     <ListResult results={filteredPagination} models={models} />
                 </div>
             )}

@@ -17,7 +17,7 @@ function Progress({ data }: IProps) {
                         <p
                             className={`text-xs font-medium py-0.5 px-2 rounded-[5px] ml-2
                             ${item.status === 'p' ? 'bg-dark-200 text-light-200' : 'bg-yellow-100 text-yellow-100'}`}
-                        >{item.status === 'p' ? t('in_progress') : t('pending')}</p>
+                        >{item.status === 'p' ? t('pending') : t('in_progress')}</p>
                     </div>
                     <div className="relative !w-3/4 !h-[30px]">
                         <LinearProgress

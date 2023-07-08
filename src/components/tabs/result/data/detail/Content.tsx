@@ -63,31 +63,32 @@ function Content({ detail }: IProps) {
                 <div className='flex items-start justify-center mt-6 gap-8'>
                     <div className='flex justify-start flex-col w-1/2'>
                         <Title className="!mb-2">{t('base_image')}</Title>
-                        <div className="w-full p-5 rounded-lg border border-dashed broder-[rgba(145, 154, 167, 0.50)] relative">
+                        <div className="w-full p-5 rounded-lg border border-dashed broder-[rgba(145, 154, 167, 0.50)]">
                             <img
                                 className='w-full rounded-md'
                                 alt="orgImage"
                                 src={detail.image.replace('http://minio:9000', 'http://153.156.254.150:50818')}
                             />
-                            <div
-                                className='absolute top-10 right-10 rounded-lg overflow-hidden bg-primary z-10 w-10 h-10
-                            flex items-center justify-center'
-                                onClick={() => downloadImg(selectedImg.file)}
-                            >
-                                <Download />
-                            </div>
                         </div>
                     </div>
                     <div className='flex justify-start flex-col w-1/2'>
                         <Title className="!mb-2">{t('variant')}-{selectedImg.id}</Title>
                         <div
-                            className="w-full p-5 rounded-lg border border-dashed bg-dark-300 broder-[rgba(145, 154, 167, 0.50)]"
+                            className="w-full p-5 rounded-lg border border-dashed 
+                            bg-dark-300 relative broder-[rgba(145, 154, 167, 0.50)]"
                         >
                             <img
                                 className='w-full rounded-md'
                                 alt='generatedImg'
                                 src={selectedImg.file}
                             />
+                            <div
+                                className='absolute top-10 right-10 rounded-lg overflow-hidden bg-primary z-10 w-10 h-10
+                                flex items-center justify-center'
+                                onClick={() => downloadImg(selectedImg.file)}
+                            >
+                                <Download />
+                            </div>
                         </div>
                     </div>
                 </div>

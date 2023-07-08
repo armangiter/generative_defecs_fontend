@@ -19,7 +19,7 @@ function Defect({ data, setData, isLoadingD }: IProps) {
     <div>
       <div className='flex items-center justify-start gap-1.5 mb-1.5'>
         <Title>{t('defect_type')}</Title>
-        <Info infoText={t('part_info')} />
+        <Info infoText={t('defect_info')} />
       </div>
       <ul className="relative grid grid-cols-4 min-h-[80px] grid-rows-[auto] gap-2.5">
         {isLoadingD ? (

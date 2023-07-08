@@ -51,17 +51,18 @@ function SideBar({ isOpen, setIsOpen }: IProps) {
                     <OpenSide isActive={isOpen} />
                 </div>
                 <ul className="grid gap-2">
-                    {listTab.map((tab: Tabs, idx: number) => (
+                    {listTab.map((tab: Tabs) => (
                         <NavLink
                             className={({ isActive }) => isActive ? `activeLink` : 'unActive'}
+                            id={!isOpen ? 'close' : ''}
                             key={tab.id}
                             to={`/${tab.link}`}
                             onClick={() => setSelectedTab(tab.name.toLowerCase())}
                         >
+                            {/* ${isOpen ? 'px-4 min-w-[192px]' : 'p-0'} */}
                             <li
                                 className={`
                                 flex items-center justify-start transition gap-2
-                                ${isOpen ? 'px-4 min-w-[192px]' : 'p-0'}
                                 `}
                             >
                                 {tab.icon}{' '}
