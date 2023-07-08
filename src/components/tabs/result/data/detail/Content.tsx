@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from "react-router-dom";
 import ArrowLeft from "../../../../../assets/icons/ArrowLeft";
 import { Head, Detail as DetailTag, Title, Label } from '../../../../../mui/customize';
 import { t } from "i18next";
-import { ResultImg, Results } from "../../../../../models";
+import { ResultImg, Results, Size } from "../../../../../models";
 import Download from '../../../../../assets/icons/Download';
 import { Button } from '@mui/material'
 import axios from 'axios';
@@ -14,7 +14,9 @@ interface IProps {
 
 function Content({ detail }: IProps) {
 
+    const baseImg = useRef(null)
     const [selectedImg, setSelectedImg] = useState<ResultImg>(detail && detail.result_images[0])
+    const [sizeImg, setSizeImg] = useState<Size>({})
 
     const downloadImg = (url: string) => {
         axios.get(url, {
@@ -34,8 +36,27 @@ function Content({ detail }: IProps) {
                 window.URL.revokeObjectURL(href);
             })
     }
-    console.log(detail);
 
+    const changeURL = (url: string) => url.replace('http://minio:9000', 'http://153.156.254.150:50818')
+
+    useEffect(() => {
+        const img: HTMLImageElement = new window.Image()
+
+        img.onload = () => {
+            let size: Size = {
+                width: 0,
+                height: 0
+            };
+
+            size.width = img.width
+            size.height = img.height
+
+            setSizeImg(size)
+        }
+        if (detail) img.src = changeURL(detail.image)
+    }, [])
+
+    const heightImg = baseImg.current && baseImg.current.clientHeight
 
     if (detail && detail.id)
         return (
@@ -69,12 +90,13 @@ function Content({ detail }: IProps) {
                             <img
                                 className='w-full rounded-md'
                                 alt="orgImage"
-                                src={detail.image.replace('http://minio:9000', 'http://153.156.254.150:50818')}
+                                ref={baseImg}
+                                src={changeURL(detail.image)}
                             />
                         </div>
                     </div>
                     <div className='flex justify-start flex-col w-1/2'>
-                        <Title className="!mb-2">{t('variant')}-{selectedImg.id}</Title>
+                        <Title className="!mb-2">{t('variant')}-{selectedImg.variant_id}</Title>
                         <div
                             className="w-full p-5 rounded-lg border border-dashed 
                             bg-dark-300 relative broder-[rgba(145, 154, 167, 0.50)]"
@@ -82,6 +104,7 @@ function Content({ detail }: IProps) {
                             <img
                                 className='w-full rounded-md'
                                 alt='generatedImg'
+                                style={{ height: heightImg ? heightImg : 0 }}
                                 src={selectedImg.file}
                             />
                             <div
