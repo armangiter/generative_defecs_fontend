@@ -25,6 +25,7 @@ function Generator({ isOpen }: IProps) {
   const [isLoadingD, setIsLoadingD] = useState<boolean>(true)
   const [localBlob, setLocalBlob] = useState<File | null>()
   const [lines, setLines] = useState<Lines[]>([]);
+  const [sizeImg, setSizeImg] = useState<Size>()
 
   const [data, setData] = useState<Data>({
     models: {
@@ -83,6 +84,23 @@ function Generator({ isOpen }: IProps) {
       })
   }, [])
 
+  useEffect(() => {
+    const img: HTMLImageElement = new window.Image()
+
+    img.onload = () => {
+      let size: Size = {
+        width: 0,
+        height: 0
+      };
+
+      size.width = img.width
+      size.height = img.height
+
+      setSizeImg(size)
+    }
+    if (urlUploaded) img.src = urlUploaded
+  }, [urlUploaded])
+
   const sendMask = (maskFile: File, inRedirect: boolean) => {
     setIsLoading(true)
     const { defects: { value: defectValue }, models: { value: modelValue }, numImg } = data
@@ -128,14 +146,17 @@ function Generator({ isOpen }: IProps) {
       const div = document.createElement('div')
       div.classList.add('drawMask');
 
-      if (generate && generate.current) {
+      if (generate && generate.current && sizeImg?.width) {
         const { current: { children } } = generate;
         const { clientWidth, clientHeight } = children[0].children[1]
 
+        const percentWidth = sizeImg.width / clientWidth
+        const percentHeight = sizeImg.height / clientHeight
+
         const stage = new Konva.Stage({
           container: div,
-          width: clientWidth,
-          height: clientHeight,
+          width: sizeImg.width,
+          height: sizeImg.height,
         });
 
         // Layer
@@ -144,8 +165,8 @@ function Generator({ isOpen }: IProps) {
 
         // Bg Black
         const fullRect = new Konva.Rect({
-          width: clientWidth,
-          height: clientHeight,
+          width: sizeImg.width,
+          height: sizeImg.height,
           fill: 'black'
         })
 
@@ -153,8 +174,9 @@ function Generator({ isOpen }: IProps) {
 
         // Line
         const listLine: any = []
+
         points.map((item: Point) => listLine.push(new Konva.Line({
-          points: item.points,
+          points: item.points.map((point, idx) => idx % 2 === 0 ? point * percentHeight : point * percentWidth),
           stroke: 'white',
           strokeWidth: item.strokeWidth,
           tension: 0.5,
@@ -176,7 +198,7 @@ function Generator({ isOpen }: IProps) {
         const file = new File([blob], 'mask_file', { type: blob.type });
 
         sendMask(file, inRedirect)
-      }
+      } else setIsLoading(false)
     }
   }
 
