@@ -43,5 +43,6 @@
   "time": "Time",
   "base_image": "Base Image",
   "variant": "variant",
-  "generated_images": "Generated Images"
+  "generated_images": "Generated Images",
+  "read_agree_rutilea": "I have read and agree to Rutilea Company’s Terms of Use and Privacy Policy."
 }

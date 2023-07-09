@@ -28,6 +28,7 @@ function Profile({ email }: IProps) {
         <>
             <Button
                 onClick={openMenu}
+                className="!normal-case"
             >
                 <div className="rotate-90 opacity-[0.8]">
                     <OpenSide isActive={false} />

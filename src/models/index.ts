@@ -54,7 +54,8 @@ interface SelectLogin {
     title: string,
     placeholder: string,
     value: string,
-    type: string
+    type: string,
+    name?: string
 }
 
 interface ResultImage {

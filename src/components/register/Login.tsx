@@ -8,6 +8,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { request } from '../../services/api';
 import Cookies from 'universal-cookie';
 
+interface Detail {
+  email: {
+    placeholder: string; title: string;
+  };
+  password: {
+    placeholder: string; title: string;
+  };
+}
+
 function Login() {
 
   const cookies: Cookies = new Cookies()
@@ -38,6 +47,13 @@ function Login() {
       .catch(() => setIsLoading(false))
   }
 
+  const detailField: Detail = {
+    email: { placeholder: t('email_placeholder'), title: t('email') },
+    password: { placeholder: t('password_placeholder'), title: t('password') }
+  }
+
+  const isDisable = (selector[0].value && selector[1].value) ? true : false
+
   return (
     <div className="w-[460px] h-[572px] bg-primary shadow-[0px_10px_13px_0px_rgba(17,_38,_146,_0.05)] rounded-xl z-20">
       <div className="border-0 border-b border-border p-6">
@@ -48,12 +64,12 @@ function Login() {
         <div className='flex flex-col items-start gap-6 p-6'>
           {selector.map((item: SelectLogin) => (
             <div className='w-full' key={item.id}>
-              <Title className='!mb-1.5'>{item.title}</Title>
+              <Title className='!mb-1.5'>{detailField[item.type].title}</Title>
               <Input
                 fullWidth
                 type={item.type}
                 value={item.value}
-                placeholder={item.placeholder}
+                placeholder={detailField[item.type].placeholder}
                 onChange={event => {
                   const newValue = event.target.value
                   const newSelector = changeSelector(selector, newValue, item.id)
@@ -68,6 +84,7 @@ function Login() {
             className='!w-full !bg-dark-100 !rounded-md !h-10'
             onClick={login}
             loading={isLoading}
+            disabled={!isDisable}
           >{t('login')}</LoadingButton>
         </div>
         <div className='flex justify-center items-center mt-auto p-6'>

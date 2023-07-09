@@ -22,17 +22,15 @@ function NumImg({ data, setData }: IProps) {
       <Input
         fullWidth
         value={numImg}
+        type="number"
+        InputProps={{ inputProps: { min: 0, max: import.meta.env.VITE_MAX_NUMBER_IMAGE } }}
         onChange={(event) => {
           const newValue = event.target.value
-          const pattern = /^[0-9]+$/;
-
-          if (newValue === '' || pattern.test(newValue)) {
-            const value = typeof newValue === 'string' ? +newValue : newValue
-            value <= +import.meta.env.VITE_MAX_NUMBER_IMAGE &&
-              setData({
-                ...data,
-                numImg: newValue
-              })
+          if (newValue) {
+            setData({
+              ...data,
+              numImg: newValue
+            })
           }
         }}
       />
