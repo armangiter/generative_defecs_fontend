@@ -26,7 +26,7 @@ function NumImg({ data, setData }: IProps) {
         InputProps={{ inputProps: { min: 1, max: import.meta.env.VITE_MAX_NUMBER_IMAGE } }}
         onChange={(event) => {
           const newValue = event.target.value
-          if (newValue) {
+          if (newValue && newValue <= import.meta.env.VITE_MAX_NUMBER_IMAGE) {
             setData({
               ...data,
               numImg: newValue

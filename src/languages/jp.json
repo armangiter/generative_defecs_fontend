@@ -43,5 +43,6 @@
   "time": "日付",
   "base_image": "元画像",
   "variant": "自動生成",
-  "generated_images": "生成された画像"
+  "generated_images": "生成された画像",
+  "read_agree_rutilea": "I have read and agree to Rutilea Company’s Terms of Use and Privacy Policy."
 }
