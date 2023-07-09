@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { t } from "i18next"
 import { Head } from "../../../mui/customize"
-import { Data, Lines, Point } from "../../../models"
+import { Data, Lines, Point, Size } from "../../../models"
 import { request } from '../../../services/api'
 
 // Components
@@ -130,7 +130,7 @@ function Generator({ isOpen }: IProps) {
 
       if (generate && generate.current) {
         const { current: { children } } = generate;
-        const { clientWidth, clientHeight } = children[0]
+        const { clientWidth, clientHeight } = children[0].children[1]
 
         const stage = new Konva.Stage({
           container: div,
