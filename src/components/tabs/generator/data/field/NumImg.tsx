@@ -23,7 +23,7 @@ function NumImg({ data, setData }: IProps) {
         fullWidth
         value={numImg}
         type="number"
-        InputProps={{ inputProps: { min: 0, max: import.meta.env.VITE_MAX_NUMBER_IMAGE } }}
+        InputProps={{ inputProps: { min: 1, max: import.meta.env.VITE_MAX_NUMBER_IMAGE } }}
         onChange={(event) => {
           const newValue = event.target.value
           if (newValue) {
