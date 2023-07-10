@@ -37,14 +37,14 @@ function Field({ data, urlUploaded, setData, createMask, isLoading, setIsLoading
       <NumImg data={data} setData={setData} />
       <Defect isLoadingD={isLoadingD} data={data} setData={setData} />
       <div className="flex items-center justify-between gap-4">
-        <LoadingButton
+        {/* <LoadingButton
           disabled={isDisableButton}
           className="!bg-primary"
           color="primary"
           loading={isLoading && (activeBtn === 'first')}
           onClick={() => handleGenerate(false, 'first')}
           fullWidth
-        >{t('generate_in_background')}</LoadingButton>
+        >{t('generate_in_background')}</LoadingButton> */}
         <LoadingButton
           disabled={isDisableButton}
           className="!bg-btn"

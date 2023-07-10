@@ -17,7 +17,7 @@ function Card(props: any) {
                     {!!status && (
                         <p
                             className='text-xs font-normal text-light-100'
-                        >{created.split("T")[0]}</p>
+                        >{created.split("T")[0]} {created.split("T")[1].split(".")[0]}</p>
                     )}
                 </div>
                 <ul className="p-1 h-12 mt-4 gap-1 rounded flex items-center justify-start">

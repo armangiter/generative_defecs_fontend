@@ -79,7 +79,9 @@ function Content({ detail }: IProps) {
                         </div>
                         <div className='flex items-center justify-end gap-4'>
                             <DetailTag className='!text-light-100'>{t('time')}</DetailTag>
-                            <DetailTag className='!text-active !font-medium'>{detail?.created.split("T")[0]}</DetailTag>
+                            <DetailTag className='!text-active !font-medium'>
+                                {detail?.created.split("T")[0]} {detail?.created.split("T")[1].split(".")[0]}
+                            </DetailTag>
                         </div>
                     </div>
                 </div>
