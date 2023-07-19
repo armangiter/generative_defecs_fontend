@@ -4,6 +4,10 @@ import { Title } from "../../../../../mui/customize"
 import { t } from "i18next"
 import { CircularProgress } from "@mui/material"
 import Info from "../../../../../assets/icons/Info"
+import Chip from "../../../../../assets/icons/Chip"
+import Crack from "../../../../../assets/icons/Crack"
+import Scratch from "../../../../../assets/icons/Scratch"
+import Indentation from "../../../../../assets/icons/Indentation"
 
 interface IProps {
   data: Data,
@@ -35,9 +39,18 @@ function Defect({ data, setData, isLoadingD }: IProps) {
                   value: defect.id
                 }
               })}
-              className={`flex text-center transition cursor-pointer h-20 rounded-md justify-center items-center bg-primary 
+              className={`flex text-center transition cursor-pointer h-20 rounded-md justify-center items-center bg-primary gap-2
               border border-solid border-border ${value === defect.id && '!border-active'}`}
-            >{defect.name}</li>
+            >
+              {
+                defect.name.toLowerCase() === 'chip' ? <Chip /> :
+                  defect.name.toLowerCase() === 'crack' ? <Crack /> :
+                    defect.name.toLowerCase() === 'scratch' ? <Scratch /> :
+                      defect.name.toLowerCase() === 'indentation' ? <Indentation /> :
+                        null
+              }
+              {defect.name}
+            </li>
           ))
         )}
       </ul>

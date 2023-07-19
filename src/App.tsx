@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Navigate, Route, Routes } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import Cookies from 'universal-cookie'
@@ -20,7 +20,7 @@ function App() {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [currencyLanguage, setCurrencyLanguage] = useState<string>(i18next.language.toUpperCase());
   const { i18n } = useTranslation();
-  
+
   useEffect(() => {
     sessionStorage.setItem('arrInterval', JSON.stringify([]))
     if (!sessionStorage.getItem('lang'))
