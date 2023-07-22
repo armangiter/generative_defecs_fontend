@@ -92,7 +92,7 @@ function Result() {
                 window.location.pathname.includes('results') && !window.location.pathname.includes('results/detail') ?
                     getData() :
                     clearInterval(interval)
-            }, 5000)
+            }, 8000)
         }
     }, [isLoading])
 

@@ -15,6 +15,8 @@ interface IProps {
 }
 
 interface Lines {
+  color?: any
+  strokeWidth?: number | undefined
   points: number[]
 }
 
@@ -77,7 +79,7 @@ const DrawMask = ({ lines, setLines, color, slider, width, height, type, image }
         <Line
           onClick={event => type === 'Eraser' && removeLine(event)}
           strokeWidth={line.strokeWidth}
-          stroke={`#${line.color}`}
+          stroke={`#${color}`}
           points={line.points}
           lineCap="round"
           tension={0.5}

@@ -16,7 +16,7 @@ function Content({ detail }: IProps) {
 
     const baseImg = useRef(null)
     const [selectedImg, setSelectedImg] = useState<ResultImg>(detail && detail.result_images[0])
-    const [sizeImg, setSizeImg] = useState<Size>({})
+    const [sizeImg, setSizeImg] = useState<Size>()
 
     const downloadImg = (url: string) => {
         axios.get(url, {
@@ -51,12 +51,14 @@ function Content({ detail }: IProps) {
             size.width = img.width
             size.height = img.height
 
+
             setSizeImg(size)
         }
         if (detail) img.src = changeURL(detail.image)
     }, [])
 
     const heightImg = baseImg.current && baseImg.current.clientHeight
+    const widthImg = baseImg.current && baseImg.current.clientWidth
 
     if (detail && detail.id)
         return (
@@ -106,7 +108,10 @@ function Content({ detail }: IProps) {
                             <img
                                 className='w-full rounded-md'
                                 alt='generatedImg'
-                                style={{ height: heightImg ? heightImg : 0 }}
+                                style={{
+                                    width: '100%',
+                                    height: 'fit-content',
+                                }}
                                 src={selectedImg.file}
                             />
                             <div
