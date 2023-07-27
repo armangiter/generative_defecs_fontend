@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Head } from "../../../mui/customize"
-import { Models, Result as ResultType, Results } from "../../../models"
+import { Result as ResultType, Results } from "../../../models"
 import ListResult from "./data/ListResult"
 import { request } from "../../../services/api"
 import { CircularProgress, Pagination } from "@mui/material"
@@ -16,13 +16,6 @@ function Result() {
         generating: [],
         pending: []
     })
-    const [models, setModels] = useState<Models[]>([])
-
-    const setSession = (name: string, value: string | number) => {
-
-        sessionStorage.setItem(name, value)
-    }
-    const getSession = (name: string) => sessionStorage.getItem(name)
 
     const filterGenerate = (data: Results[]) => {
         const newData: ResultType = {
@@ -38,56 +31,16 @@ function Result() {
         return newData
     }
 
-    const setPercent = (list: Results[], timeRepeat: number) => {
-
-        return list.map(result => {
-            if (result.status === 'g') {
-                return {
-                    ...result,
-                    percent: (timeRepeat * 10) < 90 ? timeRepeat * 10 : 90
-                }
-            } else {
-                return {
-                    ...result,
-                    percent: 0
-                }
-            }
-        })
-    }
-
     const getData = () => {
         request.getResult()
             .then(res => {
-                request.getModels()
-                    .then(response => {
-                        setModels(response.data || [])
-                        const newData = filterGenerate(res.data || [])
-                        let newInGenerate = sessionStorage.getItem('inGenerate')
-                        let timeRepeat: number = +getSession('timeRepeat')
-
-                        if (newData.generating.length && newInGenerate && newData.generating[0].id !== +newInGenerate) {
-                            setSession('timeRepeat', 0)
-                            sessionStorage.setItem('inGenerate', JSON.stringify(newData.generating[0]?.id))
-                            timeRepeat = 0
-                        } else {
-                            timeRepeat++
-                            setSession('timeRepeat', timeRepeat)
-                        }
-                        const generating = setPercent(newData.generating, timeRepeat)
-                        const pending = setPercent(newData.pending, timeRepeat)
-
-                        const percentData = { generating, pending, generated: newData.generated }
-
-                        setResults(percentData)
-                    })
+                const newData = filterGenerate(res.data || [])
+                setResults(newData)
             })
     }
 
     useEffect(() => {
         if (!isLoading) {
-            setSession('inGenerate', results.generating[0]?.id)
-            setSession('timeRepeat', 0)
-
             const interval = setInterval(() => {
                 window.location.pathname.includes('results') && !window.location.pathname.includes('results/detail') ?
                     getData() :
@@ -100,13 +53,9 @@ function Result() {
         setIsLoading(true)
         request.getResult()
             .then(res => {
-                request.getModels()
-                    .then(response => {
-                        setModels(response.data || [])
-                        const newData = filterGenerate(res.data || [])
-                        setResults(newData)
-                        setIsLoading(false)
-                    })
+                const newData = filterGenerate(res.data || [])
+                setResults(newData)
+                setIsLoading(false)
             })
     }, [])
 
@@ -132,7 +81,7 @@ function Result() {
                     {results.generating.length || results.pending.length ? (
                         <ListGenerating data={results} />
                     ) : null}
-                    <ListResult results={filteredPagination} models={models} />
+                    <ListResult results={filteredPagination} />
                 </div>
             )}
             {

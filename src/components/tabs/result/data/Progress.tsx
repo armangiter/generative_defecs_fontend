@@ -21,14 +21,14 @@ function Progress({ data }: IProps) {
                     </div>
                     <div className="relative !w-3/4 !h-[30px]">
                         <LinearProgress
-                            value={item.percent || 0}
+                            value={item.progress || 0}
                             variant="determinate"
                             sx={{ '.MuiLinearProgress-bar': { background: '#6B7280' } }}
                             className="
                                 !w-full !h-full !rounded-[20px] !bg-primary !border !border-solid !border-light-300
                         "
                         />
-                        <p className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">{item.percent || 0}%</p>
+                        <p className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">{item.progress || 0}%</p>
                     </div>
                 </li>
             ))}

@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 function Card(props: any) {
 
     const navigate = useNavigate()
-    const { result_images, id, status, created, defect_model: { name }, models, defect_type: { name: defectName } } = props
+    const { result_images, id, status, created, defect_model: { name }, defect_type: { name: defectName } } = props
 
     return (
         <li className='p-2 flex flex-col justify-between rounded-md bg-primary'>
