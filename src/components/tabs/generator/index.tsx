@@ -100,7 +100,7 @@ function Generator({ isOpen }: IProps) {
     }
     if (urlUploaded) img.src = urlUploaded
   }, [urlUploaded])
-
+  
   const sendMask = (maskFile: File, inRedirect: boolean) => {
     setIsLoading(true)
     const { defects: { value: defectValue }, models: { value: modelValue }, numImg } = data

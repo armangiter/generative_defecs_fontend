@@ -43,11 +43,9 @@ function Defect({ data, setData, isLoadingD }: IProps) {
               border border-solid border-border ${value === defect.id && '!border-active'}`}
             >
               {
-                defect.name.toLowerCase() === 'chip' ? <Chip /> :
-                  defect.name.toLowerCase() === 'crack' ? <Crack /> :
-                    defect.name.toLowerCase() === 'scratch' ? <Scratch /> :
-                      defect.name.toLowerCase() === 'indentation' ? <Indentation /> :
-                        null
+                !!defect.icon_image && (
+                  <img src={defect.icon_image} alt='defect icon' />
+                )
               }
               {defect.name}
             </li>

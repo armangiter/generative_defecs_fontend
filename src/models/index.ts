@@ -35,6 +35,7 @@ interface Defects {
     id: number,
     name: string,
     command: string,
+    icon_image: string,
     defect_model_id: string | undefined,
 }
 
@@ -85,7 +86,8 @@ interface Results {
     defect_model: Defects,
     result_images: ResultImg[],
     defect_type: DefectResult,
-    percent?: number
+    progress: number,
+    zip_file: string,
 }
 
 interface Result {

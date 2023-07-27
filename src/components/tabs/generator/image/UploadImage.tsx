@@ -22,7 +22,7 @@ interface IProps {
 
 function UploadImage({ setLocalBlob, lines, setLines, isOpen, urlUploaded, setUrlUploaded }: IProps) {
 
-  const [color, setColor] = useState('0F172A')
+  const [color, setColor] = useState('72F34A')
   const [slider, setSlider] = useState<number>(12)
   const [typeRect, setTypeRect] = useState<string>('MouseDraw')
   const [type, setType] = useState<string>('MouseDraw')

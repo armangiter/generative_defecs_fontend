@@ -16,7 +16,6 @@ function Content({ detail }: IProps) {
 
     const baseImg = useRef(null)
     const [selectedImg, setSelectedImg] = useState<ResultImg>(detail && detail.result_images[0])
-    const [sizeImg, setSizeImg] = useState<Size>()
 
     const downloadImg = (url: string) => {
         axios.get(url, {
@@ -37,28 +36,19 @@ function Content({ detail }: IProps) {
             })
     }
 
+    const downloadZip = (url: string) => {
+        axios.get(url, {
+            responseType: 'blob'
+        })
+            .then(response => {
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(response.data);
+                link.download = 'images.zip';
+                link.click();
+            });
+    }
+
     const changeURL = (url: string) => url.replace('http://minio:9000', 'http://153.156.254.150:50818')
-
-    useEffect(() => {
-        const img: HTMLImageElement = new window.Image()
-
-        img.onload = () => {
-            let size: Size = {
-                width: 0,
-                height: 0
-            };
-
-            size.width = img.width
-            size.height = img.height
-
-
-            setSizeImg(size)
-        }
-        if (detail) img.src = changeURL(detail.image)
-    }, [])
-
-    const heightImg = baseImg.current && baseImg.current.clientHeight
-    const widthImg = baseImg.current && baseImg.current.clientWidth
 
     if (detail && detail.id)
         return (
@@ -129,7 +119,7 @@ function Content({ detail }: IProps) {
                     <Button
                         color='secondary'
                         className='!bg-dark-100 !px-5'
-                        onClick={() => detail.result_images.map(item => downloadImg(item.file))}
+                        onClick={() => downloadZip(detail.zip_file)}
                     >{t('download_all')}</Button>
                 </div>
                 <ul

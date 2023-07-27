@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from 'react'
 
-const listColor: string[] = ['0F172A', 'FFFFFF'];
+const listColor: string[] = ['72F34A', 'EB56F7'];
 
 interface IProps {
     color: string,
