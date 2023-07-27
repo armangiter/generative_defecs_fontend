@@ -39,6 +39,7 @@ function SignUp() {
     const confirmPassword = selector[2]
     request.signup(email.value, password.value, confirmPassword.value)
       .then(res => {
+        setIsLoading(false)
         if (res.status === 200) {
           toast.success(t('successfully_created'), {
             position: "top-center",
@@ -51,7 +52,6 @@ function SignUp() {
             theme: "light",
           });
           navigate('/login')
-          setIsLoading(false)
         }
       })
       .catch(() => setIsLoading(false))

@@ -32,11 +32,11 @@ function Login() {
     const password = selector[1]
     request.login(email.value, password.value)
       .then(res => {
+        setIsLoading(false)
         if (res && res.status === 200) {
           window.location.reload()
           cookies.set('access', res.data.access, { path: '/' });
           cookies.set('refresh', res.data.refresh, { path: '/' });
-          setIsLoading(false)
         } else {
           setSelector([
             { ...selector[0], value: '' },
